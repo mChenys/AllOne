@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AllOne</string>
+    <string name="app_exit">再按一次退出AllOne</string>
+    <string name="notify_no_network">无网络连接</string>
 </resources>

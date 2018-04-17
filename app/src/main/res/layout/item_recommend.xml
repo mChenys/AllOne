@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="14dp"
+    android:layout_marginRight="14dp"
+    android:layout_marginTop="8dp">
+
+    <ImageView
+        android:id="@+id/iv_header"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_header"
+        android:layout_marginLeft="17dp"
+        android:layout_toRightOf="@+id/iv_header">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="David"
+            android:textColor="#111111"
+            android:textSize="15sp"/>
+
+        <ImageView
+            android:id="@+id/iv_identity"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/tv_name"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tv_name"/>
+
+        <TextView
+            android:id="@+id/tv_techJobName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_name"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="3dp"
+            android:text="资深美妆专家"
+            android:textColor="@color/color_999899"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/tv_techCourse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_techJobName"
+            android:layout_marginTop="6dp"
+            android:drawableLeft="@color/red"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:text="1536"
+            android:textColor="@color/color_818181"
+            android:textSize="9sp"/>
+
+        <TextView
+            android:id="@+id/tv_fans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_techCourse"
+            android:layout_below="@+id/tv_techJobName"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/tv_techCourse"
+            android:drawableLeft="@color/red"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:text="1346"
+            android:textColor="@color/color_818181"
+            android:textSize="9sp"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rl_desc"
+        android:layout_below="@+id/rl_desc"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@+id/iv_header"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="4dp"
+        android:maxLines="2"
+        android:text="范冰冰御用化妆师。擅长美妆和护肤。3年教学经验。范冰冰御用化妆师。擅长美妆和护肤。3年教学经验。"
+        android:textColor="#818181"
+        android:textSize="11sp"/>
+</RelativeLayout>
