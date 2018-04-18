@@ -110,7 +110,7 @@ public class BaseRecycleViewHolder extends RecyclerView.ViewHolder {
     /**
      * 设置图片
      */
-    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, float corner) {
+    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, int corner) {
         ImageView imageView = getView(viewId);
         ImageLoadUtils.disPlayWithCorner(resId, imageView, corner);
         return this;
@@ -119,7 +119,7 @@ public class BaseRecycleViewHolder extends RecyclerView.ViewHolder {
     /**
      * 设置图片
      */
-    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, float corner, int h, int w) {
+    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, int corner, int h, int w) {
         ImageView imageView = getView(viewId);
         ImageLoadUtils.disPlayWithCorner(resId, imageView, corner, w, h);
         return this;
