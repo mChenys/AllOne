@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="FocusView_id_view_pager" type="id">id_view_pager</item>
+    <item name="FocusView_id_desc_tv" type="id">id_desc_tv</item>
+    <item name="FocusView_id_indicator" type="id">id_indicator</item>
+</resources>

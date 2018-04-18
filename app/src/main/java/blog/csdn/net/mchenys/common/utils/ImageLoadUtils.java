@@ -24,7 +24,6 @@ public class ImageLoadUtils {
 
         void onLoadingComplete(String url, View view);
 
-        void onLoadingCancelled(String url, View view);
     }
 
     public static void disPlay(Uri uri, ImageView imageView) {
@@ -50,19 +49,6 @@ public class ImageLoadUtils {
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
 
-
-    public static void disPlayWithCorner(String uri, ImageView imageAware, int defaultIcon) {
-        disPlayWithCorner(uri, imageAware, -1, defaultIcon);
-    }
-
-    public static void disPlayWithCircle(String uri, ImageView imageAware, int defaultIcon) {
-        disPlayWithCircle(uri, imageAware, -1, defaultIcon);
-    }
-
-    public static void disPlayWithCorner(String uri, ImageView imageAware) {
-        disPlayWithCorner(uri, imageAware, -1, R.drawable.loading_01);
-    }
-
     public static void disPlayWithCornerUri(Uri uri, ImageView imageAware) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
@@ -72,30 +58,27 @@ public class ImageLoadUtils {
         ImageLoader.loadUri(imageAware, uri, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCircle(String uri, ImageView imageAware) {
-        disPlayWithCircle(uri, imageAware, -1, R.drawable.loading_01);
-    }
 
-    public static void disPlayWithCorner(int resId, ImageView imageAware, float corner) {
+    public static void disPlayWithCorner(int resId, ImageView imageAware, int  corner) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
-                setCornerRadius(20).
-                setCornerMargin(20).
+                setCornerRadius(corner).
+                setCornerMargin(corner).
                 build();
         ImageLoader.loadResId(imageAware, resId, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCorner(int resId, ImageView imageAware, float corner, int w, int h) {
+    public static void disPlayWithCorner(int resId, ImageView imageAware, int corner, int w, int h) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
-                setCornerRadius((int) corner).
-                setCornerMargin(20).
+                setCornerRadius(corner).
+                setCornerMargin(corner).
                 setSize(new ImageLoadConfig.OverrideSize(w, h)).
                 build();
         ImageLoader.loadResId(imageAware, resId, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCorner(String uri, ImageView imageAware, int coverColor, int defaultIcon) {
+    public static void disPlayWithCorner(String uri, ImageView imageAware) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
                 setCornerRadius(20).
@@ -103,8 +86,13 @@ public class ImageLoadUtils {
                 build();
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
-
-    public static void disPlayWithCircle(String uri, ImageView imageAware, int coverColor, int defaultIcon) {
+    public static void disPlayWithCircle(String uri, ImageView imageAware) {
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setCropCircle(true).
+                build();
+        ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
+    }
+    public static void disPlayWithCircle(String uri, ImageView imageAware, int defaultIcon) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setPlaceHolderResId(defaultIcon).
                 setCropCircle(true).
@@ -112,13 +100,6 @@ public class ImageLoadUtils {
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCircle(String uri, ImageView imageAware, int coverColor, int defaultIcon, LoaderListener listener) {
-        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
-                setPlaceHolderResId(defaultIcon).
-                setCropCircle(true).
-                build();
-        ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, listener);
-    }
 
    /* private static void disPlayWithCover(String uri, ImageView imageAware, int coverColor) {
         LoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).

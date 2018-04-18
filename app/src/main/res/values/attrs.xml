@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--焦点图自定义属性-->
+    <declare-styleable name="FocusView">
+        <!--是否需要描述信息-->
+        <attr name="describe" format="boolean"/>
+        <!--自动轮播的时间间隔-->
+        <attr name="auto_play_time" format="integer"/>
+        <!--指示器的内边距-->
+        <attr name="indicator_padding" format="dimension"/>
+        <!--指示器的圆点左右边距-->
+        <attr name="indicator_child_margin" format="dimension"/>
+        <!--描述信息背景高度-->
+        <attr name="desc_height" format="dimension"/>
+        <!--描述文本的位置-->
+        <attr name="desc_gravity">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <!--指示器的位置-->
+        <attr name="indicator_gravity">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+
+
+    </declare-styleable>
+</resources>
