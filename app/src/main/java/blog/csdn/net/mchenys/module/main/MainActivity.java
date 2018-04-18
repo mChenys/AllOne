@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -12,10 +13,10 @@ import android.widget.Toast;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseActivity;
+import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.utils.PermissionUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
-import blog.csdn.net.mchenys.module.account.WishFragment;
 import blog.csdn.net.mchenys.module.find.FindFragment;
 import blog.csdn.net.mchenys.module.personal.PersonalFragment;
 import blog.csdn.net.mchenys.module.recommend.RecommendFragment;
@@ -36,9 +37,10 @@ public class MainActivity extends BaseActivity {
     private String[] mTabTitle = {"心愿单", "推荐", "发现", "我的"};
 
     //每个tab对应的Fragment
-    private Class[] fragmentArray = {WishFragment.class, RecommendFragment.class, FindFragment.class,
+    private Class[] fragmentArray = {HomeFragment.class, RecommendFragment.class, FindFragment.class,
             PersonalFragment.class};
 
+    private int position;//首次打开的tab位置
     @Override
     public void setTitleBar(TitleBar titleBar) {
         titleBar.setVisibility(View.GONE);
@@ -52,6 +54,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        position = getIntent().getIntExtra(Constant.KEY_POSITION, 0);
         //批量申请权限
         PermissionUtils.requestMultiPermission(this, new int[]{
                 PermissionUtils.CODE_READ_EXTERNAL_STORAGE,
@@ -69,19 +72,24 @@ public class MainActivity extends BaseActivity {
         tabHost.setup(this, getSupportFragmentManager(), R.id.real_tabcontent);
         tabHost.getTabWidget().setDividerDrawable(null); //去掉分割线
         for (int i = 0; i < fragmentArray.length; i++) {
-            TabHost.TabSpec tabSpec = tabHost.newTabSpec(mTabTitle[i]).setIndicator(getTabItemView(i));
+            TabHost.TabSpec tabSpec = tabHost.newTabSpec(String.valueOf(i)).setIndicator(getTabItemView(i));
             Bundle bundle = new Bundle();
             bundle.putString(Constant.KEY_TITLE, mTabTitle[i]);
             bundle.putInt(Constant.KEY_POSITION, i);
             tabHost.addTab(tabSpec, fragmentArray[i], bundle); //添加tab和关联对应的fragment
-            tabHost.getTabWidget().getChildAt(i).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+            //设置tabView相关
+            View tabView = tabHost.getTabWidget().getChildAt(i);
+            tabView.setId(i);
+            tabView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            tabView.setOnTouchListener(mTabTouchListener);
         }
-        tabHost.setCurrentTab(0);  //默认选中第一个tab
+        tabHost.setCurrentTab(position);  //默认选中第一个tab
         //设置tab的切换监听
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Toast.makeText(mContext, "tabId : " + tabId, Toast.LENGTH_SHORT).show();
+                position = Integer.valueOf(tabId);
             }
         });
     }
@@ -149,4 +157,24 @@ public class MainActivity extends BaseActivity {
         PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
 
     }
+
+    View.OnTouchListener mTabTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int id = v.getId();
+            if (position == id) {
+                //重复点击的处理
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(String.valueOf(id));
+                    if (null != fragment) {
+                        fragment.autoRefresh(new Bundle());
+                    }
+                }
+                return true;
+            } else {//切换点击
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {}
+            }
+            return false;
+        }
+    };
 }

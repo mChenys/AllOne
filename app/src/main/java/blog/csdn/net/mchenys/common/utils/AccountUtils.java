@@ -6,12 +6,10 @@ import android.webkit.CookieSyncManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import blog.csdn.net.mchenys.AllOneApplication;
 import blog.csdn.net.mchenys.common.config.Constant;
-import blog.csdn.net.mchenys.common.config.Env;
-import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.sns.bean.SnsUser;
+import blog.csdn.net.mchenys.model.Account;
 
 
 /**
@@ -31,94 +29,6 @@ public class AccountUtils {
         void onResult(Account account);
     }
 
-    /**
-     * 检查绑定
-     * @param user
-     * @param type
-     * @param loginResult
-     */
-    public static void checkBind(final MFSnsUser user, final int type, final LoginResult loginResult) {
-        String appType = "";
-        if (type == TENCENT) {
-            appType = "qq_lady_mdkt_an";
-        } else if (type == SINA) {
-            appType = "sina_lady_mdkt";
-        } else if (type == WECHAT) {
-            appType = "weixin_lady_mdkt";
-        }
-        String url = Urls.CHECK_BIND + "?type=" + appType + "&resp_enc=utf-8";
-
-        Map<String, String> bodyMap = new HashMap<String, String>();
-        bodyMap.put("open_account_id", user.getOpenId());
-        bodyMap.put("auto_login", COOKIE_EXPIRED);
-        bodyMap.put("accessToken", user.getAccessToken());
-        bodyMap.put("screen_name", user.getNickname());
-        HttpUtils.postJSON(url, null, bodyMap, new HttpUtils.JSONCallback() {
-            @Override
-            public void onFailure(int code, Exception e) {
-                if (loginResult != null)
-                    loginResult.onFailure(code, "网络错误,登录失败");
-            }
-
-            @Override
-            public void onSuccess(JSONObject jsonObject, HttpManager.PCResponse pcResponse) {
-                if (jsonObject.optInt("status") == 0) {// 0已经绑定
-                    String passportId = jsonObject.optString("user_id");
-                    String sessionId = jsonObject.optString("session");
-                    String nickName = jsonObject.optString("cmu");
-                    Account account = createAccount(user, passportId, sessionId, nickName, type);
-                    getUserInfo(true, account, loginResult);
-                } else {// 未绑定，进行快速绑定
-                    quickBind(user, type, loginResult);
-                }
-            }
-        });
-    }
-
-    /**
-     * 快速绑定
-     * @param user
-     * @param type
-     * @param loginResult
-     */
-    public static void quickBind(final MFSnsUser user, final int type, final LoginResult loginResult) {
-        String appType = "";
-        if (type == TENCENT) {
-            appType = "qq_lady_mdkt_an";
-        } else if (type == SINA) {
-            appType = "sina_lady_mdkt";
-        } else if (type == WECHAT) {
-            appType = "weixin_lady_mdkt";
-        }
-        String url = Urls.QUICK_BIND_URL + "?type=" + appType + "&resp_enc=utf-8";
-        Map<String, String> bodyMap = new HashMap<String, String>();
-        bodyMap.put("open_account_id", user.getOpenId());
-        bodyMap.put("auto_login", COOKIE_EXPIRED);
-        bodyMap.put("accessToken", user.getAccessToken());
-        bodyMap.put("screen_name", user.getNickname());
-        HttpUtils.postJSON(url, null, bodyMap, new HttpUtils.JSONCallback() {
-            @Override
-            public void onFailure(int code, Exception e) {
-                if (loginResult != null)
-                    loginResult.onFailure(code, e.getMessage());
-            }
-
-            @Override
-            public void onSuccess(JSONObject jsonObject, HttpManager.PCResponse pcResponse) {
-                int status = jsonObject.optInt("status");
-                if (status == 0) {// 快速绑定成功
-                    String passportId = jsonObject.optString("accountId");
-                    String sessionId = jsonObject.optString("session");
-                    String nickName = jsonObject.optString("cmu");
-                    final Account account = createAccount(user, passportId, sessionId, nickName, type);
-                    getUserInfo(true, account, loginResult);
-                } else {// 失败
-                    if (loginResult != null)
-                        loginResult.onFailure(pcResponse.getCode(), jsonObject.optString("desc"));
-                }
-            }
-        });
-    }
 
     /**
      * 根据第三方账号初始Account
@@ -130,7 +40,7 @@ public class AccountUtils {
      * @param type
      * @return
      */
-    private static Account createAccount(MFSnsUser user, String passportId, String sessionId, String nickName, int type) {
+    private static Account createAccount(SnsUser user, String passportId, String sessionId, String nickName, int type) {
         Account account = new Account();
         account.setSessionId(sessionId);
         account.setUserId(passportId);
@@ -155,64 +65,7 @@ public class AccountUtils {
         return account;
     }
 
-    /**
-     * 外部调用查询用户信息
-     *
-     * @param callback
-     */
-    public static void getUserInfo(final Callback callback) {
-        getUserInfo(false, getLoginAccount(), new LoginResult() {
-            @Override
-            public void handleSuccess(Account account) {
-                callback.onResult(account);
-            }
 
-            @Override
-            public void onFailure(int errorCode, String errorMessage) {
-                callback.onResult(null);
-            }
-        });
-    }
-
-    /**
-     * 内部调用获取用户信息
-     *
-     * @param isForceNetwork
-     * @param account
-     * @param loginResul
-     */
-    private static void getUserInfo(boolean isForceNetwork, final Account account, final LoginResult loginResul) {
-        java.net.CookieManager.setDefault(null);
-        Map<String, String> headersMap = new HashMap<String, String>();
-        headersMap.put("Cookie", Urls.COMMON_SESSION_ID + "=" + account.getSessionId());
-        String url = Urls.GET_USER_INFO_URL + "?userId=" + account.getUserId() + "&version=" + Env.versionCode;
-        HttpUtils.getJSON(isForceNetwork, url, headersMap, null, new HttpUtils.JSONCallback() {
-
-            @Override
-            public void onFailure(int code, Exception e) {
-                if (loginResul != null) loginResul.onFailure(code, "获取用户信息失败");
-            }
-
-            @Override
-            public void onSuccess(JSONObject jsonObject, HttpManager.PCResponse pcResponse) {
-                int status = jsonObject.optInt("status");
-                if (status == -1) {
-                    if (loginResul != null)
-                        loginResul.onFailure(status, jsonObject.optString("msg"));
-                } else {
-                    JSONObject data = jsonObject.optJSONObject("data");
-                    if (!StringUtils.isEmpty(data.optString("userNickName"))) {
-                        account.setUserName(StringUtils.replaceIllegalChars(data.optString("userNickName")));
-                    }
-                    account.setAvatarUrl(data.optString("techHeadUrl"));
-                    account.setPhoneNum(data.optString("phoneNum"));
-                    //保存用户信息
-                    saveAccount(account);
-                    if (loginResul != null) loginResul.onSuccess(account);
-                }
-            }
-        });
-    }
 
     private static void saveAccount(Account account) {
         try {
@@ -227,7 +80,7 @@ public class AccountUtils {
             accountJson.put("smallHeaderUrl", account.getSmallHeaderUrl());
             accountJson.put("bigHeaderUrl", account.getBigHeaderUrl());
             accountJson.put("phoneNum", account.getPhoneNum());
-            PreferencesUtils.setPreferences(ShoppingApplication.mAppContext, Constant.ACCOUNT_FILE_NAME,
+            PreferencesUtils.setPreferences(AllOneApplication.mAppContext, Constant.ACCOUNT_FILE_NAME,
                     Constant.ACCOUNT_KEY, accountJson.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -239,7 +92,7 @@ public class AccountUtils {
      * @return
      */
     public static Account getLoginAccount() {
-        String account_message = PreferencesUtils.getPreference(ShoppingApplication.mAppContext,
+        String account_message = PreferencesUtils.getPreference(AllOneApplication.mAppContext,
                 Constant.ACCOUNT_FILE_NAME, Constant.ACCOUNT_KEY, "");
         Account account = null;
         try {
@@ -287,7 +140,7 @@ public class AccountUtils {
      * 退出登录
      */
     public static void logout() {
-        CookieSyncManager.createInstance(ShoppingApplication.mAppContext);
+        CookieSyncManager.createInstance(AllOneApplication.mAppContext);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
@@ -297,6 +150,6 @@ public class AccountUtils {
             Account account = getLoginAccount();
             account.reset();
         }
-        PreferencesUtils.clearPreference(ShoppingApplication.mAppContext,Constant.ACCOUNT_FILE_NAME);
+        PreferencesUtils.clearPreference(AllOneApplication.mAppContext,Constant.ACCOUNT_FILE_NAME);
     }
 }

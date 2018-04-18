@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.com.pc.framwork.utils.app.ToastUtils;
 
 
 public class StringUtils {

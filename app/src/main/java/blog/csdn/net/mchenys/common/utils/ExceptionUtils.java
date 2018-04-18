@@ -10,6 +10,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import blog.csdn.net.mchenys.AllOneApplication;
+
 
 /**
  * Created by mChenys on 2017/12/27.
@@ -17,7 +19,7 @@ import java.net.UnknownHostException;
 
 public class ExceptionUtils {
     public static void exceptionHandler(Throwable error) {
-        Context context = ShoppingApplication.mAppContext;
+        Context context = AllOneApplication.mAppContext;
         if (context == null) return;
         if (error == null) return;
         if (error instanceof JSONException) {

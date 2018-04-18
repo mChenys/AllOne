@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import cn.com.pconline.shopping.common.utils.DisplayUtils;
+import blog.csdn.net.mchenys.common.utils.DisplayUtils;
+
 
 /**
  * RecycleView adapter的基类

@@ -18,11 +18,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebStorage.QuotaUpdater;
 import android.webkit.WebView;
 
-import cn.com.pc.framwork.utils.app.WebViewJavaScriptSInterface;
-import cn.com.pconline.shopping.common.config.Constant;
-import cn.com.pconline.shopping.common.config.Urls;
-import cn.com.pconline.shopping.common.utils.AccountUtils;
-import cn.com.pconline.shopping.module.account.LoginActivity;
+import blog.csdn.net.mchenys.common.config.Constant;
+import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.utils.AccountUtils;
+import blog.csdn.net.mchenys.module.account.LoginActivity;
 
 
 /**
@@ -55,7 +54,7 @@ public class BaseWebView extends WebView {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
-                case WebViewJavaScriptSInterface.CODE_GET_HTML:
+                case MyWebViewJavaScriptSInterface.CODE_GET_HTML:
                     htmlContent = (String) msg.obj;
                     break;
                 default:

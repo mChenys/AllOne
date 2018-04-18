@@ -2,16 +2,13 @@ package blog.csdn.net.mchenys.common.utils;
 
 import android.net.Uri;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.ImageView;
 
-import java.io.File;
+import blog.csdn.net.mchenys.R;
+import blog.csdn.net.mchenys.common.glide.ImageLoader;
+import blog.csdn.net.mchenys.common.glide.cofig.ImageLoadConfig;
+import blog.csdn.net.mchenys.common.glide.linstener.LoaderListener;
 
-import cn.com.pc.framwork.module.imageloader.ImageLoader;
-import cn.com.pc.framwork.module.imageloader.ImageLoaderConfig;
-import cn.com.pc.framwork.module.imageloader.ImageTargetSize;
-import cn.com.pc.framwork.module.imageloader.RoundedTransformationBuilder;
-import cn.com.pconline.shopping.R;
 
 /**
  * 图片加载工具类
@@ -31,12 +28,10 @@ public class ImageLoadUtils {
     }
 
     public static void disPlay(Uri uri, ImageView imageView) {
-        ImageLoader.load(uri, imageView, getDefaultConfig(), null);
+        ImageLoader.loadUri(imageView, uri, ImageLoader.defConfig, null);
     }
 
     /**
-     * 默认加载 R.drawable.app_thumb_default_80_60图片
-     *
      * @param uri
      * @param imageAware
      */
@@ -45,22 +40,16 @@ public class ImageLoadUtils {
     }
 
     public static void disPlay(int resId, ImageView imageAware) {
-        ImageLoaderConfig config = new ImageLoaderConfig.Builder()
-                .setImageDefault(R.mipmap.default_icon).build();
-        ImageLoader.load(resId, imageAware, config, null);
+        ImageLoader.loadResId(imageAware, resId, ImageLoader.defConfig, null);
     }
 
     public static void disPlay(String uri, ImageView imageAware, int w, int h) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder().setImageSize(new ImageTargetSize(w, h)).
-                setImageDefault(R.mipmap.default_icon).build();
-        ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setSize(new ImageLoadConfig.OverrideSize(w, h)).
+                build();
+        ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
 
-    public static void loadBottomTab(String uri, ImageView imageAware, int h, int w, int defalutDrawable) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder().setImageSize(new ImageTargetSize(w, h)).
-                setImageDefault(defalutDrawable).build();
-        ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
-    }
 
     public static void disPlayWithCorner(String uri, ImageView imageAware, int defaultIcon) {
         disPlayWithCorner(uri, imageAware, -1, defaultIcon);
@@ -71,67 +60,73 @@ public class ImageLoadUtils {
     }
 
     public static void disPlayWithCorner(String uri, ImageView imageAware) {
-        disPlayWithCorner(uri, imageAware, -1, R.mipmap.default_icon);
+        disPlayWithCorner(uri, imageAware, -1, R.drawable.loading_01);
     }
+
     public static void disPlayWithCornerUri(Uri uri, ImageView imageAware) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
-                .setImageDefault(R.mipmap.default_icon)
-                .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).cornerRadius(20).coverColor(-1))
-                .build();
-        ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setRoundedCorners(true).
+                setCornerRadius(20).
+                setCornerMargin(20).
+                build();
+        ImageLoader.loadUri(imageAware, uri, imageLoaderConfig, null);
     }
+
     public static void disPlayWithCircle(String uri, ImageView imageAware) {
-        disPlayWithCircle(uri, imageAware, -1, R.mipmap.default_icon);
+        disPlayWithCircle(uri, imageAware, -1, R.drawable.loading_01);
     }
 
     public static void disPlayWithCorner(int resId, ImageView imageAware, float corner) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
-                .setImageDefault(R.mipmap.default_icon)
-                .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).cornerRadius(corner).coverColor(-1))
-                .build();
-        ImageLoader.load(resId, imageAware, imageLoaderConfig, null);
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setRoundedCorners(true).
+                setCornerRadius(20).
+                setCornerMargin(20).
+                build();
+        ImageLoader.loadResId(imageAware, resId, imageLoaderConfig, null);
     }
 
     public static void disPlayWithCorner(int resId, ImageView imageAware, float corner, int w, int h) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
-                .setImageDefault(R.mipmap.default_icon)
-                .setImageSize(new ImageTargetSize(w, h))
-                .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).cornerRadius(corner).coverColor(-1))
-                .build();
-        ImageLoader.load(resId, imageAware, imageLoaderConfig, null);
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setRoundedCorners(true).
+                setCornerRadius((int) corner).
+                setCornerMargin(20).
+                setSize(new ImageLoadConfig.OverrideSize(w, h)).
+                build();
+        ImageLoader.loadResId(imageAware, resId, imageLoaderConfig, null);
     }
 
     public static void disPlayWithCorner(String uri, ImageView imageAware, int coverColor, int defaultIcon) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
-                .setImageDefault(defaultIcon)
-                .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).cornerRadius(20).coverColor(coverColor))
-                .build();
-        ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setRoundedCorners(true).
+                setCornerRadius(20).
+                setCornerMargin(20).
+                build();
+        ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
 
     public static void disPlayWithCircle(String uri, ImageView imageAware, int coverColor, int defaultIcon) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
-                .setImageDefault(defaultIcon)
-                .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).circle(true).coverColor(coverColor))
-                .build();
-        ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setPlaceHolderResId(defaultIcon).
+                setCropCircle(true).
+                build();
+        ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCircle(String uri, ImageView imageAware, int coverColor, int defaultIcon, cn.com.pc.framwork.module.imageloader.ImageLoadingListener listener) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
-                .setImageDefault(defaultIcon)
-                .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).circle(true).coverColor(coverColor))
-                .build();
-        ImageLoader.load(uri, imageAware, imageLoaderConfig, listener);
+    public static void disPlayWithCircle(String uri, ImageView imageAware, int coverColor, int defaultIcon, LoaderListener listener) {
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setPlaceHolderResId(defaultIcon).
+                setCropCircle(true).
+                build();
+        ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, listener);
     }
 
-    private static void disPlayWithCover(String uri, ImageView imageAware, int coverColor) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder()
+   /* private static void disPlayWithCover(String uri, ImageView imageAware, int coverColor) {
+        LoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 .setImageDefault(R.mipmap.default_icon)
                 .setRoundedTransformationBuilder(new RoundedTransformationBuilder(imageAware.getContext()).coverColor(coverColor))
                 .build();
         ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
-    }
+    }*/
 
     /**
      * 默认加载 R.drawable.app_thumb_default_80_60图片
@@ -141,7 +136,7 @@ public class ImageLoadUtils {
      */
     public static void disPlay(final String uri, final ImageView imageAware, final ImageLoadingListener listener) {
         if (StringUtils.isEmpty(uri)) {
-            imageAware.setImageResource(R.mipmap.default_icon);
+            imageAware.setImageResource(R.drawable.bg_loading);
             if (listener != null) {
                 listener.onLoadingFailed(uri, imageAware);
             }
@@ -150,7 +145,7 @@ public class ImageLoadUtils {
         if (listener != null) {
             listener.onLoadingStarted(uri, imageAware);
         }
-        cn.com.pc.framwork.module.imageloader.ImageLoadingListener lis = new cn.com.pc.framwork.module.imageloader.ImageLoadingListener() {
+        LoaderListener lis = new LoaderListener() {
             @Override
             public void onSuccess() {
                 if (listener != null) {
@@ -165,24 +160,8 @@ public class ImageLoadUtils {
                 }
             }
         };
-        if (URLUtil.isNetworkUrl(uri)) {
-            ImageLoader.load(uri, imageAware, getDefaultConfig(), lis);
-        } else if (uri.startsWith("file://")) {
-            ImageLoader.load(new File(uri.replace("file://", "")), imageAware, getDefaultConfig(), lis);
-        } else {
-            ImageLoader.load(new File(uri), imageAware, getDefaultConfig(), lis);
-        }
+        ImageLoader.loadStringRes(imageAware, uri, ImageLoader.defConfig, lis);
     }
 
-
-    public static ImageLoaderConfig getDefaultConfig() {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder().setImageDefault(R.mipmap.default_icon).build();
-        return imageLoaderConfig;
-    }
-
-    public static ImageLoaderConfig getImageDefault(int resId) {
-        ImageLoaderConfig imageLoaderConfig = new ImageLoaderConfig.Builder().setImageDefault(resId).build();
-        return imageLoaderConfig;
-    }
 
 }

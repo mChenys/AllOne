@@ -7,8 +7,6 @@ import android.os.Looper;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
-import com.example.mchenys.okhttp2x.MyApplication;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -20,6 +18,7 @@ import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import blog.csdn.net.mchenys.AllOneApplication;
 
 
 /**
@@ -77,7 +76,7 @@ public class ImageCacheUtils {
         if (null == instance) {
             synchronized (ImageCacheUtils.class) {
                 if (null == instance) {
-                    instance = new ImageCacheUtils(MyApplication.mAppContext);
+                    instance = new ImageCacheUtils(AllOneApplication.mAppContext);
                 }
             }
         }

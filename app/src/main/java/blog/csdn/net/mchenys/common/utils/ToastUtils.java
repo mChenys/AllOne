@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import blog.csdn.net.mchenys.ShoppingApplication;
+import blog.csdn.net.mchenys.AllOneApplication;
 
 /**
  * Created by mChenys on 2018/4/17.
@@ -20,7 +20,7 @@ public class ToastUtils {
         if (!StringUtils.isEmpty(msg)) show(context, msg, Toast.LENGTH_SHORT);
     }
     public synchronized static void showShort(String msg) {
-        if (!StringUtils.isEmpty(msg)) show(ShoppingApplication.mAppContext, msg, Toast.LENGTH_SHORT);
+        if (!StringUtils.isEmpty(msg)) show(AllOneApplication.mAppContext, msg, Toast.LENGTH_SHORT);
     }
     public synchronized static void show(Context context, String msg, int duration) {
         try {

@@ -4,7 +4,8 @@ import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import cn.com.pc.framwork.utils.app.LogUtils;
+import blog.csdn.net.mchenys.common.utils.LogUtils;
+
 
 /**
  * 处理RecycleView的选中,拖拽移动,拖拽删除的实现类

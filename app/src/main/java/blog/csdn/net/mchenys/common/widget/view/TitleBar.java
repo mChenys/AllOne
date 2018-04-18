@@ -3,6 +3,7 @@ package blog.csdn.net.mchenys.common.widget.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,6 +11,10 @@ import android.widget.TextView;
 import blog.csdn.net.mchenys.R;
 
 
+/**
+ * 顶部公用布局
+ * Created by mChenys on 2012/12/27.
+ */
 /**
  * 顶部公用布局
  * Created by mChenys on 2012/12/27.
@@ -57,15 +62,48 @@ public class TitleBar extends RelativeLayout {
         mCenterTv.setVisibility(View.VISIBLE);
     }
 
+
     public void setLeftTv(String title) {
         mLeftTv.setText(title);
         mLeftTv.setVisibility(View.VISIBLE);
     }
 
-    public void setRightTv(String title) {
+
+    public void setmTitleBarHeight(int height) {
+        ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) this.getLayoutParams();
+        layoutParams.height = height;
+        this.setLayoutParams(layoutParams);
+    }
+
+    public void setLeftTvSize(int size) {
+        mLeftTv.setTextSize(size);
+    }
+
+    public void setLeftTvStyleBold(boolean isBold) {
+        mLeftTv.getPaint().setFakeBoldText(isBold);
+    }
+
+    public void setLeftTvMarginLeft(int leftMagin) {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLeftTv.getLayoutParams();
+        layoutParams.leftMargin = leftMagin;
+        mLeftTv.setLayoutParams(layoutParams);
+    }
+
+    public void setTvMargin(int leftMagin, int topMargin, int rightMargin, int bottomMargin) {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLeftTv.getLayoutParams();
+        layoutParams.leftMargin = leftMagin;
+        layoutParams.topMargin = topMargin;
+        layoutParams.rightMargin = rightMargin;
+        layoutParams.bottomMargin = bottomMargin;
+        mLeftTv.setLayoutParams(layoutParams);
+    }
+
+    public void setRightTv(String title, OnClickListener onClickListener) {
         mRightTv.setText(title);
         mRightTv.setVisibility(View.VISIBLE);
+        mRightTv.setOnClickListener(onClickListener);
     }
+
 
     public void setLeft(Integer resId, String leftTitle, OnClickListener onClickListener) {
         if (null != resId) {
@@ -82,6 +120,15 @@ public class TitleBar extends RelativeLayout {
         }
         mRightIcon1.setOnClickListener(onClickListener);
         setRightIcon1Visiable(true);
+    }
+
+    public void setRightIcon1Margin(int leftMagin, int topMargin, int rightMargin, int bottomMargin) {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRightIcon1.getLayoutParams();
+        layoutParams.leftMargin = leftMagin;
+        layoutParams.topMargin = topMargin;
+        layoutParams.rightMargin = rightMargin;
+        layoutParams.bottomMargin = bottomMargin;
+        mRightIcon1.setLayoutParams(layoutParams);
     }
 
     public void setRightIcon1Clickable(boolean canClick) {

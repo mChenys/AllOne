@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     useLibrary 'org.apache.http.legacy'
+
     compileSdkVersion 26
     defaultConfig {
         applicationId "blog.csdn.net.mchenys"
@@ -10,6 +11,15 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //BlurTransformation
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86_64"
+        }
+        aaptOptions.cruncherEnabled = false
+        aaptOptions.useNewCruncher = false
     }
     buildTypes {
         release {
@@ -38,4 +48,5 @@ dependencies {
     implementation files('libs/mta-sdk-1.6.2.1.jar')
     implementation files('libs/open-sdk-r5793.jar')
     compile(name: 'openDefault-2.0.3_', ext: 'aar')
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

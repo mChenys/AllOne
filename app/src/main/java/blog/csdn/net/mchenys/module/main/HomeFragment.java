@@ -1,4 +1,4 @@
-package blog.csdn.net.mchenys.module.account;
+package blog.csdn.net.mchenys.module.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +14,7 @@ import blog.csdn.net.mchenys.common.config.Constant;
  * Created by mChenys on 2017/12/28.
  */
 
-public class WishFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment {
     private String title;
     private int position;
 

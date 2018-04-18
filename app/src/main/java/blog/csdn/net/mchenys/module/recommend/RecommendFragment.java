@@ -54,7 +54,6 @@ public class RecommendFragment extends BaseRecyclerViewListFragment<Recommend> {
     protected void afterDataSet(List<Recommend> data, boolean isLoadMore) {
         Recommend recommend = data.get(0);
         recommend.techDesc = "测试描述";
-        data.set(0, recommend);
     }
 
     @Override
@@ -66,6 +65,8 @@ public class RecommendFragment extends BaseRecyclerViewListFragment<Recommend> {
     protected Req onCreateReq() {
         return new Req(Urls.TEST, null, null);
     }
+
+
 
 
 }

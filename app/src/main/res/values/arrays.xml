@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="permissions">
+        <item>@string/permission_recode_audio_hint</item>
+        <item>@string/permission_get_accounts_hint</item>
+        <item>@string/permission_read_phone_hint</item>
+        <item>@string/permission_call_phone_hint</item>
+        <item>@string/permission_camera_hint</item>
+        <item>@string/permission_access_fine_location_hint</item>
+        <item>@string/permission_access_coarse_location_hint</item>
+        <item>@string/permission_read_external_hint</item>
+        <item>@string/permission_white_external_hint</item>
+
+    </string-array>
+    <string name="permission_get_accounts_hint">没有开启访问联系人信息权限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_read_phone_hint">没有开启访问手机态权限，无法开启这个功能，请开启权限</string>
+    <string name="permission_call_phone_hint">没有开启拨打电话权限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_camera_hint">没有开启摄像头权限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_access_fine_location_hint">没有开启GPS定位权限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_access_coarse_location_hint">没有开启网络定位限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_read_external_hint">没有开启文件读取权限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_white_external_hint">没有开启文件存储权限，无法开启这个功能，请开启权限。</string>
+    <string name="permission_recode_audio_hint">没有开启录音权限，无法开启这个功能，请开启权限。</string>
+
+</resources>

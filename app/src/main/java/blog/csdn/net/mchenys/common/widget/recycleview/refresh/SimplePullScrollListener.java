@@ -2,7 +2,7 @@ package blog.csdn.net.mchenys.common.widget.recycleview.refresh;
 
 import android.support.v7.widget.RecyclerView;
 
-import cn.com.pconline.shopping.common.utils.DisplayUtils;
+import blog.csdn.net.mchenys.common.utils.DisplayUtils;
 
 
 /**

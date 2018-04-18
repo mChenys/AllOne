@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import cn.com.pconline.shopping.R;
+import blog.csdn.net.mchenys.R;
 
 
 /**

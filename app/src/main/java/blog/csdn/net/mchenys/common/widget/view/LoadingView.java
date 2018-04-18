@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cn.com.pconline.shopping.R;
+import blog.csdn.net.mchenys.R;
+
 
 /**
  * 加载页面

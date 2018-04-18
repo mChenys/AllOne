@@ -15,7 +15,6 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLDecoder;
@@ -24,7 +23,9 @@ import java.util.HashMap;
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
+import blog.csdn.net.mchenys.common.utils.HttpUtils;
 import blog.csdn.net.mchenys.common.utils.StringUtils;
 import blog.csdn.net.mchenys.common.utils.URIUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
@@ -300,36 +301,24 @@ public class BaseTerminalActivity extends BaseActivity {
                 mWebView.loadUrl(url, header);
             } else {
                 header.put("Cookie", Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());
-                HttpManager.getInstance().asyncRequest(url, new RequestCallBackHandler() {
+                HttpUtils.getJSON(true, url, header, null, new HttpUtils.JSONCallback() {
                     @Override
-                    public void onFailure(int i, Exception e) {
+                    public void onFailure(Exception e) {
                         mUEView.showError();
                     }
 
                     @Override
-                    public Object doInBackground(HttpManager.PCResponse pcResponse) {
-                        return null;
-                    }
-
-                    @Override
-                    public void onResponse(Object o, HttpManager.PCResponse pcResponse) {
-                        if (null != pcResponse && !StringUtils.isEmpty(pcResponse.getResponse()) && pcResponse.getCode() == 200) {
-                            try {
-                                JSONObject object = new JSONObject(pcResponse.getResponse());
-                                int status = object.optInt("status");
-                                if (status < 0) {
-                                    mUEView.showError();
-                                    return;
-                                }
-                            } catch (JSONException e) {
-                            }
-                            mWebView.loadDataWithBaseURL(url, pcResponse.getResponse(), "text/html", "UTF-8", null);
-                            mUEView.hideLoading();
-                        } else {
+                    public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
+                        int status = jsonObject.optInt("status");
+                        if (status < 0) {
                             mUEView.showError();
+                            return;
                         }
+                        mWebView.loadDataWithBaseURL(url, okResponse.getResult(), "text/html", "UTF-8", null);
+                        mUEView.hideLoading();
+
                     }
-                }, HttpManager.RequestType.NETWORK_FIRST, HttpManager.RequestMode.GET, url, header, null);
+                });
             }
         } else {
             mUEView.showError();

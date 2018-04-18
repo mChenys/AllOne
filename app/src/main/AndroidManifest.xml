@@ -7,9 +7,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:name=".ShoppingApplication"
+        android:name=".AllOneApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,6 +28,18 @@
         </activity>
         <activity
             android:name=".module.main.AppGuideActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.account.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.photo.AlbumListActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.photo.PhotoListActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".common.photo.PhotoViewActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".module.main.MainActivity"

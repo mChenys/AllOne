@@ -10,8 +10,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
@@ -21,14 +19,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.com.pc.framwork.utils.app.LogUtils;
-import cn.com.pconline.shopping.common.widget.recycleview.refresh.footer.ShoppingLoadingFooter;
-import cn.com.pconline.shopping.common.widget.recycleview.refresh.header.ShoppingRefreshHeader;
+import blog.csdn.net.mchenys.common.utils.LogUtils;
+import blog.csdn.net.mchenys.common.widget.recycleview.refresh.footer.ShoppingLoadingFooter;
+import blog.csdn.net.mchenys.common.widget.recycleview.refresh.header.ShoppingRefreshHeader;
 
 
 /**
@@ -681,7 +678,7 @@ public class RefreshRecyclerView extends RecyclerView {
                 if (pullRefreshEnabled)
                     LogUtils.d(TAG, ">>>>>>非刷新状态====" + mRefreshHeader.getState());
                 LogUtils.d(TAG, ">>>>>>isOnTop() ====" + isOnTop());
-                if (isOnTop() && appbarState == AppBarStateChangeListener.State.EXPANDED
+                if (isOnTop() /*&& appbarState == AppBarStateChangeListener.State.EXPANDED*/
                         && mRefreshHeader.getState() != BaseRefreshHeader.STATE_REFRESHING) {
                     //LogUtils.d(TAG, ">>>>>>非刷新状态");
                     mRefreshHeader.onMove(deltaY / DRAG_RATE);
@@ -706,7 +703,7 @@ public class RefreshRecyclerView extends RecyclerView {
                 break;
             default:
                 mLastY = -1; // reset
-                if (isOnTop() && appbarState == AppBarStateChangeListener.State.EXPANDED) {
+                if (isOnTop() /*&& appbarState == AppBarStateChangeListener.State.EXPANDED*/) {
                     mRefreshHeader.releaseAction(new SimpleRefreshAnimatorListener() {
                         @Override
                         public void onStayAnimEnd() {
@@ -1369,7 +1366,7 @@ public class RefreshRecyclerView extends RecyclerView {
         }
     }
 
-    //        有用到可以解开,引入design包
+    /**        有用到可以解开,引入design包
     private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
 
     @Override
@@ -1437,5 +1434,5 @@ public class RefreshRecyclerView extends RecyclerView {
 
         public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
     }
-
+**/
 }

@@ -4,13 +4,13 @@
        android:layout_height="match_parent"
        android:orientation="vertical">
 
-    <cn.com.pconline.shopping.common.widget.view.LoadingView
+    <blog.csdn.net.mchenys.common.widget.view.LoadingView
         android:id="@+id/loadView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
 
-    <cn.com.pconline.shopping.common.widget.view.NetworkErrorView
+    <blog.csdn.net.mchenys.common.widget.view.NetworkErrorView
         android:id="@+id/error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
