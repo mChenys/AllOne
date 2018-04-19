@@ -1304,7 +1304,6 @@ public class RefreshRecyclerView extends RecyclerView {
         private int topSpace;
         private int rightSpace;
         private int bottomSpace;
-        private int spanCount;
 
         /**
          * 所有间距传dip值
@@ -1316,11 +1315,10 @@ public class RefreshRecyclerView extends RecyclerView {
          */
         public SpacesItemDecoration(int leftSpace, int topSpace, int rightSpace, int bottomSpace) {
             float density = getContext().getResources().getDisplayMetrics().density;
-            this.leftSpace = (int) (density * leftSpace + 0.5);
-            this.topSpace = (int) (density * topSpace + 0.5);
-            this.rightSpace = (int) (density * rightSpace + 0.5);
-            this.bottomSpace = (int) (density * bottomSpace + 0.5);
-            this.spanCount = spanCount;
+            this.leftSpace = (int) (density * leftSpace );
+            this.topSpace = (int) (density * topSpace );
+            this.rightSpace = (int) (density * rightSpace );
+            this.bottomSpace = (int) (density * bottomSpace );
         }
 
         @Override
@@ -1340,26 +1338,35 @@ public class RefreshRecyclerView extends RecyclerView {
                 LayoutManager lp = getLayoutManager();
                 if (lp instanceof LinearLayoutManager) {
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) lp;
-                    if (linearLayoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
-                        outRect.left = 0;
-                        outRect.right = 0;
-                        outRect.bottom = 0;
-                        outRect.top = topSpace;
-                        setPadding(leftSpace, 0, rightSpace, bottomSpace);
-                    } else {
-                        outRect.top = 0;
-                        outRect.bottom = 0;
-                        outRect.right = 0;
-                        outRect.left = leftSpace;
-                        setPadding(0, topSpace, rightSpace, bottomSpace);
+                    if (itemStartPosition >= 2) {
 
+                    }else{
+                        if (linearLayoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
+                            outRect.left = 0;
+                            outRect.right = 0;
+                            outRect.bottom = 0;
+                            outRect.top = topSpace;
+                            setPadding(leftSpace, 0, rightSpace, bottomSpace);
+                        } else {
+                            outRect.top = 0;
+                            outRect.bottom = 0;
+                            outRect.right = 0;
+                            outRect.left = leftSpace;
+                            setPadding(0, topSpace, rightSpace, bottomSpace);
+                        }
                     }
-                } else { //网格布局
-                    outRect.bottom = 0;
-                    outRect.right = 0;
-                    outRect.top = topSpace;
-                    outRect.left = leftSpace;
-                    setPadding(0, 0, rightSpace, bottomSpace);
+
+                } else if(lp instanceof StaggeredGridLayoutManager) { //网格布局
+                    if (itemStartPosition >= 2) {
+
+                    }else{
+                        outRect.bottom = 0;
+                        outRect.right = 0;
+                        outRect.top = topSpace;
+                        outRect.left = leftSpace;
+                        setPadding(0, 0, rightSpace, bottomSpace);
+                    }
+
                 }
             }
 

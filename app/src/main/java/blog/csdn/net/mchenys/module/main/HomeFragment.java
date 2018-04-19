@@ -34,6 +34,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected Integer getLayoutResID() {
-        return R.layout.fragment_wish;
+        return R.layout.fragment_home;
     }
 }

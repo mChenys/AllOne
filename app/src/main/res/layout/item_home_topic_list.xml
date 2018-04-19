@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/ll_normal_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+       >
+
+        <ImageView
+            android:id="@+id/iv_big_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/color_111111"
+                android:textSize="12sp"
+                tools:text="每年秋天，广州的天气都是突然干燥降温，小朋"/>
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/color_818181"
+                android:textSize="12sp"
+                tools:text="每年秋天，广州的天气都是突然干燥降温，小朋"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15.84dp"
+                android:layout_marginTop="15.84dp">
+
+                <FrameLayout
+                    android:id="@+id/fl_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_header"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        tools:src="@mipmap/ic_launcher"/>
+
+                    <ImageView
+                        android:id="@+id/iv_header_tag"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginTop="15.5dp"
+                        tools:src="@mipmap/ic_launcher"/>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/fl_header"
+                    android:singleLine="true"
+                    android:textColor="@color/color_818181"
+                    android:textSize="10sp"
+                    tools:text="aaaaaaaaaaa"/>
+
+                <TextView
+                    android:id="@+id/tv_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:drawableLeft="@drawable/live_page_icon_support"
+                    android:drawablePadding="4dp"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    tools:text="9999"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

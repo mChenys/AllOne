@@ -17,9 +17,9 @@ import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.utils.PermissionUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
-import blog.csdn.net.mchenys.module.find.FindFragment;
+import blog.csdn.net.mchenys.module.circle.CircleFragment;
 import blog.csdn.net.mchenys.module.personal.PersonalFragment;
-import blog.csdn.net.mchenys.module.recommend.RecommendFragment;
+import blog.csdn.net.mchenys.module.special.SpecialFragment;
 
 
 /**
@@ -34,10 +34,10 @@ public class MainActivity extends BaseActivity {
     };
 
     //tab选项卡的文字
-    private String[] mTabTitle = {"心愿单", "推荐", "发现", "我的"};
+    private String[] mTabTitle = {"首页", "专家", "圈子", "我的"};
 
     //每个tab对应的Fragment
-    private Class[] fragmentArray = {HomeFragment.class, RecommendFragment.class, FindFragment.class,
+    private Class[] fragmentArray = {HomeFragment.class, SpecialFragment.class, CircleFragment.class,
             PersonalFragment.class};
 
     private int position;//首次打开的tab位置

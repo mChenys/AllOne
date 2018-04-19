@@ -190,7 +190,7 @@ public class FocusView extends RelativeLayout {
             int size = list.size();
             mViewPager.setCurrentItem(size * 1000);//多次调用,会出现卡顿情况
         }
-        mPagerAdapter.notifyDataSetChanged();
+        notifyDataSetChanged();
 
     }
 
@@ -199,7 +199,6 @@ public class FocusView extends RelativeLayout {
      */
     public void notifyDataSetChanged() {
         if (null != mPagerAdapter) {
-//            initDot();
             changeIndicator(mViewPager.getCurrentItem());
             mPagerAdapter.notifyDataSetChanged();
         }
@@ -209,26 +208,25 @@ public class FocusView extends RelativeLayout {
     private void initDot() {
         LinearLayout indicator = (LinearLayout) findViewById(id_indicator);
         indicator.removeAllViews();
-        if (null != mFocusList && mFocusList.size() < 2) {
+        int size = mFocusList.size();
+        if (null != mFocusList && size < 2) {
             return;
         }
-        int size = mFocusList.size();
-        if (size > 0) {
-            LinearLayout.LayoutParams dotLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            dotLp.leftMargin = mDotMagin;
-            for (int i = 0; i < size; i++) {
-                ImageView dot = new ImageView(getContext());
-                dot.setBackgroundResource(mIndicatorSelectorResId);
-                dot.setClickable(false);
-                dot.setId(i);
-                if (i == 0) {
-                    indicator.addView(dot, i);
-                } else {
-                    indicator.addView(dot, i, dotLp);
-                }
+        LinearLayout.LayoutParams dotLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        dotLp.leftMargin = mDotMagin;
+        for (int i = 0; i < size; i++) {
+            ImageView dot = new ImageView(getContext());
+            dot.setBackgroundResource(mIndicatorSelectorResId);
+            dot.setClickable(false);
+            dot.setId(i);
+            if (i == 0) {
+                indicator.addView(dot, i);
+            } else {
+                indicator.addView(dot, i, dotLp);
             }
         }
+
     }
 
     /**

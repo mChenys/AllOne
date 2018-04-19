@@ -1,4 +1,4 @@
-package blog.csdn.net.mchenys.module.recommend;
+package blog.csdn.net.mchenys.module.special;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,20 +16,20 @@ import blog.csdn.net.mchenys.common.base.BaseRecyclerViewListFragment;
 import blog.csdn.net.mchenys.common.config.Urls;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.model.Recommend;
-import blog.csdn.net.mchenys.module.recommend.adapter.RecommendAdapter;
+import blog.csdn.net.mchenys.module.adapter.RecommendAdapter;
 
 /**
  * 推荐
  * Created by mChenys on 2017/12/28.
  */
 
-public class RecommendFragment extends BaseRecyclerViewListFragment<Recommend> {
+public class SpecialFragment extends BaseRecyclerViewListFragment<Recommend> {
 
     private TextView mHeaderInfo;
 
     @Override
     protected void setTitleBar(TitleBar titleBar) {
-        titleBar.setCenterTv("推荐");
+        titleBar.setCenterTv("专家");
     }
 
     @Override
@@ -63,6 +63,7 @@ public class RecommendFragment extends BaseRecyclerViewListFragment<Recommend> {
 
     @Override
     protected Req onCreateReq() {
+
         return new Req(Urls.TEST, null, null);
     }
 

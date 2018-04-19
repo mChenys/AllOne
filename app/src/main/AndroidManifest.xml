@@ -41,6 +41,8 @@
         <activity
             android:name=".common.photo.PhotoViewActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".module.terminal.WapTopicsTerminalActivity"
+                  android:screenOrientation="portrait" />
         <activity
             android:name=".module.main.MainActivity"
             android:screenOrientation="portrait"/>

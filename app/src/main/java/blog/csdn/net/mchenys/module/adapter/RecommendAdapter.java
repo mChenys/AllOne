@@ -1,4 +1,4 @@
-package blog.csdn.net.mchenys.module.recommend.adapter;
+package blog.csdn.net.mchenys.module.adapter;
 
 import android.content.Context;
 

@@ -33,6 +33,8 @@ public class Urls {
     public static final String QUICK_BIND_URL = "https://passport3.pclady.com.cn/passport3/api/registerOpen4App.jsp";
     //测试RecycleView
     public static final String TEST = "https://mrobot.pclady.com.cn/modern/x/modern.pclady.com.cn/app/teacher/teacherList.do";
+    public static final String CIRCLE_HOME = "https://mrobot.pclady.com.cn/modern/s/bbs/circleHome2.xsp";
+    public static final String WAP_TOPIC_TERMINAL = "https://mrobot.pclady.com.cn/modern/s/bbs/topicDetail2.xsp" ;
 
 
     public static String getTargetUrl(String url) {
