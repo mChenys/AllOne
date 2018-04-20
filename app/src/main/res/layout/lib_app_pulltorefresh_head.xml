@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#00000000">
+
+    <!-- 内容 -->
+    <RelativeLayout
+        android:id="@+id/head_contentLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp">
+
+        <!-- 提示、最近更新 -->
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dip"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <!-- 提示 -->
+            <TextView
+                android:id="@+id/tv_first_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                tools:text="提示"/>
+
+            <!-- 最近更新 -->
+            <TextView
+                android:id="@+id/tv_second_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxEms="12"
+                android:singleLine="true"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                tools:text="最近更新"/>
+        </LinearLayout>
+
+        <!-- 箭头图像、进度条 -->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/layout1">
+            <!-- 箭头 -->
+            <ImageView
+                android:id="@+id/iv_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/app_pull_down_arrow"/>
+            <!-- 进度条 -->
+            <ProgressBar
+                android:id="@+id/pb_refresh"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+        </FrameLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

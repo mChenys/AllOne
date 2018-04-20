@@ -22,7 +22,7 @@ public class RefreshLinearLayout extends LinearLayout {
     private BaseRefreshHeader mRefreshHeader;
     private OnScrollListener mOnScrollListener;
     private OnRefreshListener mOnRefreshListener;
-    private final static float OFFSET_RADIO = 1.8f;
+    private static final float DRAG_RATE = 3;
 
     /**
      * 刷新监听
@@ -115,8 +115,8 @@ public class RefreshLinearLayout extends LinearLayout {
                 final float deltaY = ev.getRawY() - mLastY;
                 mLastY = ev.getRawY();
                 if (getScrollY() == 0
-                        && mRefreshHeader != null && (mRefreshHeader.getVisibleHeight() > 0 || deltaY > 0)) {
-                    mRefreshHeader.onMove(deltaY / OFFSET_RADIO);
+                        && mRefreshHeader != null && deltaY > 0) {
+                    mRefreshHeader.onMove(deltaY / DRAG_RATE);
                     ev.setAction(MotionEvent.ACTION_CANCEL);
                     ev.setLocation(-1, -1);
                 }

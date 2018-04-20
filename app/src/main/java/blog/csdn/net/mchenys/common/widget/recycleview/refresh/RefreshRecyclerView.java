@@ -1,8 +1,5 @@
 package blog.csdn.net.mchenys.common.widget.recycleview.refresh;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
@@ -187,15 +184,23 @@ public class RefreshRecyclerView extends RecyclerView {
     public void setNoMore(boolean noMore) {
         isLoadingData = false;
         isNoMore = noMore;
-        if (noMore && null != mNoMoreListener) mNoMoreListener.onNoMore(true);
+
         mLoaderFooter.setState(isNoMore ? BaseLoaderFooter.STATE_NOMORE : BaseLoaderFooter.STATE_COMPLETE);
+
         if (noMore && pullRefreshEnabled && mRefreshHeader.getState() == BaseRefreshHeader.STATE_REFRESHING) {
             mRefreshHeader.refreshComplete(null);
         }
         notifyDataSetChange();
-        for (OnPullScrollListener l : mOnPullScrollListeners) {
-            l.onLoaderNoMore();
+
+        if (noMore) {
+            if (null != mNoMoreListener) {
+                mNoMoreListener.onNoMore(true);
+            }
+            for (OnPullScrollListener l : mOnPullScrollListeners) {
+                l.onLoaderNoMore();
+            }
         }
+
     }
 
     public void setNoMore(boolean noMore, boolean autoScrollLast) {
@@ -430,40 +435,13 @@ public class RefreshRecyclerView extends RecyclerView {
 
         @Override
         public PointF computeScrollVectorForPosition(int targetPosition) {
-           return  ((LinearLayoutManager) getLayoutManager()).computeScrollVectorForPosition(targetPosition);
+            return ((LinearLayoutManager) getLayoutManager()).computeScrollVectorForPosition(targetPosition);
         }
     }
 
-    private boolean isAnimating;
-
-    public void animToTop() {
-        if (isAnimating) return;
-        ValueAnimator animator = ValueAnimator.ofInt(mWrapAdapter.getItemCount() - 1, 0);
-        animator.setDuration(1000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int position = (int) animation.getAnimatedValue();
-                scrollToPosition(position);
-            }
-        });
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                isAnimating = false;
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                isAnimating = true;
-            }
-        });
-        animator.start();
-    }
 
     //控制飞滑的速度
-    private double flingScale = 0.5;
+    private double flingScale = 0.7;
 
     @Override
     public boolean fling(int velocityX, int velocityY) {
@@ -1315,10 +1293,10 @@ public class RefreshRecyclerView extends RecyclerView {
          */
         public SpacesItemDecoration(int leftSpace, int topSpace, int rightSpace, int bottomSpace) {
             float density = getContext().getResources().getDisplayMetrics().density;
-            this.leftSpace = (int) (density * leftSpace );
-            this.topSpace = (int) (density * topSpace );
-            this.rightSpace = (int) (density * rightSpace );
-            this.bottomSpace = (int) (density * bottomSpace );
+            this.leftSpace = (int) (density * leftSpace);
+            this.topSpace = (int) (density * topSpace);
+            this.rightSpace = (int) (density * rightSpace);
+            this.bottomSpace = (int) (density * bottomSpace);
         }
 
         @Override
@@ -1340,7 +1318,7 @@ public class RefreshRecyclerView extends RecyclerView {
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) lp;
                     if (itemStartPosition >= 2) {
 
-                    }else{
+                    } else {
                         if (linearLayoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
                             outRect.left = 0;
                             outRect.right = 0;
@@ -1356,10 +1334,10 @@ public class RefreshRecyclerView extends RecyclerView {
                         }
                     }
 
-                } else if(lp instanceof StaggeredGridLayoutManager) { //网格布局
+                } else if (lp instanceof StaggeredGridLayoutManager) { //网格布局
                     if (itemStartPosition >= 2) {
 
-                    }else{
+                    } else {
                         outRect.bottom = 0;
                         outRect.right = 0;
                         outRect.top = topSpace;
@@ -1374,72 +1352,69 @@ public class RefreshRecyclerView extends RecyclerView {
     }
 
     /**        有用到可以解开,引入design包
-    private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
+     private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        //解决和CollapsingToolbarLayout冲突的问题
-        AppBarLayout appBarLayout = null;
-        ViewParent p = getParent();
-        while (p != null) {
-            if (p instanceof CoordinatorLayout) {
-                break;
-            }
-            p = p.getParent();
-        }
-        if (p instanceof CoordinatorLayout) {
-            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
-            final int childCount = coordinatorLayout.getChildCount();
-            for (int i = childCount - 1; i >= 0; i--) {
-                final View child = coordinatorLayout.getChildAt(i);
-                if (child instanceof AppBarLayout) {
-                    appBarLayout = (AppBarLayout) child;
-                    break;
-                }
-            }
-            if (appBarLayout != null) {
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        appbarState = state;
-                    }
-                });
-            }
-        }
-    }
+     @Override protected void onAttachedToWindow() {
+     super.onAttachedToWindow();
+     //解决和CollapsingToolbarLayout冲突的问题
+     AppBarLayout appBarLayout = null;
+     ViewParent p = getParent();
+     while (p != null) {
+     if (p instanceof CoordinatorLayout) {
+     break;
+     }
+     p = p.getParent();
+     }
+     if (p instanceof CoordinatorLayout) {
+     CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
+     final int childCount = coordinatorLayout.getChildCount();
+     for (int i = childCount - 1; i >= 0; i--) {
+     final View child = coordinatorLayout.getChildAt(i);
+     if (child instanceof AppBarLayout) {
+     appBarLayout = (AppBarLayout) child;
+     break;
+     }
+     }
+     if (appBarLayout != null) {
+     appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+     @Override public void onStateChanged(AppBarLayout appBarLayout, State state) {
+     appbarState = state;
+     }
+     });
+     }
+     }
+     }
 
-    public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
+     public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
 
-        public enum State {
-            EXPANDED,
-            COLLAPSED,
-            IDLE
-        }
+     public enum State {
+     EXPANDED,
+     COLLAPSED,
+     IDLE
+     }
 
-        private State mCurrentState = State.IDLE;
+     private State mCurrentState = State.IDLE;
 
-        @Override
-        public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-            if (i == 0) {
-                if (mCurrentState != State.EXPANDED) {
-                    onStateChanged(appBarLayout, State.EXPANDED);
-                }
-                mCurrentState = State.EXPANDED;
-            } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
-                if (mCurrentState != State.COLLAPSED) {
-                    onStateChanged(appBarLayout, State.COLLAPSED);
-                }
-                mCurrentState = State.COLLAPSED;
-            } else {
-                if (mCurrentState != State.IDLE) {
-                    onStateChanged(appBarLayout, State.IDLE);
-                }
-                mCurrentState = State.IDLE;
-            }
-        }
+     @Override public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+     if (i == 0) {
+     if (mCurrentState != State.EXPANDED) {
+     onStateChanged(appBarLayout, State.EXPANDED);
+     }
+     mCurrentState = State.EXPANDED;
+     } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+     if (mCurrentState != State.COLLAPSED) {
+     onStateChanged(appBarLayout, State.COLLAPSED);
+     }
+     mCurrentState = State.COLLAPSED;
+     } else {
+     if (mCurrentState != State.IDLE) {
+     onStateChanged(appBarLayout, State.IDLE);
+     }
+     mCurrentState = State.IDLE;
+     }
+     }
 
-        public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
-    }
-**/
+     public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
+     }
+     **/
 }

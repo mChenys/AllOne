@@ -13,10 +13,12 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
+import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebStorage.QuotaUpdater;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
@@ -110,6 +112,23 @@ public class BaseWebView extends WebView {
         }
         addJavascriptInterface(new MyWebViewJavaScriptSInterface(context, mHandler), "PCJSKit");
         setWebChromeClient(null);
+        setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if(URLUtil.isNetworkUrl(url)){
+                    view.loadUrl(url);
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+        });
+        //屏蔽长按复制
+        setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return true;
+            }
+        });
     }
 
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -293,4 +312,6 @@ public class BaseWebView extends WebView {
     public interface OnScrollChangedCallback {
         void onScroll(int l, int t);
     }
+
+
 }

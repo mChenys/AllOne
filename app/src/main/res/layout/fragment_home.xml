@@ -5,9 +5,9 @@
                 android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/tv_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+    <ViewFlipper
+        android:id="@+id/information_article_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ffffff"></ViewFlipper>
 </RelativeLayout>
