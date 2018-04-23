@@ -156,7 +156,6 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
 
     protected void loadData(boolean isRefresh) {
 
-
         if (NetworkUtils.isNetworkAvailable(mContext)) {
             if (isLoadMore) {//加载更多
                 if (pageTotal < 1 || total > 0 && total < 5) {
@@ -205,6 +204,9 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
                         mUEView.showError();
                     } else {
                         if (mRecyclerView.getHeadersCount() > 1) {
+                            //有头部
+                            mUEView.hideAll();
+                        } else {
                             mUEView.showNoData();
                         }
                     }

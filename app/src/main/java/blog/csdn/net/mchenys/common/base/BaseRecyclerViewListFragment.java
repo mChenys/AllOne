@@ -208,7 +208,12 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                     if (!NetworkUtils.isNetworkAvailable(mContext)) {
                         mUEView.showError();
                     } else {
-                        mUEView.showNoData();
+                        if (mRecyclerView.getHeadersCount() > 1) {
+                            //有头部
+                            mUEView.hideAll();
+                        } else {
+                            mUEView.showNoData();
+                        }
                     }
                 }
             }
@@ -244,7 +249,12 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                             adapter.notifyDataSetChanged();
                         }
                         if (mData.isEmpty()) { //如果数据集合为空,则显示没有数据
-                            mUEView.showNoData();
+                            if (mRecyclerView.getHeadersCount() > 1) {
+                                //有头部
+                                mUEView.hideAll();
+                            } else {
+                                mUEView.showNoData();
+                            }
                         } else {
                             mUEView.hideAll();
                         }
