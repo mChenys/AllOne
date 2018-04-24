@@ -19,6 +19,7 @@ public class Account {
     //第三方登录的icons
     private String smallHeaderUrl;//第三方小头像
     private String bigHeaderUrl;//第三方大头像
+    private boolean phoneBind;
 
     public int getType() {
         return type;
@@ -107,6 +108,13 @@ public class Account {
     public void setLoginTime(long loginTime) {
         this.loginTime = loginTime;
     }
+    public void setPhoneBind(boolean phoneBind) {
+        this.phoneBind = phoneBind;
+    }
+
+    public boolean isPhoneBind() {
+        return phoneBind;
+    }
 
     public void reset() {
         this.type = 0;// 登陆类型
@@ -119,4 +127,6 @@ public class Account {
         this.password = "";// 密码
         this.loginTime = -1;//登陆时间
     }
+
+
 }

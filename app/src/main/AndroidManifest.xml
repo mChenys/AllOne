@@ -29,9 +29,8 @@
         <activity
             android:name=".module.main.AppGuideActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".module.account.LoginActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".module.account.LoginActivity"
+                  android:screenOrientation="portrait"/>
         <activity
             android:name=".common.photo.AlbumListActivity"
             android:screenOrientation="portrait"/>

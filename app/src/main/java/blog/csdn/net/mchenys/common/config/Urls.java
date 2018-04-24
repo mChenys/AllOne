@@ -6,7 +6,7 @@ package blog.csdn.net.mchenys.common.config;
  */
 public class Urls {
 
-    public static int URL_TYPE = Env.TEST;
+    public static int URL_TYPE = Env.RELEASE;
 
     public static String COMMON_SESSION_ID = URL_TYPE != Env.RELEASE ? "common_session_id1=" : "common_session_id=";
 
@@ -28,14 +28,16 @@ public class Urls {
     //绑定第三方账号
     public static final String CHECK_BIND = getTargetUrl("https://passport3.pclady.com.cn/passport3/api/login_xauth.jsp");
     //获取用户信息
-    public static final String GET_USER_INFO_URL = "https://mrobot.pclady.com.cn/modern/x/modern.pclady.com.cn/app/account/getUserInfo.do";
+    public static final String GET_USER_INFO_URL = getTargetUrl("https://csc.pconline.com.cn/s/buy/user/getUserInfo.xsp");
     //快速绑定第三方账号
     public static final String QUICK_BIND_URL = "https://passport3.pclady.com.cn/passport3/api/registerOpen4App.jsp";
-    //测试RecycleView
-    public static final String TEST = "https://mrobot.pclady.com.cn/modern/x/modern.pclady.com.cn/app/teacher/teacherList.do";
-    public static final String CIRCLE_HOME = "https://mrobot.pclady.com.cn/modern/s/bbs/circleHome2.xsp";
-    public static final String WAP_TOPIC_TERMINAL = "https://mrobot.pclady.com.cn/modern/s/bbs/topicDetail2.xsp" ;
 
+    public static final String TEST = getTargetUrl("https://mrobot.pclady.com.cn/modern/x/modern.pclady.com.cn/app/teacher/teacherList.do");
+    public static final String CIRCLE_HOME = getTargetUrl("https://mrobot.pclady.com.cn/modern/s/bbs/circleHome2.xsp");
+    public static final String WAP_TOPIC_TERMINAL = getTargetUrl("https://mrobot.pclady.com.cn/modern/s/bbs/topicDetail2.xsp") ;
+    public static String FREE_LOGIN_URL =getTargetUrl("https://passport3.pconline.com.cn/passport3/passport/mobile_login.jsp");
+    public static final String ACCOUNT_LOGIN = getTargetUrl("https://passport3.pconline.com.cn/passport3/rest/login.jsp");
+    public static final String PHONE_BIND2 = getTargetUrl("https://passport3.pconline.com.cn/passport3/api/mobile_bind2.jsp");
 
     public static String getTargetUrl(String url) {
         if (URL_TYPE == Env.TEST) {

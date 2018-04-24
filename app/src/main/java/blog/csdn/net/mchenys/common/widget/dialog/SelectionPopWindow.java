@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -152,11 +151,6 @@ public class SelectionPopWindow extends PopupWindow {
     public void show(CallBack callBack) {
         if (isShowing()) return;
         this.mCallBack = callBack;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAtLocation(mContext.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-            }
-        }, 150);
+        showAtLocation(mContext.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
     }
 }

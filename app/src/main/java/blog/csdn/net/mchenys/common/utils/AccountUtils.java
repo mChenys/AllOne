@@ -6,10 +6,17 @@ import android.webkit.CookieSyncManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import blog.csdn.net.mchenys.AllOneApplication;
 import blog.csdn.net.mchenys.common.config.Constant;
+import blog.csdn.net.mchenys.common.config.Env;
+import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
 import blog.csdn.net.mchenys.common.sns.bean.SnsUser;
 import blog.csdn.net.mchenys.model.Account;
+import blog.csdn.net.mchenys.module.account.LoginResult;
 
 
 /**
@@ -25,11 +32,112 @@ public class AccountUtils {
     public static final int WECHAT = 4;//微信登录类型
     public final static String COOKIE_EXPIRED = "90";
 
-    public interface Callback {
-        void onResult(Account account);
+    public static void login(String username, final String password, final LoginResult loginResult) {
+        Map<String, String> bodyMap = new HashMap<>();
+        Map<String, String> headersMap = new HashMap<>();
+        bodyMap.put("username", username);
+        bodyMap.put("password", password);
+        bodyMap.put("auto_login", "90");//cookie过期时间，不填默认为15天，最大不超过90天
+        HttpUtils.postJSON(Urls.ACCOUNT_LOGIN, headersMap, bodyMap, new HttpUtils.JSONCallback() {
+            @Override
+            public void onFailure( Exception e) {
+                loginResult.onFailure(-1, e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
+                int code = jsonObject.optInt("status");
+                if (code == 0) {//登录成功
+                    final Account account = new Account();
+                    String sessionId = jsonObject.optString("session");
+                    account.setSessionId(sessionId);
+                    account.setUserId(jsonObject.optString("userId"));
+                    account.setType(PASSPORT);
+                    account.setLoginTime(System.currentTimeMillis());
+                    account.setPassword(password);
+                    //检查手机是否绑定
+                    checkPhoneBind(sessionId, new HttpUtils.JSONCallback() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            getUserInfo(true, account, loginResult);
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
+                            int code = jsonObject.optInt("code");
+                            if (code == 1) {
+                                account.setPhoneBind(true);
+                            }
+                            getUserInfo(true, account, loginResult);
+                        }
+                    });
+                } else if (code == -1) {
+                    loginResult.onFailure(code, "登录失败");
+                } else if (code == 2) {
+                    loginResult.onFailure(code, "用户不存在,登录失败");
+                } else if (code == 3) {
+                    loginResult.onFailure(code, "账号或密码错误,登录失败");
+                }else if(code == 4){
+                    loginResult.onFailure(code, "为了您的帐号安全，请输入验证码");
+                }else if (code == 6) {
+                    loginResult.onFailure(code, "验证码失效");
+                } else if (code == 7) {
+                    loginResult.onFailure(code, "验证码错误");
+                } else {
+                    loginResult.onFailure(code, "获取错误数据,登录失败");
+                }
+            }
+        });
+    }
+    /**
+     * 检查手机是否绑定
+     *
+     * @param callback
+     */
+    private static void checkPhoneBind(String sessionId, HttpUtils.JSONCallback callback) {
+        Map<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("act", "check");
+        Map<String, String> headersMap = new HashMap<>();
+        headersMap.put("Cookie", Urls.COMMON_SESSION_ID + sessionId);
+        HttpUtils.postJSON(Urls.PHONE_BIND2, headersMap, bodyMap, callback);
     }
 
+    /**
+     * 获取用户信息
+     * @param isForceNetwork
+     * @param account
+     * @param loginResul
+     */
+    private static void getUserInfo(boolean isForceNetwork, final Account account, final LoginResult loginResul) {
+        java.net.CookieManager.setDefault(null);
+        Map<String, String> headersMap = new HashMap<String, String>();
+        headersMap.put("Cookie", Urls.COMMON_SESSION_ID + account.getSessionId());
+        String url = Urls.GET_USER_INFO_URL + "?uid=" + account.getUserId() + "&version=" + Env.versionCode;
+        HttpUtils.getJSON(isForceNetwork, url, headersMap, null, new HttpUtils.JSONCallback() {
 
+            @Override
+            public void onFailure(Exception e) {
+                if (loginResul != null) loginResul.onFailure(-1,"获取用户信息失败");
+            }
+
+            @Override
+            public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
+                int status = jsonObject.optInt("status");
+                if (status == -1) {
+                    if (loginResul != null)
+                        loginResul.onFailure(status, "获取用户信息失败");
+                } else {
+                    if (!StringUtils.isEmpty(jsonObject.optString("nickName"))) {
+                        account.setUserName(StringUtils.replaceIllegalChars(jsonObject.optString("nickName")));
+                    }
+                    account.setAvatarUrl(jsonObject.optString("image"));
+                    account.setPhoneNum(jsonObject.optString("telephone"));
+                    saveAccount(account);
+                    if (loginResul != null) loginResul.onSuccess(account);
+                }
+            }
+        });
+    }
     /**
      * 根据第三方账号初始Account
      *
@@ -66,7 +174,6 @@ public class AccountUtils {
     }
 
 
-
     private static void saveAccount(Account account) {
         try {
             JSONObject accountJson = new JSONObject();
@@ -89,6 +196,7 @@ public class AccountUtils {
 
     /**
      * 获取登录账号
+     *
      * @return
      */
     public static Account getLoginAccount() {
@@ -118,6 +226,7 @@ public class AccountUtils {
 
     /**
      * 是否登录
+     *
      * @return
      */
     public static boolean isLogin() {
@@ -127,6 +236,7 @@ public class AccountUtils {
 
     /**
      * 获取sessionId
+     *
      * @return
      */
     public static String getSessionId() {
@@ -150,6 +260,6 @@ public class AccountUtils {
             Account account = getLoginAccount();
             account.reset();
         }
-        PreferencesUtils.clearPreference(AllOneApplication.mAppContext,Constant.ACCOUNT_FILE_NAME);
+        PreferencesUtils.clearPreference(AllOneApplication.mAppContext, Constant.ACCOUNT_FILE_NAME);
     }
 }

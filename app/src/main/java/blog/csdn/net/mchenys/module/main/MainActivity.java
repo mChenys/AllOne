@@ -1,5 +1,6 @@
 package blog.csdn.net.mchenys.module.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTabHost;
@@ -177,4 +178,16 @@ public class MainActivity extends BaseActivity {
             return false;
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            BaseFragment fragment = (BaseFragment) getSupportFragmentManager().
+                    findFragmentByTag(String.valueOf(position));
+            if (null != fragment) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+
+    }
 }

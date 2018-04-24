@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,26 +10,85 @@
         android:background="@color/white">
 
         <TextView
-            android:textColor="@color/color_333333"
-            android:textSize="18sp"
-            android:text="首页"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="首页"
+            android:textColor="@color/color_333333"
+            android:textSize="18sp"/>
 
         <ImageView
             android:id="@+id/iv_more"
-            android:src="@drawable/ic_menu_more"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
-            android:paddingRight="20dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:paddingLeft="20dp"
-            android:layout_height="match_parent"/>
+            android:paddingRight="20dp"
+            android:src="@drawable/ic_menu_more"/>
     </RelativeLayout>
-    <ViewFlipper
-        android:id="@+id/information_article_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#ffffff"></ViewFlipper>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/comment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_f4f7f7"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/et_write_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/write_comment_bg"
+                android:hint="写评论"
+                android:maxLines="4"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="@color/color_333333"
+                android:textColorHint="@color/gray_1"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_reload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:drawableLeft="@drawable/ic_refresh"
+                android:drawablePadding="5dp"
+                android:textColor="@color/gray_1"
+                android:textSize="16sp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/tv_send_comment"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_f4f7f7"
+                android:gravity="center_horizontal"
+                android:padding="5dp"
+                android:text="发送"
+                android:textColor="@color/color_ff8523"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ViewFlipper
+            android:id="@+id/information_article_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/comment_layout"
+            android:background="#ffffff"/>
+
+    </RelativeLayout>
+
 
 </LinearLayout>

@@ -14,7 +14,7 @@ public class Constant {
     public static final String KEY_TITLE = "key_title";
     public static final String KEY_POSITION = "key_position";
     public static final int REQ_WEB_LOGIN = 200;//webView登录
-    public static final int REQ_PC_LOGIN = 100;//太平洋账号登录
+    public static final int REQ_LOGIN = 100;//太平洋账号登录
     public static final int REQ_PHONE_BIND = 101;//手机号绑定
     public static final String ACCOUNT_FILE_NAME = "account_file_name"; //本地保存账号的文件名
     public static final String ACCOUNT_KEY = "account_key";//本地保存账号的key
