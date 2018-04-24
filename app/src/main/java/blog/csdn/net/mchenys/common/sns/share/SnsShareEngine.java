@@ -137,7 +137,7 @@ public class SnsShareEngine {
     }
 
     /**
-     * 分享到新浪微博/qq微博
+     * 分享到新浪微博/qq微博(已取消)
      * @param platform
      */
     protected void shareToWeibo(int platform) {

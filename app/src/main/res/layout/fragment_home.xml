@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
 
+        <TextView
+            android:textColor="@color/color_333333"
+            android:textSize="18sp"
+            android:text="首页"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:src="@drawable/ic_menu_more"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
     <ViewFlipper
         android:id="@+id/information_article_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#ffffff"></ViewFlipper>
-</RelativeLayout>
+
+</LinearLayout>

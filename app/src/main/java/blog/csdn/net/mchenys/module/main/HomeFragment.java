@@ -1,13 +1,16 @@
 package blog.csdn.net.mchenys.module.main;
 
 
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseFragment;
-import blog.csdn.net.mchenys.common.widget.webview.BaseWebView;
+import blog.csdn.net.mchenys.common.utils.ToastUtils;
+import blog.csdn.net.mchenys.common.widget.dialog.SelectionPopWindow;
 import blog.csdn.net.mchenys.common.widget.pulltopage.PullToPageBase;
+import blog.csdn.net.mchenys.common.widget.webview.BaseWebView;
 import blog.csdn.net.mchenys.common.widget.webview.PullToPageWebView;
 
 
@@ -32,11 +35,25 @@ public class HomeFragment extends BaseFragment {
         pagedWebview1.getLoadableView().loadUrl(urls[currentPage]);
         pagedWebview1.setOnRefreshListener(new MyOnPageListener(pagedWebview1, pagedWebview2));
         pagedWebview2.setOnRefreshListener(new MyOnPageListener(pagedWebview2, pagedWebview1));
+
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectionPopWindow window = new SelectionPopWindow(mContext, R.layout.item_selection_popwin);
+                window.setData(new String[]{"自动刷新", "正序观看"});
+                window.show(new SelectionPopWindow.CallBack() {
+                    @Override
+                    public void onSelect(int position, String content) {
+                        ToastUtils.showShort(content);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -69,19 +86,14 @@ public class HomeFragment extends BaseFragment {
             }
         }
     }
+
     // 上下拉分页前初始化文章标题
     private void setArticleTitle(PullToPageWebView currentWebview, String type) {
-
-        String defaultTitle = "没有了";
-        String defaultLoading = "正在加载";
-        String tempLoading = "释放翻页";
-//        currentWebview.setUpLoading(defaultLoading);
-//        currentWebview.setDownLoading(tempLoading);
         // 下拉翻上一页时
         if (type.equals(PullToPageBase.PULL_DOWN)) {
 
             if (currentPage == 1) {
-                currentWebview.setDownTitle(defaultTitle);
+                currentWebview.setDownTitle("没有了");
             } else {
                 currentWebview.setDownTitle("初始化中...");
             }
@@ -89,7 +101,7 @@ public class HomeFragment extends BaseFragment {
         // 上拉翻到下一页时
         else if (type.equals(PullToPageBase.PULL_UP)) {
             if (currentPage == totalPage) {
-                currentWebview.setUpTitle(defaultTitle);
+                currentWebview.setUpTitle("没有了");
             } else {
                 currentWebview.setUpTitle("初始化中...");
             }
@@ -144,7 +156,6 @@ public class HomeFragment extends BaseFragment {
             return;
         }
     }
-
 
 
     /**
