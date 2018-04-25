@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -25,9 +26,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class BitmapUtils {
@@ -1025,7 +1029,7 @@ public class BitmapUtils {
         return BitmapFactory.decodeStream(in, null, options);
     }
 
-    public static Bitmap decodeSampleBitmapFromByte(InputStream in, int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampleBitmapFromStream2(InputStream in, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         byte[] bytes = input2Byte(in);
@@ -1240,5 +1244,69 @@ public class BitmapUtils {
         }
         return bitmap;
 
+    }
+
+
+    /**
+     * v2.8转换拍照生成的bitmap成文件
+     *
+     * @param bitmap
+     * @param photoDir 保存相片的根目录
+     * @return File
+     */
+    public static File convertBitmap2File(Bitmap bitmap, File photoDir) {
+        FileOutputStream fileOutputStream = null;
+        File cameraPhotoFile = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+        try {
+            //保存拍照的文件
+            cameraPhotoFile = new File(photoDir, dateFormat.format(new Date()) + ".jpg");
+            if (!cameraPhotoFile.exists()) {
+                cameraPhotoFile.createNewFile();
+            }
+            fileOutputStream = new FileOutputStream(cameraPhotoFile);
+            // 把数据写入文件
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileOutputStream != null) {
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return cameraPhotoFile;
+    }
+
+    public static Bitmap cropCircle(Bitmap source) {
+        if (null != source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+            int width = (source.getWidth() - size) / 2;
+            int height = (source.getHeight() - size) / 2;
+            Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            BitmapShader shader =
+                    new BitmapShader(source, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+            if (width != 0 || height != 0) {
+                // source isn't square, move viewport to center
+                Matrix matrix = new Matrix();
+                matrix.setTranslate(-width, -height);
+                shader.setLocalMatrix(matrix);
+            }
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+            return bitmap;
+        }
+        return null;
     }
 }

@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name=".AllOneApplication"
@@ -29,8 +29,9 @@
         <activity
             android:name=".module.main.AppGuideActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".module.account.LoginActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.account.LoginActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".common.photo.AlbumListActivity"
             android:screenOrientation="portrait"/>
@@ -40,10 +41,15 @@
         <activity
             android:name=".common.photo.PhotoViewActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".module.terminal.WapTopicsTerminalActivity"
-                  android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.terminal.WapTopicsTerminalActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".module.main.MainActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".module.personal.SettingActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".common.sns.activity.SnsSelectPlatformNewActivity"
@@ -73,6 +79,30 @@
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:label="@string/app_name"/>
+
+        <!-- 用于裁剪图片的 -->
+        <activity
+            android:name=".common.photo.crop.CropActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.CROP_MODERN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="blog.csdn.net.mchenys.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

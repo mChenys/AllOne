@@ -7,9 +7,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.config.Constant;
+import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
+import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBackHandler;
+import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
+import blog.csdn.net.mchenys.common.photo.crop.CropActivity;
 import blog.csdn.net.mchenys.common.sns.bean.SnsShareContent;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
@@ -50,7 +64,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         nickNameTv = findViewById(R.id.tv_nickName);
         phoneTv = findViewById(R.id.tv_phone);
         headerIv = findViewById(R.id.iv_header);
-
     }
 
     @Override
@@ -60,8 +73,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         if (null != account) {
             nickNameTv.setText(account.getUserName());
             phoneTv.setText(account.getPhoneNum());
-            ImageLoadUtils.disPlayWithCircle(account.getAvatarUrl(), headerIv);
+            ImageLoadUtils.disPlayWitchCircleForceNetwork(account.getAvatarUrl(), headerIv);
             mLoginOutBtn.setText("注销");
+
         } else {
             nickNameTv.setText("未登录");
             mLoginOutBtn.setText("登录");
@@ -76,6 +90,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.iv_sina).setOnClickListener(this);
         findViewById(R.id.iv_friend).setOnClickListener(this);
         findViewById(R.id.btn_login_out).setOnClickListener(this);
+        findViewById(R.id.iv_header).setOnClickListener(this);
     }
 
     @Override
@@ -103,7 +118,73 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 }
 
                 break;
+            case R.id.iv_header:
+                if (AccountUtils.isLogin()) {
+                    JumpUtils.startActivityForResult(mContext, SettingActivity.class, Constant.REQ_UPDATE_HEADER);
+                }
+                break;
         }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constant.REQ_LOGIN:
+                    loadData();
+                    break;
+                case Constant.REQ_UPDATE_HEADER:
+                    String filePath = data.getStringExtra(CropActivity.CROP_IMAGE_PATH);
+                    File outputFile = new File(filePath);
+                    doUploadHeaderImage(outputFile);
+                    break;
+            }
+
+
+        }
+    }
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    private void doUploadHeaderImage(final File uploadFile) {
+        String fileName = dateFormat.format(new Date()) + ".jpg"; //头像文件的名称
+        Map<String, String> headersMap = new HashMap<>();
+        headersMap.put("Cookie", Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());
+        String url = "http://upc.pcbaby.com.cn/upload_head.jsp";
+        OkHttpEngine.getInstance().asyncPostImage(fileName, fileName, url, new RequestCallBackHandler() {
+            @Override
+            public void onFailure(Exception e) {
+                ToastUtils.showShort("头像上传失败");
+            }
+
+            @Override
+            public Object doInBackground(OkResponse pcResponse) {
+                return null;
+            }
+
+            @Override
+            public void onResponse(Object o, OkResponse pcResponse) {
+                if (null != pcResponse) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(pcResponse.getResult());
+                        int retCode = jsonObject.optInt("retCode");
+                        if (0 == retCode) {
+                            ToastUtils.showShort("头像上传成功");
+                            ImageLoadUtils.disPlayWitchCircleForceNetwork(uploadFile, headerIv);
+                            //更新数据
+                            AccountUtils.getUserInfo(true, AccountUtils.getLoginAccount(), null);
+
+                        } else {
+                            ToastUtils.showShort("头像上传失败");
+                        }
+                    } catch (JSONException e) {
+                        ToastUtils.showShort("头像上传失败");
+                    }
+                }
+            }
+        }, uploadFile, "", headersMap, null);
     }
 
     private SnsShareContent getShareContent() {
@@ -124,12 +205,4 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
         }
     };
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQ_LOGIN && resultCode == Activity.RESULT_OK) {
-            loadData();
-        }
-    }
 }

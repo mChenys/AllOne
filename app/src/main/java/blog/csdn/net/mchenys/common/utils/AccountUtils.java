@@ -108,7 +108,7 @@ public class AccountUtils {
      * @param account
      * @param loginResul
      */
-    private static void getUserInfo(boolean isForceNetwork, final Account account, final LoginResult loginResul) {
+    public static void getUserInfo(boolean isForceNetwork, final Account account, final LoginResult loginResul) {
         java.net.CookieManager.setDefault(null);
         Map<String, String> headersMap = new HashMap<String, String>();
         headersMap.put("Cookie", Urls.COMMON_SESSION_ID + account.getSessionId());

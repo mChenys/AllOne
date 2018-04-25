@@ -162,6 +162,27 @@ public class PermissionUtils {
      * @see PermissionUtils#CODE_WRITE_EXTERNAL_STORAGE
      */
     public static void requestMultiPermission(final Activity activity, int[] requestCode, PermissionGrant grant) {
+        requestMultiPermission(activity, requestCode, CODE_MUlTI_PERMISSION, grant);
+    }
+
+    /**
+     * 一次申请多个权限
+     *
+     * @param activity
+     * @param requestCode
+     * @param groupCode   标记该多组权限申请的请求code
+     * @param grant
+     * @see PermissionUtils#CODE_RECORD_AUDIO
+     * @see PermissionUtils#CODE_GET_ACCOUNTS
+     * @see PermissionUtils#CODE_READ_PHONE_STATE
+     * @see PermissionUtils#CODE_CALL_PHONE
+     * @see PermissionUtils#CODE_CAMERA
+     * @see PermissionUtils#CODE_ACCESS_FINE_LOCATION
+     * @see PermissionUtils#CODE_ACCESS_COARSE_LOCATION
+     * @see PermissionUtils#CODE_READ_EXTERNAL_STORAGE
+     * @see PermissionUtils#CODE_WRITE_EXTERNAL_STORAGE
+     */
+    public static void requestMultiPermission(final Activity activity, int[] requestCode, int groupCode, PermissionGrant grant) {
         //获取没有申请的权限
         List<String> permissionsList = null;
         //获取没有申请且需要提示建议信息的权限
@@ -178,25 +199,24 @@ public class PermissionUtils {
         }
         if (permissionsList.size() > 0) {
             //批量申请权限
-            ActivityCompat.requestPermissions(activity, permissionsList.toArray(new String[permissionsList.size()]), CODE_MUlTI_PERMISSION);
+            ActivityCompat.requestPermissions(activity, permissionsList.toArray(new String[permissionsList.size()]), groupCode);
         } else if (shouldRationalePermissionsList.size() > 0) {
             //提示建议
-            shouldShowRationale(activity, shouldRationalePermissionsList);
+            shouldShowRationale(activity,groupCode, shouldRationalePermissionsList);
         } else { //已有权限
-            grant.onPermissionGranted(CODE_MUlTI_PERMISSION);
+            grant.onPermissionGranted(groupCode);
         }
     }
 
-
     /**
      * 多个权限申请后结果处理
-     *
-     * @param activity
+     *  @param activity
      * @param permissions
      * @param grantResults
+     * @param requestCode
      * @param permissionGrant
      */
-    private static void requestMultiResult(Activity activity, String[] permissions, int[] grantResults, PermissionGrant permissionGrant) {
+    private static void requestMultiResult(Activity activity, String[] permissions, int[] grantResults, int requestCode, PermissionGrant permissionGrant) {
 
         if (activity == null) {
             return;
@@ -215,7 +235,7 @@ public class PermissionUtils {
         }
 
         if (notGranted.size() == 0) {
-            permissionGrant.onPermissionGranted(CODE_MUlTI_PERMISSION);
+            permissionGrant.onPermissionGranted(requestCode);
         } else {
             //部分权限未申请成功,跳去权限设置
             openSettingActivity(activity, "检测到一些权限申请被拒绝了,请到设置页面进行权限管理");
@@ -227,16 +247,18 @@ public class PermissionUtils {
      * 提示开启这些权限
      *
      * @param activity
+     * @param groupCode
      * @param shouldRationalePermissionsList
      */
-    private static void shouldShowRationale(final Activity activity, final List<String> shouldRationalePermissionsList) {
+    private static void shouldShowRationale(final Activity activity, final int groupCode, final List<String> shouldRationalePermissionsList) {
         showMessageOKCancel(activity, "为保证程序的正常运行,请允许相关权限申请",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //用户确认后再申请
-                        ActivityCompat.requestPermissions(activity, shouldRationalePermissionsList.toArray(new String[shouldRationalePermissionsList.size()]),
-                                CODE_MUlTI_PERMISSION);
+                        ActivityCompat.requestPermissions(activity, shouldRationalePermissionsList.toArray(
+                                new String[shouldRationalePermissionsList.size()]),
+                                groupCode);
                         LogUtils.d(TAG, "showMessageOKCancel requestPermissions");
                     }
                 });
@@ -279,6 +301,8 @@ public class PermissionUtils {
 
     }
 
+
+
     /**
      * 权限返回结果处理
      *
@@ -295,9 +319,9 @@ public class PermissionUtils {
         }
         LogUtils.d(TAG, "requestPermissionsResult requestCode:" + requestCode);
 
-        if (requestCode == CODE_MUlTI_PERMISSION) {
+        if (requestCode >= CODE_MUlTI_PERMISSION) {
             //多个权限申请结果处理
-            requestMultiResult(activity, permissions, grantResults, permissionGrant);
+            requestMultiResult(activity, permissions, grantResults,requestCode, permissionGrant);
             return;
         }
 

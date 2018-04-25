@@ -1,8 +1,12 @@
 package blog.csdn.net.mchenys.common.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+
+import java.io.File;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.glide.ImageLoader;
@@ -15,6 +19,7 @@ import blog.csdn.net.mchenys.common.glide.linstener.LoaderListener;
  * Created by mChenys on 2017/12/27.
  */
 public class ImageLoadUtils {
+
 
     public interface ImageLoadingListener {
 
@@ -59,7 +64,7 @@ public class ImageLoadUtils {
     }
 
 
-    public static void disPlayWithCorner(int resId, ImageView imageAware, int  corner) {
+    public static void disPlayWithCorner(int resId, ImageView imageAware, int corner) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
                 setCornerRadius(corner).
@@ -86,12 +91,14 @@ public class ImageLoadUtils {
                 build();
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
+
     public static void disPlayWithCircle(String uri, ImageView imageAware) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setCropCircle(true).
                 build();
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
+
     public static void disPlayWithCircle(String uri, ImageView imageAware, int defaultIcon) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setPlaceHolderResId(defaultIcon).
@@ -109,9 +116,45 @@ public class ImageLoadUtils {
         ImageLoader.load(uri, imageAware, imageLoaderConfig, null);
     }*/
 
+    public static void disPlayWitchCircleForceNetwork(File url, ImageView imageView) {
+        Bitmap temp = BitmapFactory.decodeResource(imageView.getResources(), R.drawable.bg_error);
+        imageView.setImageBitmap(BitmapUtils.cropCircle(temp));
+        if (url == null || !url.exists()) {
+            return;
+        }
+        try {
+            ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig)
+                    .setPrioriy(ImageLoadConfig.LoadPriority.HIGH)
+                    .setCropCircle(true)
+                    .setDiskCacheStrategy(ImageLoadConfig.DiskCache.NONE)
+                    .setSkipMemoryCache(true)
+                    .setCrossFade(false)
+                    .build();
+            ImageLoader.loadFile(imageView, url, imageLoaderConfig, null);
+        } catch (Exception e) {
+
+        }
+    }
+    public static void disPlayWitchCircleForceNetwork(String url, ImageView imageView) {
+        Bitmap temp = BitmapFactory.decodeResource(imageView.getResources(), R.drawable.bg_error);
+        imageView.setImageBitmap(BitmapUtils.cropCircle(temp));
+        if (StringUtils.isEmpty(url)) {
+            return;
+        }
+        try {
+            ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig)
+                    .setPrioriy(ImageLoadConfig.LoadPriority.HIGH)
+                    .setCropCircle(true)
+                    .setDiskCacheStrategy(ImageLoadConfig.DiskCache.NONE)
+                    .setSkipMemoryCache(true)
+                    .setCrossFade(false)
+                    .build();
+            ImageLoader.loadStringRes(imageView, url, imageLoaderConfig, null);
+        } catch (Exception e) {
+
+        }
+    }
     /**
-     * 默认加载 R.drawable.app_thumb_default_80_60图片
-     *
      * @param uri
      * @param imageAware
      */

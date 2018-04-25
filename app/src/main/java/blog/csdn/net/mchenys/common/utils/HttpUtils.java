@@ -75,7 +75,7 @@ public class HttpUtils {
             public Object doInBackground(OkResponse okResponse) {
                 Bitmap bitmap = cacheUtils.loadBitmapFromHttp(url, okResponse.getInputStream(), targetWidth, targetHeight);
                 if (null == bitmap && !cacheUtils.isDiskLruCacheCreated()) {
-                    bitmap = BitmapUtils.decodeSampleBitmapFromByte(okResponse.getInputStream(), targetWidth, targetHeight);
+                    bitmap = BitmapUtils.decodeSampleBitmapFromStream2(okResponse.getInputStream(), targetWidth, targetHeight);
                     if (null != bitmap) {
                         cacheUtils.addBitmapToMemoryCache(url, bitmap);
                     }

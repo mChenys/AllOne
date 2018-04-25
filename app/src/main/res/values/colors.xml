@@ -49,4 +49,7 @@
     <color name="color_ff8523">#ff8523</color>
     <color name="color_dddddd">#dddddd</color>
     <color name="gray_1">#c0c0c0</color>
+    <color name="card_background">#ffffff</color>
+    <color name="card_shadow">#10000000</color>
+    <color name="m_window_background">#00000000</color>
 </resources>

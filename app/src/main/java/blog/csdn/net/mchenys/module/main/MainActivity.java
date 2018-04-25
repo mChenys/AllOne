@@ -1,6 +1,7 @@
 package blog.csdn.net.mchenys.module.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTabHost;
@@ -56,14 +57,17 @@ public class MainActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         position = getIntent().getIntExtra(Constant.KEY_POSITION, 0);
-        //批量申请权限
-        PermissionUtils.requestMultiPermission(this, new int[]{
-                PermissionUtils.CODE_READ_EXTERNAL_STORAGE,
-                PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE,
-                PermissionUtils.CODE_READ_PHONE_STATE,
-        }, mPermissionGrant);
-        //单个权限申请
-        //   PermissionUtils.requestPermission(this, PermissionUtils.CODE_CAMERA, mPermissionGrant);
+        if (Build.VERSION.SDK_INT >= 23) {
+            //批量申请权限
+            PermissionUtils.requestMultiPermission(this, new int[]{
+                    PermissionUtils.CODE_READ_EXTERNAL_STORAGE,
+                    PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE,
+                    PermissionUtils.CODE_READ_PHONE_STATE,
+            }, mPermissionGrant);
+            //单个权限申请
+            //   PermissionUtils.requestPermission(this, PermissionUtils.CODE_CAMERA, mPermissionGrant);
+        }
+
     }
 
     @Override
@@ -155,6 +159,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
 
     }
