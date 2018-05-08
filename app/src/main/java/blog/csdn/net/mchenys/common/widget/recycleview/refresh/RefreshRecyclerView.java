@@ -221,12 +221,6 @@ public class RefreshRecyclerView extends RecyclerView {
         if (null != mWrapAdapter) {
             mWrapAdapter.notifyDataSetChanged();
         }
-        if (null != getAdapter()) {
-            getAdapter().notifyDataSetChanged();
-        }
-        if (null != mWrapAdapter) {
-            mWrapAdapter.notifyDataSetChanged();
-        }
     }
 
     /**

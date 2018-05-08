@@ -1,7 +1,6 @@
 package blog.csdn.net.mchenys.common.base;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -242,12 +241,8 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                                 }
                             }
                         }
-                        RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
-                        if (null != adapter) {
-                            mData.addAll(newData);
-                            afterDataSet(mData, isLoadMore);
-                            adapter.notifyDataSetChanged();
-                        }
+                        mData.addAll(newData);
+                        afterDataSet(mData, isLoadMore);
                         if (mData.isEmpty()) { //如果数据集合为空,则显示没有数据
                             if (mRecyclerView.getHeadersCount() > 1) {
                                 //有头部
