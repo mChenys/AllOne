@@ -71,23 +71,28 @@ public class BaseWebView extends WebView {
     /**
      * 如果客户端已经登录，进入网页时需要同步Cookie
      *
-     * @param context
      * @param url
      */
-    public void syncCookie(Context context, String url) {
+    public void syncCookie(String url) {
         if (null == url || "".equals(url)) return;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.createInstance(mContext);
+        }
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+
         if (AccountUtils.isLogin()) {
-            String sessionId = AccountUtils.getSessionId();
-            CookieSyncManager.createInstance(context);
-            CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.setAcceptCookie(true);
-            cookieManager.removeSessionCookie();
-            cookieManager.setCookie(url, Urls.COMMON_SESSION_ID + sessionId);
-            CookieSyncManager.getInstance().sync();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                cookieManager.setCookie(url, Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());//为url设置cookie
+                cookieManager.flush();//同步cookie
+            } else {
+                cookieManager.removeSessionCookie();
+                cookieManager.removeAllCookie();
+                cookieManager.setCookie(url, Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());//为url设置cookie
+                CookieSyncManager.getInstance().sync();
+            }
         } else {
-            CookieSyncManager.createInstance(context);
-            CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.setAcceptCookie(true);
             cookieManager.removeSessionCookie();
             cookieManager.setCookie(url, Urls.COMMON_SESSION_ID);
         }
@@ -112,10 +117,10 @@ public class BaseWebView extends WebView {
         }
         addJavascriptInterface(new MyWebViewJavaScriptSInterface(context, mHandler), "PCJSKit");
         setWebChromeClient(null);
-        setWebViewClient(new WebViewClient(){
+        setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(URLUtil.isNetworkUrl(url)){
+                if (URLUtil.isNetworkUrl(url)) {
                     view.loadUrl(url);
                     return true;
                 }

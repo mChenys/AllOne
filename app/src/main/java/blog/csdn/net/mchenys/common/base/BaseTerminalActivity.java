@@ -10,6 +10,8 @@ import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -246,6 +248,20 @@ public class BaseTerminalActivity extends BaseActivity {
 //                    super.onReceivedSslError(view, handler, error);
                     handler.proceed();//支持https响应
                 }
+
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                    mWebView.syncCookie(url);
+                    return super.shouldInterceptRequest(view, url);
+                }
+
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mWebView.syncCookie(request.getUrl().toString());
+                    }
+                    return super.shouldInterceptRequest(view, request);
+                }
             });
 
         } else {
@@ -295,9 +311,6 @@ public class BaseTerminalActivity extends BaseActivity {
             header.put("Referer", url);
             this.originalUrl = url;
             if (loadType == TYPE_URL) {
-                if (URLUtil.isNetworkUrl(url)) {
-                    mWebView.syncCookie(getApplicationContext(), url);
-                }
                 mWebView.loadUrl(url, header);
             } else {
                 header.put("Cookie", Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());
