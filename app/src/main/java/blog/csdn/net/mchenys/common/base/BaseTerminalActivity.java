@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
@@ -395,11 +396,6 @@ public class BaseTerminalActivity extends BaseActivity {
         return null;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        isLoadComplete = false;
-    }
 
     /**
      * 添加固定在内容区域下的view
@@ -420,4 +416,38 @@ public class BaseTerminalActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mWebView != null) {
+            mWebView.onResume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mWebView != null) {
+            mWebView.onPause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isLoadComplete = false;
+        try {
+            if (null != mWebView) {
+                mWebView.clearCache(false);
+                mWebView.clearHistory();
+                ViewGroup parent = (ViewGroup) mWebView.getParent();
+                if (null != parent) {
+                    parent.removeView(mWebView);
+                    mWebView.destroy();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
