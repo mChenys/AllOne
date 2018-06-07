@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Map;
 
 import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
@@ -39,6 +40,15 @@ public class HttpUtils {
                 OkHttpEngine.RequestMode.GET, "", headersMap, bodyMap);
     }
 
+    public static OkResponse getResponse(boolean forceNetwork, String url, Map<String, String> headersMap, Map<String, String> bodyMap) {
+        try {
+            return OkHttpEngine.getInstance().syncRequest(url, forceNetwork ? OkHttpEngine.RequestType.FORCE_NETWORK :
+                    OkHttpEngine.RequestType.CACHE_FIRST, OkHttpEngine.RequestMode.GET, "", headersMap, bodyMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static void postJSON(String url, Map<String, String> headersMap, Map<String, String> bodyMap, final JSONCallback handler) {
         OkHttpEngine.getInstance().asyncRequest(url, new MyRequestCallBackHandler(handler), OkHttpEngine.RequestType.FORCE_NETWORK,
