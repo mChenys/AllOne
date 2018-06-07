@@ -6,6 +6,7 @@ package blog.csdn.net.mchenys.common.config;
  */
 public class Urls {
 
+
     public static int URL_TYPE = Env.RELEASE;
 
     public static String COMMON_SESSION_ID = URL_TYPE != Env.RELEASE ? "common_session_id1=" : "common_session_id=";
@@ -38,6 +39,11 @@ public class Urls {
     public static String FREE_LOGIN_URL =getTargetUrl("https://passport3.pconline.com.cn/passport3/passport/mobile_login.jsp");
     public static final String ACCOUNT_LOGIN = getTargetUrl("https://passport3.pconline.com.cn/passport3/rest/login.jsp");
     public static final String PHONE_BIND2 = getTargetUrl("https://passport3.pconline.com.cn/passport3/api/mobile_bind2.jsp");
+
+    public static final String HOME_COLUMN_LIST = "https://mrobot.pchouse.com.cn/s/magazine/pchouse/cms/houseArticleList.xsp";
+    public static final String SUB_COLUMN = "https://mrobot.pchouse.com.cn/s/magazine/pchouse/cms/preloadChannels.xsp" ;
+    public static final String URL_ARTICLE = "https://mrobot.pchouse.com.cn/v3/cms/articles/";
+
 
     public static String getTargetUrl(String url) {
         if (URL_TYPE == Env.TEST) {

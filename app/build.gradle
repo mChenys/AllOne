@@ -49,4 +49,5 @@ dependencies {
     implementation files('libs/open-sdk-r5793.jar')
     compile(name: 'openDefault-2.0.3_', ext: 'aar')
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation files('libs/gson-2.7.jar')
 }

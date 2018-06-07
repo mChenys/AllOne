@@ -160,7 +160,7 @@ public class ImageLoadUtils {
      */
     public static void disPlay(final String uri, final ImageView imageAware, final ImageLoadingListener listener) {
         if (StringUtils.isEmpty(uri)) {
-            imageAware.setImageResource(R.drawable.bg_loading);
+            imageAware.setImageResource(R.drawable.default_img_640x420);
             if (listener != null) {
                 listener.onLoadingFailed(uri, imageAware);
             }

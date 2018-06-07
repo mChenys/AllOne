@@ -1,6 +1,6 @@
 package blog.csdn.net.mchenys.common.base;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private boolean isPush;
     private long exitTime;
-    protected Context mContext;
+    protected Activity mContext;
 
     /**
      * 子类别重写,可以重写initData initView initListener

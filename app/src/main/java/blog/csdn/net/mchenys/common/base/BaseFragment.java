@@ -29,6 +29,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mRootView == null || !isSavePagerStatus() && null != getLayoutResID()) {
             mRootView = inflater.inflate(getLayoutResID(), container, false);
+            initParams();
             initView();
             initListener();
             loadData();
@@ -40,9 +41,13 @@ public abstract class BaseFragment extends Fragment {
         }
         return mRootView;
     }
+
+
+
     public <T extends View> T findViewById(@IdRes int id) {
         return mRootView.findViewById(id);
     }
+
     public BaseFragment show(@IdRes int id) {
         findViewById(id).setVisibility(View.VISIBLE);
         return this;
@@ -135,6 +140,10 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void autoRefresh(Bundle bundle) {
+
+    }
+
+    protected void initParams() {
 
     }
 }

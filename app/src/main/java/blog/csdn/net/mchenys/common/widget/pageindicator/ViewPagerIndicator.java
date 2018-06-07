@@ -1,4 +1,4 @@
-package blog.csdn.net.mchenys.common.widget.indicator;
+package blog.csdn.net.mchenys.common.widget.pageindicator;
 
 import android.content.Context;
 import android.content.res.TypedArray;

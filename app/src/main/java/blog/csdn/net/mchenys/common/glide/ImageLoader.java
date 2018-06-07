@@ -42,7 +42,7 @@ public class ImageLoader {
     public static ImageLoadConfig defConfig = new ImageLoadConfig.Builder().
             setCropType(ImageLoadConfig.CENTER_CROP).
             setAsBitmap(true).
-            setPlaceHolderResId(R.drawable.bg_loading).
+            setPlaceHolderResId(R.drawable.default_img_180x180).
             setErrorResId(R.drawable.bg_error).
             setDiskCacheStrategy(ImageLoadConfig.DiskCache.SOURCE).
             setPrioriy(ImageLoadConfig.LoadPriority.HIGH).build();

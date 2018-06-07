@@ -8,6 +8,7 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseActivity;
 import blog.csdn.net.mchenys.common.utils.JumpUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
+import blog.csdn.net.mchenys.model.SubColumn;
 
 
 /**
@@ -30,6 +31,7 @@ public class LaunchActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        SubColumn.requestData(this);
         //解决下载安装app并打开,HOME键回到桌面,点击桌面图标打开APP时,APP重新打开启动页问题
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();

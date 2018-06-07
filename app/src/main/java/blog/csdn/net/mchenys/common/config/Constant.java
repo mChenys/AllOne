@@ -22,5 +22,7 @@ public class Constant {
     public static final String KEY_REFRESH = "key_refresh";
     public static final int REQ_CAMERA_CODE = 10;
     public static final int REQ_CROP_CODE = 11;
-    public static final int REQ_UPDATE_HEADER = 12 ;
+    public static final int REQ_UPDATE_HEADER = 12;
+    public static String PREFERENCES_KEY_SUBCOLUMN = "preferences_key_subcolumn";
+    public static final String PREFERENCES_SUBCOLUMN = "preferences_subcolumn";
 }

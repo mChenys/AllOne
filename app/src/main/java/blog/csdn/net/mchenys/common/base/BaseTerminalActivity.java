@@ -56,7 +56,7 @@ public class BaseTerminalActivity extends BaseActivity {
     private boolean onReceivedError;
     public static final int TYPE_URL = 0; //通过loadUrl加载页面
     public static final int TYPE_CODE = 1; //通过http请求html加载页面,默认方式
-    private int loadType = TYPE_CODE;
+    private int loadType = TYPE_URL;
 
     public boolean isLoadComplete() {
         return isLoadComplete;

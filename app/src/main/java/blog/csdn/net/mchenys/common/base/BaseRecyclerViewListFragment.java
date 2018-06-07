@@ -62,6 +62,7 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
         isLazyLoad = lazyLoad;
     }
 
+
     public class Req {
         public String url;
         public Map<String, String> headersMap;
@@ -215,6 +216,8 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                         }
                     }
                 }
+
+                onReqComplete(isLoadMore);
             }
 
             @Override
@@ -262,6 +265,7 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                         } else {
                             mRecyclerView.refreshComplete();
                         }
+                        onReqComplete(isLoadMore);
                     } catch (Exception e) {
                         onFailure( e);
                     }
@@ -336,5 +340,10 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
      * @param isLoadMore
      */
     protected abstract void afterDataSet(List<T> data, boolean isLoadMore);
+
+
+    public void onReqComplete(boolean isLoadMore) {
+        //empty
+    }
 
 }

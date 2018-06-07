@@ -1,94 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
 
-    <RelativeLayout
+    <TextView
+        android:background="@color/white"
+        android:gravity="center"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white">
+        android:text="首页"
+        android:textColor="@color/color_333333"
+        android:textSize="20sp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="首页"
-            android:textColor="@color/color_333333"
-            android:textSize="18sp"/>
+    <blog.csdn.net.mchenys.common.widget.layout.RefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+        android:orientation="vertical">
+
+        <!--下拉刷新-->
 
         <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/ic_menu_more"/>
-    </RelativeLayout>
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="-81dp"
+            android:layout_gravity="center"
+            android:src="@drawable/app_refreshing_animation" />
 
-    <RelativeLayout
+
+        <blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollParentView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--焦点图-->
+            <RelativeLayout
+                android:id="@+id/rl_focus"
+                android:layout_width="match_parent"
+                android:layout_height="180dp">
+
+                <blog.csdn.net.mchenys.common.widget.focusimg.ImageViewPager
+                    android:id="@+id/imageViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+                <blog.csdn.net.mchenys.common.widget.focusimg.FocusCircleView
+                    android:id="@+id/FocusCircleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+            <!--导航栏-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <blog.csdn.net.mchenys.common.widget.pageindicator.TabPageIndicator
+                    android:id="@+id/tab_indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/ic_right_layer"/>
+            </RelativeLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollParentView>
+    </blog.csdn.net.mchenys.common.widget.layout.RefreshLayout>
+
+
+    <blog.csdn.net.mchenys.common.widget.view.UEView
+        android:id="@+id/UEView"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"/>
 
-        <LinearLayout
-            android:id="@+id/comment_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/color_f4f7f7"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:gravity="center_vertical"
-            android:padding="10dp">
-
-            <EditText
-                android:id="@+id/et_write_comment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/write_comment_bg"
-                android:hint="写评论"
-                android:maxLines="4"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:textColor="@color/color_333333"
-                android:textColorHint="@color/gray_1"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tv_reload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:drawableLeft="@drawable/ic_refresh"
-                android:drawablePadding="5dp"
-                android:textColor="@color/gray_1"
-                android:textSize="16sp"
-                android:visibility="visible"/>
-
-            <TextView
-                android:id="@+id/tv_send_comment"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@color/color_f4f7f7"
-                android:gravity="center_horizontal"
-                android:padding="5dp"
-                android:text="发送"
-                android:textColor="@color/color_ff8523"
-                android:visibility="gone"/>
-        </LinearLayout>
-
-        <ViewFlipper
-            android:id="@+id/information_article_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/comment_layout"
-            android:background="#ffffff"/>
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

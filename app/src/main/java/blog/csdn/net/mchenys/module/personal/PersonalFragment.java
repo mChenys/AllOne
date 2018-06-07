@@ -33,6 +33,7 @@ import blog.csdn.net.mchenys.common.utils.ShareUtils;
 import blog.csdn.net.mchenys.common.utils.ToastUtils;
 import blog.csdn.net.mchenys.model.Account;
 import blog.csdn.net.mchenys.module.account.LoginActivity;
+import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 
 
 /**
@@ -71,8 +72,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.loadData();
         Account account = AccountUtils.getLoginAccount();
         if (null != account) {
-            nickNameTv.setText(account.getUserName());
-            phoneTv.setText(account.getPhoneNum());
+            nickNameTv.setText("昵称:"+account.getUserName());
+            phoneTv.setText("手机:"+account.getPhoneNum());
             ImageLoadUtils.disPlayWitchCircleForceNetwork(account.getAvatarUrl(), headerIv);
             mLoginOutBtn.setText("注销");
 
@@ -91,6 +92,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.iv_friend).setOnClickListener(this);
         findViewById(R.id.btn_login_out).setOnClickListener(this);
         findViewById(R.id.iv_header).setOnClickListener(this);
+        findViewById(R.id.btn_to_page_ternimal).setOnClickListener(this);
+
     }
 
     @Override
@@ -122,6 +125,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 if (AccountUtils.isLogin()) {
                     JumpUtils.startActivityForResult(mContext, SettingActivity.class, Constant.REQ_UPDATE_HEADER);
                 }
+                break;
+
+            case R.id.btn_to_page_ternimal:
+                JumpUtils.startActivity(mContext, PageTerminalActivity.class);
+
                 break;
         }
     }

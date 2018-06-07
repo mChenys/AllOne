@@ -814,7 +814,8 @@ public class RefreshRecyclerView extends RecyclerView {
 
     private boolean isOnTop() {
         //头部不在屏幕时是没有attach到RecycleView上,所以拿不到parent
-        if (pullRefreshEnabled && null != mRefreshHeader && mRefreshHeader.getView().getParent() != null) {
+        if (pullRefreshEnabled && null != mRefreshHeader && mRefreshHeader.getView().getParent() != null
+                &&!canScrollVertically(-1)) {
             return true;
         } else {
             return false;
@@ -1411,4 +1412,18 @@ public class RefreshRecyclerView extends RecyclerView {
      public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
      }
      **/
+
+    //由于RecyclerView有刷新头存在，canScrollVertically(-1)时，始终返回true的解决办法
+    @Override
+    public boolean canScrollVertically(int direction) {
+        if (direction < 1) {
+            boolean original = super.canScrollVertically(direction);
+            if (!original || getChildAt(0) != null && getChildAt(0).getTop() >= 0) {
+                return false;
+            }else {
+                return true;
+            }
+        }
+        return super.canScrollVertically(direction);
+    }
 }
