@@ -34,7 +34,7 @@
             android:src="@drawable/app_refreshing_animation" />
 
 
-        <blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollParentView
+        <blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -82,7 +82,7 @@
                 android:id="@+id/vp_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollParentView>
+        </blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollView>
     </blog.csdn.net.mchenys.common.widget.layout.RefreshLayout>
 
 

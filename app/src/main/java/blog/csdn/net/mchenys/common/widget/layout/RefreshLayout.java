@@ -21,7 +21,7 @@ public class RefreshLayout extends LinearLayout {
     private int lastX, lastY;
     private ImageView mRefreshView;
     private int refreshHeight;
-    private PinkNestedScrollParentView mScrollView; //可滚动的View
+    private Scrollable mScrollableView; //可滚动的View
     private Scroller mScroller;
     private AnimationDrawable mAnimationDrawable;
     private Handler mHandler = new Handler();
@@ -37,7 +37,7 @@ public class RefreshLayout extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mRefreshView = (ImageView) getChildAt(0);
-        mScrollView = (PinkNestedScrollParentView) getChildAt(1);
+        mScrollableView = (Scrollable) getChildAt(1);
         mRefreshView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -68,10 +68,14 @@ public class RefreshLayout extends LinearLayout {
             boolean isVerticalScroll = Math.abs(dy) > Math.abs(dx);
             boolean isPullingDown = dy > 0;
             //向下拦截
-            shouldIntercept = (mScrollView.canIntercept(isPullingDown) && isPullingDown && isVerticalScroll) || (getScrollY() < 0);
+            shouldIntercept = (mScrollableView.canIntercept(dy) && isPullingDown && isVerticalScroll) || (getScrollY() < 0);
 
         }
-        return shouldIntercept || super.onInterceptTouchEvent(ev);
+        if (shouldIntercept) {
+            return true;
+        } else {
+            return super.onInterceptTouchEvent(ev);
+        }
     }
 
     @Override

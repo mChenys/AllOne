@@ -13,8 +13,8 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
 
-public class PinkNestedScrollParentView extends LinearLayout implements NestedScrollingParent {
-    private static final String TAG = "PinkNestedScrollParentView";
+public class PinkNestedScrollView extends LinearLayout implements NestedScrollingParent , Scrollable{
+    private static final String TAG = "PinkNestedScrollParent";
     private View mTopView;
     private View mPinkView;
     private View mContentView;
@@ -24,7 +24,7 @@ public class PinkNestedScrollParentView extends LinearLayout implements NestedSc
     private OverScroller mScroller;
     private View mTarget;
 
-    public PinkNestedScrollParentView(Context context, AttributeSet attrs) {
+    public PinkNestedScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
         mNestedScrollingParentHelper = new NestedScrollingParentHelper(this);
@@ -75,6 +75,7 @@ public class PinkNestedScrollParentView extends LinearLayout implements NestedSc
     @Override
     public void onStopNestedScroll(View target) {
         mNestedScrollingParentHelper.onStopNestedScroll(target);
+        mTarget = null;
     }
 
     //先于child滚动
@@ -242,6 +243,7 @@ public class PinkNestedScrollParentView extends LinearLayout implements NestedSc
                         mTarget.onTouchEvent(event);
                     }
                 } else {
+                    Log.e("cys", "mTarget不存在,ACTION_MOVE getScrollY:" + getScrollY());
                     scrollBy(0, -dy);
                 }
 
@@ -312,9 +314,11 @@ public class PinkNestedScrollParentView extends LinearLayout implements NestedSc
         return shouldIntercept;
     }
 
-    public boolean canIntercept(boolean isPullingDown) {
+
+    @Override
+    public boolean canIntercept(int dy) {
         if (null != mTarget) {
-            if (isPullingDown) {
+            if (dy > 0) {
                 return !mTarget.canScrollVertically(-1) && getScrollY() == 0;
             } else {
                 return false;
@@ -322,6 +326,5 @@ public class PinkNestedScrollParentView extends LinearLayout implements NestedSc
         } else {
             return getScrollY() == 0;
         }
-
     }
 }

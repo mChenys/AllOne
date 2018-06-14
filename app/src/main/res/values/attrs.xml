@@ -51,12 +51,21 @@
     </declare-styleable>
 
     <declare-styleable name="PullToRefresh">
-        <attr name="adapterViewBackground" format="reference|color" />
-        <attr name="pheaderBackground" format="reference|color" />
+        <attr name="adapterViewBackground" format="reference|color"/>
+        <attr name="pheaderBackground" format="reference|color"/>
         <attr name="model">
-            <flag name="pullDownFromTop" value="0x1" />
-            <flag name="pullUpFromBottom" value="0x2" />
-            <flag name="both" value="0x3" />
+            <flag name="pullDownFromTop" value="0x1"/>
+            <flag name="pullUpFromBottom" value="0x2"/>
+            <flag name="both" value="0x3"/>
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension"/>
+        <attr name="border_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CoverImageView">
+        <attr name="coverColor" format="color" />
     </declare-styleable>
 </resources>
