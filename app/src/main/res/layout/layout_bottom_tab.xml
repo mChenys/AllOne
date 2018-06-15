@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:orientation="vertical">
-    <!--tab图片-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+    <!--原本宽高为 32dp-->
     <ImageView
         android:id="@+id/iv_tab"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        />
-    <!--tab名字-->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:focusable="false"
+        android:scaleType="centerInside"/>
+
+    <ImageView
+        android:id="@+id/red_dot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/iv_tab"
+        android:src="@drawable/ic_red_dot"
+        android:visibility="gone"/>
+    <!--3.0隐藏-->
     <TextView
         android:id="@+id/tv_tab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:textSize="12sp"/>
-</LinearLayout>
+        android:layout_below="@id/iv_tab"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/selector_tab_text_color"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="首页"/>
+
+</RelativeLayout>

@@ -1,17 +1,23 @@
 package blog.csdn.net.mchenys.module.main;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.lang.reflect.Method;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseActivity;
@@ -36,7 +42,7 @@ public class MainActivity extends BaseActivity {
     };
 
     //tab选项卡的文字
-    private String[] mTabTitle = {"首页", "专家", "圈子", "我的"};
+    private String[] mTabTitle = {"", "", "", ""};
 
     //每个tab对应的Fragment
     private Class[] fragmentArray = {HomeFragment.class, SpecialFragment.class, CircleFragment.class,
@@ -74,7 +80,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
         super.initView();
         FragmentTabHost tabHost = findViewById(android.R.id.tabhost);
-        tabHost.setup(this, getSupportFragmentManager(), R.id.real_tabcontent);
+        tabHost.setup(this, getSupportFragmentManager(),  android.R.id.tabcontent);
         tabHost.getTabWidget().setDividerDrawable(null); //去掉分割线
         for (int i = 0; i < fragmentArray.length; i++) {
             TabHost.TabSpec tabSpec = tabHost.newTabSpec(String.valueOf(i)).setIndicator(getTabItemView(i));
@@ -86,7 +92,7 @@ public class MainActivity extends BaseActivity {
             //设置tabView相关
             View tabView = tabHost.getTabWidget().getChildAt(i);
             tabView.setId(i);
-            tabView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+           // tabView.setBackgroundColor(getResources().getColor(R.color.white));
             tabView.setOnTouchListener(mTabTouchListener);
         }
         tabHost.setCurrentTab(position);  //默认选中第一个tab
@@ -163,7 +169,7 @@ public class MainActivity extends BaseActivity {
         PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
 
     }
-
+    //tab切换处理
     View.OnTouchListener mTabTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -178,7 +184,18 @@ public class MainActivity extends BaseActivity {
                 }
                 return true;
             } else {//切换点击
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {}
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    View child = v.findViewById(R.id.iv_tab);
+                    if (null != child && child instanceof ImageView) {
+                        Drawable drawable = ((ImageView)child).getDrawable();
+                        if (null != drawable && drawable instanceof StateListDrawable) {
+                            AnimationDrawable anim = getAnimDrawable((StateListDrawable) drawable);
+                            if (null != anim) {
+                                anim.start();
+                            }
+                        }
+                    }
+                }
             }
             return false;
         }
@@ -194,5 +211,44 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+    }
+
+    /**
+     * 从xml中的selector中获取选中时的drawable
+     *
+     * @param userDrawable
+     * @return
+     */
+    public AnimationDrawable getAnimDrawable(StateListDrawable userDrawable) {
+        AnimationDrawable animationDrawable = null;
+        try {
+            Class slDraClass = StateListDrawable.class;
+            Method getStateCountMethod = slDraClass.getDeclaredMethod("getStateCount");
+            Method getStateSetMethod = slDraClass.getDeclaredMethod("getStateSet", int.class);
+            Method getDrawableMethod = slDraClass.getDeclaredMethod("getStateDrawable", int.class);
+            int count = (Integer) getStateCountMethod.invoke(userDrawable);
+            Log.e("cys", "state count =" + count);
+            out:for (int i = 0; i < count; i++) {
+                int[] stateSet = (int[]) getStateSetMethod.invoke(userDrawable, i);
+                if (stateSet == null || stateSet.length == 0) {
+                    Log.e("cys", "state is null");
+                } else {
+                    for (int j = 0; j < stateSet.length; j++) {
+                        Log.e("cys", "state =" + stateSet[j]);
+                        if (stateSet[j] == android.R.attr.state_selected) {
+                            Drawable drawable = (Drawable) getDrawableMethod.invoke(userDrawable, i);
+                            Log.e("cys", "drawable =" + drawable);
+                            if (null != drawable && drawable instanceof AnimationDrawable) {
+                                animationDrawable = (AnimationDrawable) drawable;
+                                break out;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return animationDrawable;
     }
 }

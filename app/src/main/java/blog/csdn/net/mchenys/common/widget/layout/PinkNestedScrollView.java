@@ -75,7 +75,10 @@ public class PinkNestedScrollView extends LinearLayout implements NestedScrollin
     @Override
     public void onStopNestedScroll(View target) {
         mNestedScrollingParentHelper.onStopNestedScroll(target);
-        mTarget = null;
+        if (!shouldIntercept) {
+            mTarget = null; //已拦截事件就没必要清空了
+            Log.e("cys", "onStopNestedScroll-> 清空target");
+        }
     }
 
     //先于child滚动
