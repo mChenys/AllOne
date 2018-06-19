@@ -22,14 +22,14 @@
             />
 
 
-        <LinearLayout
-            android:id="@+id/ll_flow_top"
+        <FrameLayout
+            android:id="@+id/fl_flow_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"/>
 
-        <LinearLayout
-            android:id="@+id/ll_flow_bottom"
+        <FrameLayout
+            android:id="@+id/fl_flow_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

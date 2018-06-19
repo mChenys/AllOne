@@ -19,6 +19,7 @@ public class ImageViewPager extends ViewPager {
 
     private final static int AUTO_SWITCH_TIME = 5000;
     private static OnItemClickListener onItemClickListener;
+    private boolean noScroll;
 
     private Handler mHandler = new Handler();
 
@@ -51,31 +52,6 @@ public class ImageViewPager extends ViewPager {
         this.onItemClickListener = onItemClickListener;
     }
 
-    private int lastX, lastY;
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            onPause();
-        } else if (ev.getAction() == MotionEvent.ACTION_UP) {
-            onResume();
-        } else if (ev.getAction() == MotionEvent.ACTION_CANCEL) {
-            onResume();
-        }
-        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-
-            for (int i = 0; i < getChildCount(); i++) {
-                MotionEvent childEvent = MotionEvent.obtain(ev);
-                childEvent.setAction(MotionEvent.ACTION_CANCEL);
-                getChildAt(i).dispatchTouchEvent(ev);
-            }
-        }
-//        ViewGroup group = (ViewGroup) getParent();
-//        group = (ViewGroup) group.getParent();
-//        group.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
-
     //暂停自动切换
     public void onPause() {
         mHandler.removeCallbacks(mScrollRunable);
@@ -83,6 +59,14 @@ public class ImageViewPager extends ViewPager {
 
     //重新开启自动切换
     public void onResume() {
+        if (null != getAdapter() && getAdapter() instanceof BasePagerAdapter) {
+            BasePagerAdapter basePagerAdapter = (BasePagerAdapter) getAdapter();
+            if (basePagerAdapter.getDataCount() <= 1) {
+                noScroll = true;
+                return;
+            }
+        }
+        noScroll = false;
         mHandler.removeCallbacks(mScrollRunable);
         mHandler.postDelayed(mScrollRunable, AUTO_SWITCH_TIME);
     }
@@ -93,13 +77,14 @@ public class ImageViewPager extends ViewPager {
 
 
     //基类适配器
-    public abstract static class BasePagerAdapter<T> extends PagerAdapter implements OnClickListener {
+    public abstract  class BasePagerAdapter<T> extends PagerAdapter implements OnClickListener {
         private Context mContext;
         private List<T> mData;
 
         public BasePagerAdapter(Context ctx, List<T> data) {
             this.mContext = ctx;
             this.mData = data;
+
         }
 
         @Override
@@ -159,6 +144,12 @@ public class ImageViewPager extends ViewPager {
         public int getDataCount() {
             return mData.size();
         }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+            onResume();
+        }
     }
 
     public interface OnItemClickListener {
@@ -166,4 +157,40 @@ public class ImageViewPager extends ViewPager {
     }
 
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            onPause();
+        } else if (ev.getAction() == MotionEvent.ACTION_UP) {
+            onResume();
+        } else if (ev.getAction() == MotionEvent.ACTION_CANCEL) {
+            onResume();
+        }
+        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            for (int i = 0; i < getChildCount(); i++) {
+                MotionEvent childEvent = MotionEvent.obtain(ev);
+                childEvent.setAction(MotionEvent.ACTION_CANCEL);
+                getChildAt(i).dispatchTouchEvent(ev);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        if (noScroll) {
+            return false;
+        } else {
+            return super.onTouchEvent(e);
+        }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent e) {
+        if (noScroll) {
+            return false;
+        } else {
+            return super.onInterceptTouchEvent(e);
+        }
+    }
 }

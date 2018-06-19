@@ -26,8 +26,8 @@ import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.utils.PermissionUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.module.circle.CircleFragment;
+import blog.csdn.net.mchenys.module.designer.DesignerHomeFragment;
 import blog.csdn.net.mchenys.module.personal.PersonalFragment;
-import blog.csdn.net.mchenys.module.special.SpecialFragment;
 
 
 /**
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
     private String[] mTabTitle = {"", "", "", ""};
 
     //每个tab对应的Fragment
-    private Class[] fragmentArray = {HomeFragment.class, SpecialFragment.class, CircleFragment.class,
+    private Class[] fragmentArray = {HomeFragment.class,  CircleFragment.class,DesignerHomeFragment.class,
             PersonalFragment.class};
 
     private int position;//首次打开的tab位置

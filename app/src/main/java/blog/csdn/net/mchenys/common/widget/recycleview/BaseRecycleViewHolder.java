@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.utils.ImageLoadUtils;
 import blog.csdn.net.mchenys.common.utils.StringUtils;
 
@@ -96,32 +97,22 @@ public class BaseRecycleViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+
     /**
-     * 设置图片
+     * 设置圆角图片
      */
-    public BaseRecycleViewHolder setCornerImageUrl(int viewId, String url) {
-        if (!StringUtils.isEmpty(url)) {
-            ImageView imageView = getView(viewId);
-            ImageLoadUtils.disPlayWithCorner(url, imageView);
-        }
+    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, int radiusDip) {
+        ImageView imageView = getView(viewId);
+        ImageLoadUtils.disPlayWithCorner(resId, imageView, radiusDip);
         return this;
     }
 
     /**
-     * 设置图片
+     * 设置圆角图片
      */
-    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, int corner) {
+    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, int radiusDip, int h, int w) {
         ImageView imageView = getView(viewId);
-        ImageLoadUtils.disPlayWithCorner(resId, imageView, corner);
-        return this;
-    }
-
-    /**
-     * 设置图片
-     */
-    public BaseRecycleViewHolder setCornerImageUrl(int viewId, int resId, int corner, int h, int w) {
-        ImageView imageView = getView(viewId);
-        ImageLoadUtils.disPlayWithCorner(resId, imageView, corner, w, h);
+        ImageLoadUtils.disPlayWithCorner(resId, imageView, radiusDip, w, h);
         return this;
     }
 
@@ -161,5 +152,43 @@ public class BaseRecycleViewHolder extends RecyclerView.ViewHolder {
     public BaseRecycleViewHolder setLayoutParams(int resId, ViewGroup.LayoutParams params) {
         getView(resId).setLayoutParams(params);
         return this;
+    }
+    public BaseRecycleViewHolder setHeaderImageView(int resId, String url) {
+        ImageView view = getView(resId);
+        if (null != view) {
+            ImageLoadUtils.disPlayWithCircle(url, view, R.drawable.bg_bbs_default_avatar);
+        }
+        return this;
+    }
+
+
+    public BaseRecycleViewHolder displayWithRound(int resId, String url, int radiusDip) {
+        ImageView view = getView(resId);
+        if (null != view) {
+            ImageLoadUtils.disPlayWithCorner(url, view, radiusDip);
+
+        }
+        return this;
+    }
+
+    public BaseRecycleViewHolder displayWithRoundBySize(int resId, String url,int w,int h, int radiusDip) {
+        ImageView view = getView(resId);
+        if (null != view) {
+            ImageLoadUtils.displayWithRound(url, view, w,h,radiusDip);
+
+        }
+        return this;
+    }
+
+    public void hide(int resId) {
+        View v = getView(resId);
+        if (null != v)
+            v.setVisibility(View.GONE);
+    }
+
+    public void show(int resId) {
+        View v = getView(resId);
+        if (null != v)
+            v.setVisibility(View.VISIBLE);
     }
 }

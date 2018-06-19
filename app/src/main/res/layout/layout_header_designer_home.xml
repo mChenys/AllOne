@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/rg_condition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <blog.csdn.net.mchenys.common.widget.view.ToggleRadioButton
+                android:id="@+id/rb_price"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableRight="@drawable/selector_arrow_change"
+                android:gravity="center"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:text="设计师报价"
+                android:textColor="@color/color_222222"
+                android:textSize="13sp"/>
+
+
+            <blog.csdn.net.mchenys.common.widget.view.ToggleRadioButton
+                android:id="@+id/rb_province"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableRight="@drawable/selector_arrow_change"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="所在地区"
+                android:textColor="@color/color_222222"
+                android:textSize="13sp"/>
+
+
+        </RadioGroup>
+
+        <blog.csdn.net.mchenys.common.widget.view.ToggleRadioButton
+            android:id="@+id/rb_same_city"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_check_change"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="只看同城"
+            android:textColor="@color/color_222222"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_cccccc"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_conditional_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        android:paddingTop="25dp"
+        android:visibility="gone"/>
+
+    <View
+        android:id="@+id/view_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/color_25Black"
+        android:visibility="gone"/>
+</LinearLayout>

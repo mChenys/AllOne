@@ -44,6 +44,13 @@
         android:layout_below="@+id/ll_desc"
         android:text="显示分页终端"/>
 
+    <Button
+        android:id="@+id/btn_current_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_to_page_ternimal"
+        android:text="我的小区"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -103,5 +103,16 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Bas
     public List<T> getData() {
         return mData;
     }
+
+    public interface ItemClickListener {
+        void onItemClick(BaseRecycleViewHolder holder, int position);
+    }
+
+    private ItemClickListener mItemClickListener;
+
+    public void setItemClickListener(ItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+
+    }
 }
 

@@ -59,6 +59,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".module.terminal.LiveColumnTerminalActivity"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".module.terminal.PersonalPageTerminalActivity"
+                  android:screenOrientation="portrait"/>
+
         <activity
             android:name=".common.sns.activity.SnsSelectPlatformNewActivity"
             android:label="分享页面"

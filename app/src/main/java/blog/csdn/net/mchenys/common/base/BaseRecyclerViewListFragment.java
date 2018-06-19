@@ -2,6 +2,7 @@ package blog.csdn.net.mchenys.common.base;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import org.json.JSONObject;
@@ -32,8 +33,8 @@ import blog.csdn.net.mchenys.common.widget.view.UEView;
 public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
 
     protected RefreshRecyclerView mRecyclerView;
-    private LinearLayout mTopLayout; //悬浮在顶部布局,可添加额外的布局
-    private LinearLayout mBottomLayout; //悬浮在底部布局,可添加额外的布局
+    private FrameLayout mTopLayout; //悬浮在顶部布局,可添加额外的布局
+    private FrameLayout mBottomLayout; //悬浮在底部布局,可添加额外的布局
     protected UEView mUEView;
     private TitleBar mTitleBar;
 
@@ -89,8 +90,8 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
         super.initView();
         mTitleBar = findViewById(R.id.title_bar);
         mRecyclerView = findViewById(R.id.refresh);
-        mTopLayout = findViewById(R.id.ll_flow_top);
-        mBottomLayout = findViewById(R.id.ll_flow_bottom);
+        mTopLayout = findViewById(R.id.fl_flow_top);
+        mBottomLayout = findViewById(R.id.fl_flow_bottom);
         mUEView = findViewById(R.id.UEView);
         mUEView.showLoading();
         setTitleBar(mTitleBar);
@@ -282,15 +283,24 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
      *
      * @param resId
      */
-    protected void addTopLayout(int resId) {
-        addTopLayout(resId, new LinearLayout.LayoutParams(-1, -2));
+    protected void addCoverTopLayout(int resId) {
+        addCoverTopLayout(resId, new LinearLayout.LayoutParams(-1, -2));
     }
 
-    protected void addTopLayout(int resId, LinearLayout.LayoutParams lp) {
+    protected void addCoverTopLayout(int resId, LinearLayout.LayoutParams lp) {
         View view = View.inflate(getActivity(), resId, null);
         if (null != view) {
             mTopLayout.addView(view, lp);
         }
+    }
+    /**
+     * 添加顶部布局
+     *
+     * @param topLayout
+     * @param params
+     */
+    public void addCoverTopLayout(View topLayout, FrameLayout.LayoutParams params) {
+        mTopLayout.addView(topLayout, params);
     }
 
     /**
@@ -345,5 +355,6 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
     public void onReqComplete(boolean isLoadMore) {
         //empty
     }
+
 
 }

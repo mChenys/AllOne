@@ -58,7 +58,7 @@ public class HomeFragment extends BaseFragment {
 
     protected void initParams() {
         super.initParams();
-        String subColumnJsonStr = PreferencesUtils.getPreference(mContext, Constant.PREFERENCES_SUBCOLUMN, Constant.PREFERENCES_KEY_SUBCOLUMN,null);
+        String subColumnJsonStr = PreferencesUtils.getPreference(mContext, Constant.PREFERENCES_SUBCOLUMN, Constant.PREFERENCES_KEY_SUBCOLUMN, null);
         if (!StringUtils.isEmpty(subColumnJsonStr)) {
             Gson gson = new Gson();
             try {
@@ -71,6 +71,7 @@ public class HomeFragment extends BaseFragment {
             }
         }
     }
+
     @Override
     protected Integer getLayoutResID() {
         return R.layout.fragment_home;
@@ -80,14 +81,14 @@ public class HomeFragment extends BaseFragment {
     protected void initView() {
         super.initView();
         //焦点图
-        mImageViewPager =  findViewById(R.id.imageViewPager);
+        mImageViewPager = findViewById(R.id.imageViewPager);
         mFocusCircleView = findViewById(R.id.FocusCircleView);
-        mImageViewPager.setAdapter(mFocusAdapter = new ImageViewPager.BasePagerAdapter<HomeFocus>(mContext, mFocusList) {
+        mImageViewPager.setAdapter(mFocusAdapter = mImageViewPager.new BasePagerAdapter<HomeFocus>(mContext, mFocusList) {
             @Override
             public View getItemView(Context context, int position, HomeFocus focus) {
                 View view = LayoutInflater.from(context).inflate(R.layout.focus_view_item, null);
-                TextView adLabel =  view.findViewById(R.id.tv_ad);
-                ImageView imageView =  view.findViewById(R.id.focus_view);
+                TextView adLabel = view.findViewById(R.id.tv_ad);
+                ImageView imageView = view.findViewById(R.id.focus_view);
                 adLabel.setVisibility(View.GONE);
                 if (focus != null) {
                     ImageLoadUtils.disPlay(focus.image, imageView);
@@ -98,16 +99,19 @@ public class HomeFragment extends BaseFragment {
         });
         mImageViewPager.setCurrentItem(Integer.MAX_VALUE / 2 - 3);
 
+        //内容视图
+        mVpContent = findViewById(R.id.vp_content);
+        mVpContent.setAdapter(mPagerAdapterCompat = new BasePagerAdapter(getChildFragmentManager()));
         //导航栏
         mTabIndicator = findViewById(R.id.tab_indicator);
         mTabIndicator.setDividerVisible(false);
+        mTabIndicator.setViewPager(mVpContent);
         //异常页面
         mUeView = findViewById(R.id.UEView);
 
         //下拉刷新
-        mRefreshLayout =findViewById(R.id.refreshLayout);
-        //内容视图
-        mVpContent =  findViewById(R.id.vp_content);
+        mRefreshLayout = findViewById(R.id.refreshLayout);
+
     }
 
     @Override
@@ -147,7 +151,7 @@ public class HomeFragment extends BaseFragment {
 
     public void finishRefresh(boolean isLoadMore) {
         Log.e("cys", "finishRefresh");
-        if(!isLoadMore)
+        if (!isLoadMore)
             mRefreshLayout.onComplete();
     }
 
@@ -176,8 +180,6 @@ public class HomeFragment extends BaseFragment {
     protected void loadData() {
         super.loadData();
         if (mSubColumnList != null && !mSubColumnList.isEmpty()) {
-            mVpContent.setAdapter(mPagerAdapterCompat = new BasePagerAdapter(getChildFragmentManager()));
-            mTabIndicator.setViewPager(mVpContent);
             mTabIndicator.notifyDataSetChanged();
             mTabIndicator.setCurrentItem(0);
         } else {
@@ -204,7 +206,7 @@ public class HomeFragment extends BaseFragment {
             findViewById(R.id.rl_focus).setVisibility(View.GONE);
         }*/
 
-       //test
+        //test
         List<HomeFocus> temp = HomeFocus.getTest();
         mFocusList.clear();
         mFocusList.addAll(temp);

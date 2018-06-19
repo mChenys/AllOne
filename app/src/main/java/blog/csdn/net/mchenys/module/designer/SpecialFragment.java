@@ -1,4 +1,4 @@
-package blog.csdn.net.mchenys.module.special;
+package blog.csdn.net.mchenys.module.designer;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

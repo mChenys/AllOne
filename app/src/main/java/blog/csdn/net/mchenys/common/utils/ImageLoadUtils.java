@@ -1,10 +1,15 @@
 package blog.csdn.net.mchenys.common.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
 
@@ -12,6 +17,7 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.glide.ImageLoader;
 import blog.csdn.net.mchenys.common.glide.cofig.ImageLoadConfig;
 import blog.csdn.net.mchenys.common.glide.linstener.LoaderListener;
+import blog.csdn.net.mchenys.common.glide.transformation.CornerTransform;
 
 
 /**
@@ -54,7 +60,7 @@ public class ImageLoadUtils {
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCornerUri(Uri uri, ImageView imageAware) {
+    public static void disPlayWithCorner(Uri uri, ImageView imageAware) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
                 setCornerRadius(20).
@@ -64,30 +70,30 @@ public class ImageLoadUtils {
     }
 
 
-    public static void disPlayWithCorner(int resId, ImageView imageAware, int corner) {
+    public static void disPlayWithCorner(int resId, ImageView imageAware, int radiusDip) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
-                setCornerRadius(corner).
-                setCornerMargin(corner).
+                setCornerRadius(DisplayUtils.convertDIP2PX(imageAware.getContext(),radiusDip)).
+                setCornerMargin(0).
                 build();
         ImageLoader.loadResId(imageAware, resId, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCorner(int resId, ImageView imageAware, int corner, int w, int h) {
+    public static void disPlayWithCorner(int resId, ImageView imageAware, int radiusDip, int w, int h) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
-                setCornerRadius(corner).
-                setCornerMargin(corner).
+                setCornerRadius(DisplayUtils.convertDIP2PX(imageAware.getContext(),radiusDip)).
+                setCornerMargin(0).
                 setSize(new ImageLoadConfig.OverrideSize(w, h)).
                 build();
         ImageLoader.loadResId(imageAware, resId, imageLoaderConfig, null);
     }
 
-    public static void disPlayWithCorner(String uri, ImageView imageAware) {
+    public static void disPlayWithCorner(String uri, ImageView imageAware, int radiusDip) {
         ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
                 setRoundedCorners(true).
-                setCornerRadius(20).
-                setCornerMargin(20).
+                setCornerRadius(DisplayUtils.convertDIP2PX(imageAware.getContext(),radiusDip)).
+                setCornerMargin(DisplayUtils.convertDIP2PX(imageAware.getContext(),radiusDip)).
                 build();
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
     }
@@ -187,5 +193,30 @@ public class ImageLoadUtils {
         ImageLoader.loadStringRes(imageAware, uri, ImageLoader.defConfig, lis);
     }
 
+
+    public static void displayWithRound(final String url, final ImageView imageView, final int w, final int h, final float radius) {
+        if (null == imageView) return;
+        final Context context = imageView.getContext();
+        float corner = DisplayUtils.dip2px(context, radius);
+        final CornerTransform cornerTransform = new CornerTransform(context, corner);
+        Glide.with(context).load(url).asBitmap()
+                .override(w,h)
+                .transform(cornerTransform)
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String s, Target<Bitmap> target, boolean b) {
+                        Glide.with(context).load(R.drawable.default_img_180x180).asBitmap()
+                                .override(w,h)
+                                .transform(cornerTransform).into(imageView);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap bitmap, String s, Target<Bitmap> target, boolean b, boolean b1) {
+                        return false;
+                    }
+                })
+                .into(imageView);
+    }
 
 }

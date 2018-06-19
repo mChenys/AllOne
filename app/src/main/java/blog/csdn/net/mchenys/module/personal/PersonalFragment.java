@@ -2,18 +2,24 @@ package blog.csdn.net.mchenys.module.personal;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.OptionsPickerView;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import blog.csdn.net.mchenys.R;
@@ -29,9 +35,11 @@ import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
 import blog.csdn.net.mchenys.common.utils.ImageLoadUtils;
 import blog.csdn.net.mchenys.common.utils.JumpUtils;
+import blog.csdn.net.mchenys.common.utils.PreferencesUtils;
 import blog.csdn.net.mchenys.common.utils.ShareUtils;
 import blog.csdn.net.mchenys.common.utils.ToastUtils;
 import blog.csdn.net.mchenys.model.Account;
+import blog.csdn.net.mchenys.model.Province;
 import blog.csdn.net.mchenys.module.account.LoginActivity;
 import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 
@@ -44,9 +52,15 @@ import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
 
     private Button mLoginOutBtn;
+    private Button mCityBtn;
     private TextView nickNameTv;
     private ImageView headerIv;
     private TextView phoneTv;
+    private OptionsPickerView<String> pickerView; //https://blog.csdn.net/qq_22393017/article/details/58099486
+
+    private List<String> provinceNameList = new ArrayList<>(); //省份列表
+    private List<Province> provinceList = new ArrayList<>();
+    private List<List<String>> cityNameList = new ArrayList<>(); //城市列表
 
     @Override
     protected Integer getLayoutResID() {
@@ -59,12 +73,28 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    protected void initParams() {
+        super.initParams();
+        parseJsonData();
+    }
+
+    @Override
     protected void initView() {
         super.initView();
         mLoginOutBtn = findViewById(R.id.btn_login_out);
         nickNameTv = findViewById(R.id.tv_nickName);
         phoneTv = findViewById(R.id.tv_phone);
         headerIv = findViewById(R.id.iv_header);
+        mCityBtn = findViewById(R.id.btn_current_city);
+        pickerView = new OptionsPickerView<>(new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                mCityBtn.setText(parseSelectedResult(options1, options2));
+            }
+        }));
+        pickerView.setPicker(provinceNameList, cityNameList);
+        if (provinceNameList.size() > 2 && cityNameList.size() > 3)
+            pickerView.setSelectOptions(2, 3);   //默认选中广东省广州市
     }
 
     @Override
@@ -72,8 +102,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.loadData();
         Account account = AccountUtils.getLoginAccount();
         if (null != account) {
-            nickNameTv.setText("昵称:"+account.getUserName());
-            phoneTv.setText("手机:"+account.getPhoneNum());
+            nickNameTv.setText("昵称:" + account.getUserName());
+            phoneTv.setText("手机:" + account.getPhoneNum());
             ImageLoadUtils.disPlayWitchCircleForceNetwork(account.getAvatarUrl(), headerIv);
             mLoginOutBtn.setText("注销");
 
@@ -82,6 +112,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             mLoginOutBtn.setText("登录");
             headerIv.setImageResource(R.mipmap.ic_launcher);
         }
+
     }
 
     @Override
@@ -93,6 +124,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.btn_login_out).setOnClickListener(this);
         findViewById(R.id.iv_header).setOnClickListener(this);
         findViewById(R.id.btn_to_page_ternimal).setOnClickListener(this);
+        findViewById(R.id.btn_current_city).setOnClickListener(this);
 
     }
 
@@ -130,6 +162,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             case R.id.btn_to_page_ternimal:
                 JumpUtils.startActivity(mContext, PageTerminalActivity.class);
 
+                break;
+
+            case R.id.btn_current_city:
+                pickerView.show();
                 break;
         }
     }
@@ -213,4 +249,41 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
         }
     };
+
+    /**
+     * 从json数据中解析出省市列表数据
+     */
+    private void parseJsonData() {
+        String jsonStr = PreferencesUtils.getPreference(mContext, "pre_province_cities", "key_province_cities", "");
+        if (TextUtils.isEmpty(jsonStr)) return;
+        try {
+            JSONArray jsonArray = new JSONArray(jsonStr);
+            provinceList = Province.parseProvinceList(jsonArray);
+            if (provinceList != null) {
+                for (int i = 0; i < provinceList.size(); i++) {
+                    Province province = provinceList.get(i);
+                    provinceNameList.add(province.getName());
+                    List<Province.City> cityList = province.getCityList();
+                    List<String> temp = new ArrayList<>();
+                    for (int j = 0; j < cityList.size(); j++) {
+                        temp.add(cityList.get(j).getCityName());
+                    }
+                    cityNameList.add(temp);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 根据option返回对应城市
+     *
+     * @param opt1 opt1
+     * @param opt2 opt2
+     * @return 城市
+     */
+    private String parseSelectedResult(int opt1, int opt2) {
+        return provinceList.get(opt1).getCityList().get(opt2).getCityName();
+    }
 }
