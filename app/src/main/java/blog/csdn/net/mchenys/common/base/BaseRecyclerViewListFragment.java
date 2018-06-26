@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -169,56 +170,18 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
     }
 
     protected void loadData(boolean isRefresh) {
-        if (NetworkUtils.isNetworkAvailable(getActivity())) {
-            if (isLoadMore) {//加载更多
-                if (pageTotal < 1 || total > 0 && total < 5) {
-                    mRecyclerView.hideLoaderFooterView();
-                    return;
-                } else if (pageTotal < pageNo && isShowNoMore) {
-                    mRecyclerView.setNoMore(true);
-                    return;
-                }
-            }
-        }
         Req req = onCreateReq();
-        if (null == req) {
-            mUEView.hideAll();
-            if (isLoadMore) {
-                mRecyclerView.loadMoreComplete();
-            } else {
-                mRecyclerView.refreshComplete();
-            }
-            return;
+        if (!canRequest(req)) return;
+        if (null == req.bodyMap) {
+            req.bodyMap = new HashMap<>();
         }
-        String url = req.url + "?pageSize=" + pageSize + "&pageNo=" + pageNo;
-        if (null != req.bodyMap) {
-            for (String key : req.bodyMap.keySet()) {
-                url = url.concat("&" + key + "=" + req.bodyMap.get(key));
-            }
-        }
-        HttpUtils.getJSON(isRefresh, url, req.headersMap, null, new HttpUtils.JSONCallback() {
+        req.bodyMap.put("pageSize", String.valueOf(pageSize));
+        req.bodyMap.put("pageNo", String.valueOf(pageNo));
+        HttpUtils.getJSON(isRefresh, req.url, req.headersMap, null, new HttpUtils.JSONCallback() {
             @Override
             public void onFailure(Exception e) {
                 ExceptionUtils.exceptionHandler(e);
-                if (isLoadMore) {
-                    mRecyclerView.loadMoreComplete();
-                } else {
-                    mRecyclerView.refreshComplete();
-                }
-                if (mData.isEmpty()) {
-                    if (!NetworkUtils.isNetworkAvailable(mContext)) {
-                        mUEView.showError();
-                    } else {
-                        if (mRecyclerView.getHeadersCount() > 1) {
-                            //有头部
-                            mUEView.hideAll();
-                        } else {
-                            mUEView.showNoData();
-                        }
-                    }
-                }
-
-                onReqComplete(isLoadMore);
+                requestException();
             }
 
             @Override
@@ -227,48 +190,16 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                 if (status >= 0) {
                     total = jsonObject.optInt("total");
                     pageNo = jsonObject.optInt("pageNo");
-                    //获取总页数
                     pageTotal = GetPageTotalUtils.getPageTotal(total, 10);
                     try {
                         //刷新数据
                         beforeDataSet(jsonObject, isLoadMore);
                         List<T> temp = parseList(jsonObject);
-                        if (!isLoadMore) {
-                            mData.clear();
-                            set.clear();
-                        }
-                        List<T> newData = new ArrayList<>();
-                        if (temp != null && !temp.isEmpty()) {
-                            for (T t : temp) { //去重复
-                                if (set.add(t)) {
-                                    newData.add(t);
-                                }
-                            }
-                        }
-                        mData.addAll(newData);
+                        removeDuplicateData(temp);
                         afterDataSet(mData, isLoadMore);
-                        if (mData.isEmpty()) { //如果数据集合为空,则显示没有数据
-                            if (mRecyclerView.getHeadersCount() > 1) {
-                                //有头部
-                                mUEView.hideAll();
-                            } else {
-                                mUEView.showNoData();
-                            }
-                        } else {
-                            mUEView.hideAll();
-                        }
-                        if (isLoadMore) {
-                            if (pageTotal < pageNo && isShowNoMore) {
-                                mRecyclerView.setNoMore(true);
-                            } else {
-                                mRecyclerView.loadMoreComplete();
-                            }
-                        } else {
-                            mRecyclerView.refreshComplete();
-                        }
-                        onReqComplete(isLoadMore);
+                        requestSuccess();
                     } catch (Exception e) {
-                        onFailure( e);
+                        onFailure(e);
                     }
                 } else {
                     onFailure(new Exception(jsonObject.optString("msg")));
@@ -277,6 +208,95 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
         });
     }
 
+    /**
+     * 是否可以请求
+     *
+     * @param req
+     * @return
+     */
+    private boolean canRequest(Req req) {
+        if (NetworkUtils.isNetworkAvailable(getActivity())) {
+            if (isLoadMore) {//加载更多
+                if (pageTotal < 1 || total > 0 && total < 5) {
+                    mRecyclerView.hideLoaderFooterView();
+                    return false;
+                } else if (pageTotal <= pageNo && isShowNoMore) {
+                    mRecyclerView.setNoMore(true);
+                    return false;
+                }
+            }
+        }
+        if (null == req) {
+            mUEView.hideAll();
+            mRecyclerView.stopRefresh(isLoadMore);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 去重 记得重写T类型的equals和hasCode方法
+     *
+     * @param temp
+     */
+    private void removeDuplicateData(List<T> temp) {
+        if (!isLoadMore) {
+            mData.clear();
+            set.clear();
+        }
+        List<T> newData = new ArrayList<>();
+        if (temp != null && !temp.isEmpty()) {
+            for (T t : temp) { //去重复
+                if (set.add(t)) {
+                    newData.add(t);
+                }
+            }
+        }
+        mData.addAll(newData);
+    }
+
+    /**
+     * 请求异常
+     */
+    private void requestException() {
+        mRecyclerView.stopRefresh(isLoadMore);
+        if (mData.isEmpty()) {
+            if (!NetworkUtils.isNetworkAvailable(mContext)) {
+                mUEView.showError();
+            } else {
+                if (mRecyclerView.getHeadersCount() > 1) {
+                    //有头部
+                    mUEView.hideAll();
+                } else {
+                    mUEView.showNoData();
+                }
+            }
+        }
+
+        onReqComplete(isLoadMore);
+    }
+
+    /**
+     * 请求成功
+     */
+    private void requestSuccess() {
+        if (mData.isEmpty()) { //如果数据集合为空,则显示没有数据
+            if (mRecyclerView.getHeadersCount() > 1) {
+                //有头部
+                mUEView.hideAll();
+            } else {
+                mUEView.showNoData();
+            }
+        } else {
+            mUEView.hideAll();
+        }
+        if (isLoadMore && pageTotal <= pageNo && isShowNoMore) {
+            mRecyclerView.setNoMore(true);
+        } else {
+            mRecyclerView.stopRefresh(isLoadMore);
+        }
+        onReqComplete(isLoadMore);
+    }
 
     /**
      * 添加头部布局
@@ -293,6 +313,7 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
             mTopLayout.addView(view, lp);
         }
     }
+
     /**
      * 添加顶部布局
      *
@@ -341,7 +362,8 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
      * @param jsonObject
      * @param isLoadMore
      */
-    protected abstract void beforeDataSet(JSONObject jsonObject, boolean isLoadMore);
+    protected void beforeDataSet(JSONObject jsonObject, boolean isLoadMore) {
+    }
 
     /**
      * 列表数据设置完之后,可以处理广告或者其他
@@ -349,7 +371,8 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
      * @param data
      * @param isLoadMore
      */
-    protected abstract void afterDataSet(List<T> data, boolean isLoadMore);
+    protected void afterDataSet(List<T> data, boolean isLoadMore) {
+    }
 
 
     public void onReqComplete(boolean isLoadMore) {

@@ -25,11 +25,10 @@
                 android:layout_height="38dp"
                 android:layout_weight="1"
                 android:button="@null"
+                android:drawablePadding="5dp"
                 android:drawableRight="@drawable/selector_arrow_change"
                 android:gravity="center"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp"
-                android:text="设计师报价"
+                android:text="设计报价"
                 android:textColor="@color/color_222222"
                 android:textSize="13sp"/>
 
@@ -40,10 +39,9 @@
                 android:layout_height="38dp"
                 android:layout_weight="1"
                 android:button="@null"
+                android:drawablePadding="5dp"
                 android:drawableRight="@drawable/selector_arrow_change"
                 android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
                 android:text="所在地区"
                 android:textColor="@color/color_222222"
                 android:textSize="13sp"/>
@@ -57,10 +55,9 @@
             android:layout_height="38dp"
             android:layout_weight="1"
             android:button="@null"
+            android:drawablePadding="5dp"
             android:drawableRight="@drawable/selector_check_change"
             android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:text="只看同城"
             android:textColor="@color/color_222222"
             android:textSize="13sp"/>

@@ -2,6 +2,7 @@ package blog.csdn.net.mchenys.common.utils;
 
 
 import android.content.Context;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -122,6 +123,30 @@ public class StringUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * 将text中的所有target设置指定的颜色
+     * @param target
+     * @param text
+     * @return
+     */
+    public static Spanned heightLineText(String target, String text) {
+        int index = text.indexOf(target);
+        String preText = "";
+        StringBuilder result = new StringBuilder();
+        while (index != -1) {
+            if (index > 0)
+                preText = text.substring(0, index);
+            result.append(preText).append("<font color=#c8800d>").append(target).append("</font>");
+            if (index + target.length() < text.length())
+                text = text.substring(index + target.length(), text.length());
+            else
+                text = "";
+            index = text.indexOf(target);
+        }
+        result.append(text);
+        return Html.fromHtml(result.toString());
     }
 
     public static boolean isNumeric(String str) {

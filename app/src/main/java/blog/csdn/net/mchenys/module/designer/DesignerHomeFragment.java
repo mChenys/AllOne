@@ -55,15 +55,6 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
     protected void initParams() {
         super.initParams();
         mPriceList.addAll(DesignPrice.getAllPrice());
-        DesignProvince.getList(new DesignProvince.ResultCallback() {
-
-            @Override
-            public void onResult(List<DesignProvince> list) {
-                mProvinceList.addAll(list);
-                mProvinceList.add(0, new DesignProvince(0, "全部地区", true));
-            }
-        });
-        initLocation();
     }
 
     @Override
@@ -186,6 +177,8 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initLocation();
+        initProvince();
         isViewCreated = true;
     }
 
@@ -210,6 +203,7 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
         DesignProvince data = mProvinceList.get(excludePosition);
         data.isSelected = true;
         provinceId = data.provinceId;
+        mProvinceRb.setText(excludePosition==0?"所在地区":data.provinceName);
     }
 
     private void resetPriceChoose(int excludePosition) {
@@ -218,6 +212,8 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
         }
         DesignPrice data = mPriceList.get(excludePosition);
         data.isSelected = true;
+        priceType = data.priceType;
+        mPriceRb.setText(excludePosition==0?"设计报价":data.price);
     }
 
     //所在地区
@@ -273,8 +269,6 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
                 @Override
                 public void onClick(View v) {
                     resetPriceChoose(position);
-                    DesignPrice data = mPriceList.get(position);
-                    priceType = data.priceType;
                     showChooseList(false);
                     loadData(false);
                 }
@@ -297,5 +291,21 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
             }
         });
         bdLbsUtils.start();
+    }
+    private void initProvince() {
+        if (mProvinceList.isEmpty()) {
+            DesignProvince.getList(new DesignProvince.ResultCallback() {
+
+                @Override
+                public void onResult(List<DesignProvince> list) {
+                    if (null != list && mProvinceList.isEmpty()) {
+                        mProvinceList.clear();
+                        mProvinceList.addAll(list);
+                        mProvinceList.add(0, new DesignProvince(0, "全部地区", true));
+                    }
+
+                }
+            });
+        }
     }
 }

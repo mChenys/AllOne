@@ -51,7 +51,7 @@ public class DesignProvince {
     }
 
     public static void getList(final ResultCallback callback) {
-        HttpUtils.getJSON(true, Urls.DESIGN_CITY_LIST, null, null, new HttpUtils.JSONCallback() {
+        HttpUtils.getJSON(false, Urls.DESIGN_CITY_LIST, null, null, new HttpUtils.JSONCallback() {
             @Override
             public void onFailure(Exception e) {
                 if (null != callback) callback.onResult(null);

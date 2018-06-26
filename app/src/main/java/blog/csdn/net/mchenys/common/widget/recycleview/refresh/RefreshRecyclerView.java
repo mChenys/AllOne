@@ -331,7 +331,13 @@ public class RefreshRecyclerView extends RecyclerView {
 
     }
 
-
+    public void stopRefresh(boolean isLoadMore){
+        if (isLoadMore) {
+            loadMoreComplete();
+        }else{
+            refreshComplete();
+        }
+    }
     @Override
     public void scrollBy(int x, int y) {
         isApiScroll = true;
@@ -367,6 +373,8 @@ public class RefreshRecyclerView extends RecyclerView {
      * @param position
      * @param stickTop 是否支持置顶功能
      * @param dy       距离recycleview顶部的距离
+     *                 <p>
+     *  或者使用scrollToPositionWithOffset来完成
      */
     public void smoothScrollToPosition(int position, boolean stickTop, int dy) {
         isApiScroll = true;
@@ -386,7 +394,6 @@ public class RefreshRecyclerView extends RecyclerView {
         }
 
     }
-
 
     //实现置顶的功能
     private class MySmoothTopScroller extends LinearSmoothScroller {
@@ -815,7 +822,7 @@ public class RefreshRecyclerView extends RecyclerView {
     private boolean isOnTop() {
         //头部不在屏幕时是没有attach到RecycleView上,所以拿不到parent
         if (pullRefreshEnabled && null != mRefreshHeader && mRefreshHeader.getView().getParent() != null
-                &&!canScrollVertically(-1)) {
+                && !canScrollVertically(-1)) {
             return true;
         } else {
             return false;
@@ -1346,71 +1353,71 @@ public class RefreshRecyclerView extends RecyclerView {
         }
     }
 
-    /**        有用到可以解开,引入design包
-     private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
-
-     @Override protected void onAttachedToWindow() {
-     super.onAttachedToWindow();
-     //解决和CollapsingToolbarLayout冲突的问题
-     AppBarLayout appBarLayout = null;
-     ViewParent p = getParent();
-     while (p != null) {
-     if (p instanceof CoordinatorLayout) {
-     break;
-     }
-     p = p.getParent();
-     }
-     if (p instanceof CoordinatorLayout) {
-     CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
-     final int childCount = coordinatorLayout.getChildCount();
-     for (int i = childCount - 1; i >= 0; i--) {
-     final View child = coordinatorLayout.getChildAt(i);
-     if (child instanceof AppBarLayout) {
-     appBarLayout = (AppBarLayout) child;
-     break;
-     }
-     }
-     if (appBarLayout != null) {
-     appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-     @Override public void onStateChanged(AppBarLayout appBarLayout, State state) {
-     appbarState = state;
-     }
-     });
-     }
-     }
-     }
-
-     public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
-
-     public enum State {
-     EXPANDED,
-     COLLAPSED,
-     IDLE
-     }
-
-     private State mCurrentState = State.IDLE;
-
-     @Override public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-     if (i == 0) {
-     if (mCurrentState != State.EXPANDED) {
-     onStateChanged(appBarLayout, State.EXPANDED);
-     }
-     mCurrentState = State.EXPANDED;
-     } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
-     if (mCurrentState != State.COLLAPSED) {
-     onStateChanged(appBarLayout, State.COLLAPSED);
-     }
-     mCurrentState = State.COLLAPSED;
-     } else {
-     if (mCurrentState != State.IDLE) {
-     onStateChanged(appBarLayout, State.IDLE);
-     }
-     mCurrentState = State.IDLE;
-     }
-     }
-
-     public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
-     }
+    /**
+     * 有用到可以解开,引入design包
+     * private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
+     *
+     * @Override protected void onAttachedToWindow() {
+     * super.onAttachedToWindow();
+     * //解决和CollapsingToolbarLayout冲突的问题
+     * AppBarLayout appBarLayout = null;
+     * ViewParent p = getParent();
+     * while (p != null) {
+     * if (p instanceof CoordinatorLayout) {
+     * break;
+     * }
+     * p = p.getParent();
+     * }
+     * if (p instanceof CoordinatorLayout) {
+     * CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
+     * final int childCount = coordinatorLayout.getChildCount();
+     * for (int i = childCount - 1; i >= 0; i--) {
+     * final View child = coordinatorLayout.getChildAt(i);
+     * if (child instanceof AppBarLayout) {
+     * appBarLayout = (AppBarLayout) child;
+     * break;
+     * }
+     * }
+     * if (appBarLayout != null) {
+     * appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+     * @Override public void onStateChanged(AppBarLayout appBarLayout, State state) {
+     * appbarState = state;
+     * }
+     * });
+     * }
+     * }
+     * }
+     * <p>
+     * public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
+     * <p>
+     * public enum State {
+     * EXPANDED,
+     * COLLAPSED,
+     * IDLE
+     * }
+     * <p>
+     * private State mCurrentState = State.IDLE;
+     * @Override public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+     * if (i == 0) {
+     * if (mCurrentState != State.EXPANDED) {
+     * onStateChanged(appBarLayout, State.EXPANDED);
+     * }
+     * mCurrentState = State.EXPANDED;
+     * } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+     * if (mCurrentState != State.COLLAPSED) {
+     * onStateChanged(appBarLayout, State.COLLAPSED);
+     * }
+     * mCurrentState = State.COLLAPSED;
+     * } else {
+     * if (mCurrentState != State.IDLE) {
+     * onStateChanged(appBarLayout, State.IDLE);
+     * }
+     * mCurrentState = State.IDLE;
+     * }
+     * }
+     * <p>
+     * public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
+     * }
      **/
 
     //由于RecyclerView有刷新头存在，canScrollVertically(-1)时，始终返回true的解决办法
@@ -1420,7 +1427,7 @@ public class RefreshRecyclerView extends RecyclerView {
             boolean original = super.canScrollVertically(direction);
             if (!original || getChildAt(0) != null && getChildAt(0).getTop() >= 0) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         }
