@@ -41,6 +41,7 @@ public class ImageLoadUtils {
         ImageLoader.loadUri(imageView, uri, ImageLoader.defConfig, null);
     }
 
+
     /**
      * @param uri
      * @param imageAware
@@ -58,6 +59,12 @@ public class ImageLoadUtils {
                 setSize(new ImageLoadConfig.OverrideSize(w, h)).
                 build();
         ImageLoader.loadStringRes(imageAware, uri, imageLoaderConfig, null);
+    }
+
+    public static void disPlayWithFitCenter(String uri, ImageView imageView) {
+        ImageLoadConfig imageLoaderConfig = ImageLoadConfig.parseBuilder(ImageLoader.defConfig).
+                setCropType(ImageLoadConfig.FIT_CENTER).build();
+        ImageLoader.loadStringRes(imageView, uri, imageLoaderConfig, null);
     }
 
     public static void disPlayWithCorner(Uri uri, ImageView imageAware) {

@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".AllOneApplication"
@@ -62,6 +63,10 @@
         <activity android:name=".module.terminal.PersonalPageTerminalActivity"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".common.photo.PhotoPreviewActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".common.photo.PhotoPreviewActivity2"
+                  android:screenOrientation="portrait"/>
         <activity
             android:name=".common.sns.activity.SnsSelectPlatformNewActivity"
             android:label="分享页面"

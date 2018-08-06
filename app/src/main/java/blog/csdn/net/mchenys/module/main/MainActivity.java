@@ -24,6 +24,8 @@ import blog.csdn.net.mchenys.common.base.BaseActivity;
 import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.utils.PermissionUtils;
+import blog.csdn.net.mchenys.common.utils.ScreenShotListenManager;
+import blog.csdn.net.mchenys.common.widget.dialog.ScreenShotDialog;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.module.circle.CircleFragment;
 import blog.csdn.net.mchenys.module.designer.DesignerHomeFragment;
@@ -49,6 +51,7 @@ public class MainActivity extends BaseActivity {
             PersonalFragment.class};
 
     private int position;//首次打开的tab位置
+
     @Override
     public void setTitleBar(TitleBar titleBar) {
         titleBar.setVisibility(View.GONE);
@@ -103,7 +106,11 @@ public class MainActivity extends BaseActivity {
                 position = Integer.valueOf(tabId);
             }
         });
+
     }
+
+
+
 
     /**
      * 给Tab按钮设置图标和文字
@@ -251,4 +258,6 @@ public class MainActivity extends BaseActivity {
         }
         return animationDrawable;
     }
+
+
 }

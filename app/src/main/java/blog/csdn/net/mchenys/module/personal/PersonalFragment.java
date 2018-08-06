@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
+import com.bigkoo.pickerview.listener.CustomListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,8 @@ import blog.csdn.net.mchenys.common.config.Urls;
 import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
 import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBackHandler;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
+import blog.csdn.net.mchenys.common.photo.PhotoPreviewActivity;
+import blog.csdn.net.mchenys.common.photo.PhotoPreviewActivity2;
 import blog.csdn.net.mchenys.common.photo.crop.CropActivity;
 import blog.csdn.net.mchenys.common.sns.bean.SnsShareContent;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
@@ -52,15 +55,21 @@ import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
 
     private Button mLoginOutBtn;
-    private Button mCityBtn;
+    private Button mCityBtn, mHouseBtn,mAreaBtn;
     private TextView nickNameTv;
     private ImageView headerIv;
     private TextView phoneTv;
-    private OptionsPickerView<String> pickerView; //https://blog.csdn.net/qq_22393017/article/details/58099486
+    private OptionsPickerView<String> mCityPinkView; //https://blog.csdn.net/qq_22393017/article/details/58099486
+    private OptionsPickerView<String> mHousePinkView;
+    private OptionsPickerView<String> mAreaPinkView;
 
     private List<String> provinceNameList = new ArrayList<>(); //省份列表
     private List<Province> provinceList = new ArrayList<>();
     private List<List<String>> cityNameList = new ArrayList<>(); //城市列表
+    private List<List<List<String>>> lastNameList = new ArrayList<>(); //最后一个城市列表(测试用数据)
+    private List<String> tingList = new ArrayList<>();//厅
+    private List<String> shiList = new ArrayList<>();//室
+    private List<String> weiList = new ArrayList<>();//卫
 
     @Override
     protected Integer getLayoutResID() {
@@ -76,6 +85,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     protected void initParams() {
         super.initParams();
         parseJsonData();
+        for (int i = 0; i < 11; i++) {
+            tingList.add(i + "厅");
+            shiList.add(i + "室");
+            weiList.add(i + "卫");
+        }
     }
 
     @Override
@@ -86,16 +100,63 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         phoneTv = findViewById(R.id.tv_phone);
         headerIv = findViewById(R.id.iv_header);
         mCityBtn = findViewById(R.id.btn_current_city);
-        pickerView = new OptionsPickerView<>(new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
+        mHouseBtn = findViewById(R.id.btn_house_type);
+        mAreaBtn = findViewById(R.id.btn_area);
+
+        //城市滚轮
+        mCityPinkView = new OptionsPickerView<>(new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 mCityBtn.setText(parseSelectedResult(options1, options2));
             }
         }));
-        pickerView.setPicker(provinceNameList, cityNameList);
-        if (provinceNameList.size() > 2 && cityNameList.size() > 3)
-            pickerView.setSelectOptions(2, 3);   //默认选中广东省广州市
+        mCityPinkView.setPicker(provinceNameList, cityNameList);
+        if (provinceNameList.size() > 2 && cityNameList.size() > 3) {
+            mCityPinkView.setSelectOptions(2, 3);   //默认选中广东省广州市
+        }
+
+        //户型滚轮
+
+        mHousePinkView = new OptionsPickerView<>(new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                mHouseBtn.setText(parseSelectedResult(options1, options2, options3));
+            }
+        }));
+        mHousePinkView.setNPicker(tingList,shiList,weiList);
+
+        //省市区
+        OptionsPickerView.Builder builder =new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                mAreaBtn.setText(parseSelectedResult2(options1, options2, options3));
+            }
+        });
+        //采用自定义的布局
+        builder.setLayoutRes(R.layout.layout_area_pickerview_options, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                v.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mAreaPinkView.returnData();
+                        mAreaPinkView.dismiss();
+                    }
+                });
+                v.findViewById(R.id.tv_close).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mAreaPinkView.dismiss();
+                    }
+                });
+
+            }
+        });
+        mAreaPinkView = new OptionsPickerView<>(builder);
+        mAreaPinkView.setPicker(provinceNameList, cityNameList,lastNameList);
     }
+
+
 
     @Override
     protected void loadData() {
@@ -125,6 +186,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.iv_header).setOnClickListener(this);
         findViewById(R.id.btn_to_page_ternimal).setOnClickListener(this);
         findViewById(R.id.btn_current_city).setOnClickListener(this);
+        findViewById(R.id.btn_house_type).setOnClickListener(this);
+        findViewById(R.id.btn_area).setOnClickListener(this);
+        findViewById(R.id.btn_show_pic).setOnClickListener(this);
+        findViewById(R.id.btn_show_pic2).setOnClickListener(this);
 
     }
 
@@ -165,7 +230,20 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.btn_current_city:
-                pickerView.show();
+                mCityPinkView.show();
+                break;
+
+            case R.id.btn_house_type:
+                mHousePinkView.show();
+                break;
+            case R.id.btn_area:
+                mAreaPinkView.show();
+                break;
+            case R.id.btn_show_pic:
+                startActivity(new Intent(mContext, PhotoPreviewActivity.class));
+                break;
+            case R.id.btn_show_pic2:
+                startActivity(new Intent(mContext, PhotoPreviewActivity2.class));
                 break;
         }
     }
@@ -269,6 +347,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         temp.add(cityList.get(j).getCityName());
                     }
                     cityNameList.add(temp);
+                    lastNameList.add(cityNameList);
                 }
             }
         } catch (JSONException e) {
@@ -285,5 +364,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
      */
     private String parseSelectedResult(int opt1, int opt2) {
         return provinceList.get(opt1).getCityList().get(opt2).getCityName();
+    }
+
+    private String parseSelectedResult(int options1, int options2, int options3) {
+        return tingList.get(options1)+","+shiList.get(options2)+","+weiList.get(options3);
+    }
+
+    private String parseSelectedResult2(int options1, int options2, int options3) {
+        return provinceList.get(options1).getName()+","+cityNameList.get(options1).get(options2)+","+
+                lastNameList.get(options1).get(options2).get(options3);
     }
 }

@@ -1,101 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-    <Button
-        android:id="@+id/btn_login_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="注销"/>
-
-    <ImageView
-        android:id="@+id/iv_header"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/ll_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_nickName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/tv_phone"
+        <ImageView
+            android:id="@+id/iv_header"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/ll_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tv_nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_to_page_ternimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_desc"
+            android:text="显示分页终端"/>
+
+        <Button
+            android:id="@+id/btn_current_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_to_page_ternimal"
+            android:text="我的小区"/>
+
+        <Button
+            android:id="@+id/btn_house_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_current_city"
+            android:text="户型"/>
+
+        <Button
+            android:id="@+id/btn_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_current_city"
+            android:text="省市区"/>
+        <Button
+            android:id="@+id/btn_show_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_current_city"
+            android:text="浏览图片"/>
+        <Button
+            android:id="@+id/btn_show_pic2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_current_city"
+            android:text="浏览图片2"/>
+
+        <Button
+            android:id="@+id/btn_login_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="注销"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp">
+
+            <ImageView
+                android:id="@+id/iv_wechat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/ic_wx_friend_share"
+                />
+
+            <ImageView
+                android:id="@+id/iv_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/ic_wx_friend_circle_share"
+                />
+
+            <ImageView
+                android:id="@+id/iv_qq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/ic_qq_share"
+                />
+
+            <ImageView
+                android:id="@+id/iv_sina"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/ic_sina_share"
+                />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_to_page_ternimal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_desc"
-        android:text="显示分页终端"/>
-
-    <Button
-        android:id="@+id/btn_current_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_to_page_ternimal"
-        android:text="我的小区"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="51dp"
-        android:gravity="center"
-        android:paddingLeft="35dp"
-        android:paddingRight="35dp">
-
-
-        <ImageView
-            android:id="@+id/iv_wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/ic_wx_friend_share"
-            />
-
-        <ImageView
-            android:id="@+id/iv_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/ic_wx_friend_circle_share"
-            />
-
-        <ImageView
-            android:id="@+id/iv_qq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/ic_qq_share"
-            />
-
-        <ImageView
-            android:id="@+id/iv_sina"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/ic_sina_share"
-            />
-
-    </LinearLayout>
-</RelativeLayout>
+</ScrollView>

@@ -36,11 +36,8 @@ public class DesignerHomeAdapter extends BaseRecycleViewAdapter<DesignerPojo> {
         }
         if (null != data.image) {
             if (data.image.size() >= 2) {
-                int w = 200;
-                int h = 100;
-                String testUrl = "http://img0.pchouse.com.cn/pchouse/news/renwu/1801/1.jpg";
-                holder.displayWithRoundBySize(R.id.iv_housing_case_left, testUrl/*data.image.get(0)*/, w, h, 4)
-                        .displayWithRoundBySize(R.id.iv_housing_case_right,testUrl/* data.image.get(1)*/, w, h, 4);
+                holder.displayWithRound(R.id.iv_housing_case_left, data.image.get(0), 4)
+                        .displayWithRound(R.id.iv_housing_case_right, data.image.get(1), 4);
 
             } else {
                 holder.displayWithRound(R.id.iv_housing_case_left, data.image.get(0), 4);

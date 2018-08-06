@@ -33,7 +33,7 @@ public class SubColumn {
     }
 
     public static void requestData(final Context context) {
-        HttpUtils.getJSON(true, Urls.SUB_COLUMN, null, null, new HttpUtils.JSONCallback() {
+        HttpUtils.getJSON(true, Urls.SUB_COLUMN+"?v=4.4.0.0", null, null, new HttpUtils.JSONCallback() {
             @Override
             public void onFailure(Exception e) {
 

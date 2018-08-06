@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
 
     <blog.csdn.net.mchenys.common.widget.view.CircleImageView
         android:id="@+id/iv_header"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_bbs_default_avatar"
@@ -27,11 +28,11 @@
         android:layout_marginLeft="10dp"
         android:maxLength="8"
         android:singleLine="true"
-        android:text="用户昵称"
         android:textColor="@color/color_333333"
         android:textSize="14sp"
         app:layout_constraintLeft_toRightOf="@+id/iv_header"
-        app:layout_constraintTop_toTopOf="@+id/iv_header"/>
+        app:layout_constraintTop_toTopOf="@+id/iv_header"
+        tools:text="用户昵称"/>
 
     <ImageView
         android:id="@+id/iv_designer_tag"
@@ -39,6 +40,7 @@
         android:layout_height="12dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="3dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_personal_designer"
         app:layout_constraintLeft_toRightOf="@+id/tv_nickname"
         app:layout_constraintTop_toTopOf="@+id/tv_nickname"/>
@@ -47,33 +49,34 @@
         android:id="@+id/tv_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="广州"
         android:textColor="@color/color_bbbbbb"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_header"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_nickname"/>
+        app:layout_constraintLeft_toLeftOf="@+id/tv_nickname"
+        tools:text="广州"/>
 
     <TextView
         android:id="@+id/tv_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
-        android:text="800-1200元/㎡"
         android:textColor="@color/color_bbbbbb"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_city"
-        app:layout_constraintLeft_toRightOf="@+id/tv_city"/>
+        app:layout_constraintLeft_toRightOf="@+id/tv_city"
+        tools:text="800-1200元/㎡"/>
 
     <!--有2个图片时显示-->
     <ImageView
         android:id="@+id/iv_housing_case_left"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="2.5dp"
         android:layout_marginTop="15dp"
         android:scaleType="centerCrop"
         android:src="@drawable/default_img_640x420"
-        app:layout_constraintDimensionRatio="H,2:1"
+        app:layout_constraintDimensionRatio="W,1:2"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="@+id/iv_header"
         app:layout_constraintRight_toLeftOf="@+id/iv_housing_case_right"
         app:layout_constraintTop_toBottomOf="@+id/iv_header"/>
@@ -83,9 +86,10 @@
         android:id="@+id/iv_housing_case_right"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="2.5dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/iv_housing_case_left"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/iv_housing_case_left"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_housing_case_left"

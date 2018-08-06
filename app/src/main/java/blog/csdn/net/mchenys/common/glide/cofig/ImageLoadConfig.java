@@ -90,7 +90,7 @@ public class ImageLoadConfig {
         this.crossFade = builder.crossFade;
         this.crossDuration = builder.crossDuration;
         this.size = builder.size;
-        this.CropType = builder.CropType;
+        this.CropType = builder.cropType;
         this.asGif = builder.asGif;
         this.asBitmap = builder.asBitmap;
         this.skipMemoryCache = builder.skipMemoryCache;
@@ -121,7 +121,7 @@ public class ImageLoadConfig {
         private boolean crossFade;
         private int crossDuration;
         private OverrideSize size;
-        private int CropType = CENTER_CROP;
+        private int cropType = CENTER_CROP;
         private boolean asGif;
         private boolean asBitmap;
         private boolean skipMemoryCache;
@@ -171,7 +171,7 @@ public class ImageLoadConfig {
         }
 
         public Builder setCropType(int cropType) {
-            CropType = cropType;
+            this.cropType = cropType;
             return this;
         }
 
@@ -290,6 +290,11 @@ public class ImageLoadConfig {
         }
     }
 
+    /**
+     * 将ImageLoadConfig转成Builder
+     * @param config
+     * @return
+     */
     public static Builder parseBuilder(ImageLoadConfig config) {
         Builder builder = new Builder();
         builder.placeHolderResId = config.placeHolderResId;
@@ -297,7 +302,7 @@ public class ImageLoadConfig {
         builder.crossFade = config.crossFade;
         builder.crossDuration = config.crossDuration;
         builder.size = config.size;
-        builder.CropType = config.CropType;
+        builder.cropType = config.CropType;
         builder.asGif = config.asGif;
         builder.asBitmap = config.asBitmap;
         builder.skipMemoryCache = config.skipMemoryCache;

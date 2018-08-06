@@ -163,7 +163,7 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
         req.bodyMap.put("pageSize", String.valueOf(pageSize));
         req.bodyMap.put("pageNo", String.valueOf(pageNo));
         req.bodyMap.put("version", String.valueOf( Env.versionCode));
-        HttpUtils.getJSON(isRefresh, req.url, req.headersMap, null, new HttpUtils.JSONCallback() {
+        HttpUtils.getJSON(isRefresh, req.url, req.headersMap, req.bodyMap, new HttpUtils.JSONCallback() {
             @Override
             public void onFailure(Exception e) {
                 ExceptionUtils.exceptionHandler(e);

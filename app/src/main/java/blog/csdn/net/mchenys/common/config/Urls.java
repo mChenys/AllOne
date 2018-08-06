@@ -7,7 +7,7 @@ package blog.csdn.net.mchenys.common.config;
 public class Urls {
 
 
-    public static int URL_TYPE = Env.TEST;
+    public static int URL_TYPE = Env.RELEASE;
 
     public static String COMMON_SESSION_ID = URL_TYPE != Env.RELEASE ? "common_session_id1=" : "common_session_id=";
 
@@ -40,8 +40,8 @@ public class Urls {
     public static final String ACCOUNT_LOGIN = getTargetUrl("https://passport3.pconline.com.cn/passport3/rest/login.jsp");
     public static final String PHONE_BIND2 = getTargetUrl("https://passport3.pconline.com.cn/passport3/api/mobile_bind2.jsp");
 
-    public static final String HOME_COLUMN_LIST = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/cms/houseArticleList.xsp");
-    public static final String SUB_COLUMN = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/cms/preloadChannels.xsp") ;
+    public static final String HOME_COLUMN_LIST = getTargetUrl("http://mrobot.pchouse.com.cn/s/magazine/pchouse/cms/houseUpdate.xsp");
+    public static final String SUB_COLUMN = getTargetUrl("http://mrobot.pchouse.com.cn/s-7200/magazine/pchouse/cms/preloadChannels.xsp") ;
     public static final String URL_ARTICLE = getTargetUrl("https://mrobot.pchouse.com.cn/v3/cms/articles/");
     public static final String DESIGNER_PERSONAL_PAGE = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/houseCase/userHome.xsp") ;
     public static final String DESIGN_CITY_LIST = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/houseCase/getDesignerProvinces.xsp") ;
@@ -62,6 +62,8 @@ public class Urls {
                 url = url.replace("https://live.pcvideo.com.cn/", "https://v67.pconline.com.cn/live/");
             } else if (url.contains("https://mrobot.pchouse.com.cn")) {
                 url = url.replace("https://mrobot.pchouse.com.cn", "https://t-mrobot.pchouse.com.cn");
+            }else if (url.contains("http://mrobot.pchouse.com.cn")) {
+                url = url.replace("http://mrobot.pchouse.com.cn", "http://t-mrobot.pchouse.com.cn");
             }
         } else if (URL_TYPE == Env.DEVELOP) {
             if (url.contains("https://passport3.pcauto.com.cn/passport3")) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -13,6 +14,8 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.utils.AppUtils;
 import blog.csdn.net.mchenys.common.utils.JumpUtils;
+import blog.csdn.net.mchenys.common.utils.ScreenShotListenManager;
+import blog.csdn.net.mchenys.common.widget.dialog.ScreenShotDialog;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.module.main.MainActivity;
 
@@ -38,6 +41,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private long exitTime;
     protected Activity mContext;
 
+    //截屏监听
+    private ScreenShotListenManager mScreenShotListenManager;
+    private ScreenShotDialog mShotDialog;
     /**
      * 子类别重写,可以重写initData initView initListener
      *
@@ -69,10 +75,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (null != getLayoutResID()) {
             View.inflate(this, getLayoutResID(), mContentLayout);
         }
+        mShotDialog = new ScreenShotDialog(this);
+        mScreenShotListenManager = ScreenShotListenManager.newInstance(this);
     }
 
     protected void initListener() {
 
+        mScreenShotListenManager.setListener(
+                new ScreenShotListenManager.OnScreenShotListener() {
+                    public void onShot(String imagePath) {
+                        Log.e("cys","截屏路径imagePath:"+imagePath);
+                        mShotDialog.show(imagePath);
+                    }
+                }
+        );
+        mScreenShotListenManager.startListen();
     }
 
     protected void loadData() {
@@ -188,5 +205,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void autoRefresh(Bundle bundle) {
         //empty
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mScreenShotListenManager.stopListen();
     }
 }
