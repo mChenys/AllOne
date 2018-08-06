@@ -1,6 +1,7 @@
 package blog.csdn.net.mchenys.module.main;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
@@ -15,7 +16,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.igexin.sdk.PushManager;
 
 import java.lang.reflect.Method;
 
@@ -23,9 +25,10 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseActivity;
 import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.config.Constant;
+import blog.csdn.net.mchenys.common.push.AllOneIntentService;
+import blog.csdn.net.mchenys.common.push.AllOnePushService;
+import blog.csdn.net.mchenys.common.utils.AppUtils;
 import blog.csdn.net.mchenys.common.utils.PermissionUtils;
-import blog.csdn.net.mchenys.common.utils.ScreenShotListenManager;
-import blog.csdn.net.mchenys.common.widget.dialog.ScreenShotDialog;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.module.circle.CircleFragment;
 import blog.csdn.net.mchenys.module.designer.DesignerHomeFragment;
@@ -66,6 +69,18 @@ public class MainActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         position = getIntent().getIntExtra(Constant.KEY_POSITION, 0);
+        initPushService();
+    }
+
+    private void initPushService() {
+        PackageManager pkgManager = getPackageManager();
+        // 读写 sd card 权限非常重要, android6.0默认禁止的, 建议初始化之前就弹窗让用户赋予该权限
+        boolean sdCardWritePermission =
+                pkgManager.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName()) == PackageManager.PERMISSION_GRANTED;
+        // read phone state用于获取 imei 设备信息
+        boolean phoneSatePermission =
+                pkgManager.checkPermission(android.Manifest.permission.READ_PHONE_STATE, getPackageName()) == PackageManager.PERMISSION_GRANTED;
+
         if (Build.VERSION.SDK_INT >= 23) {
             //批量申请权限
             PermissionUtils.requestMultiPermission(this, new int[]{
@@ -73,12 +88,14 @@ public class MainActivity extends BaseActivity {
                     PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE,
                     PermissionUtils.CODE_READ_PHONE_STATE,
             }, mPermissionGrant);
-            //单个权限申请
-            //   PermissionUtils.requestPermission(this, PermissionUtils.CODE_CAMERA, mPermissionGrant);
+        } else {
+            PushManager.getInstance().initialize(this.getApplicationContext(), AllOnePushService.class);
+            PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), AllOneIntentService.class);
+            PushManager.getInstance().bindAlias(getApplicationContext(), AppUtils.getDevId(getApplicationContext()));
+            //Env.GT_CLIENT_ID = PushManager.getInstance().getClientid(MainActivity.this);
         }
-
+        Log.e("cys", "设备Id:" + AppUtils.getDevId(getApplicationContext()));
     }
-
     @Override
     protected void initView() {
         super.initView();
@@ -130,39 +147,17 @@ public class MainActivity extends BaseActivity {
         return view;
     }
 
+
+
+
     private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
         @Override
         public void onPermissionGranted(int requestCode) {
             switch (requestCode) {
-                case PermissionUtils.CODE_RECORD_AUDIO:
-                    Toast.makeText(mContext, "录音权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_GET_ACCOUNTS:
-                    Toast.makeText(mContext, "获取联系人信息权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_READ_PHONE_STATE:
-                    Toast.makeText(mContext, "获取手机态权限权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_CALL_PHONE:
-                    Toast.makeText(mContext, "拨打电话权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_CAMERA:
-                    Toast.makeText(mContext, "访问摄像头权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_ACCESS_FINE_LOCATION:
-                    Toast.makeText(mContext, "GPS定位权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_ACCESS_COARSE_LOCATION:
-                    Toast.makeText(mContext, "网络定位权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_READ_EXTERNAL_STORAGE:
-                    Toast.makeText(mContext, "本地文件读取权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
-                    Toast.makeText(mContext, "文本文件写入权限已开启", Toast.LENGTH_SHORT).show();
-                    break;
                 case PermissionUtils.CODE_MUlTI_PERMISSION:
-                    //Toast.makeText(mContext, "相关权限已开启成功", Toast.LENGTH_SHORT).show();
+                    PushManager.getInstance().initialize(getApplicationContext(), AllOnePushService.class);
+                    PushManager.getInstance().registerPushIntentService(getApplicationContext(), AllOneIntentService.class);
+                    PushManager.getInstance().bindAlias(getApplicationContext(), AppUtils.getDevId(getApplicationContext()));
                     break;
                 default:
                     break;

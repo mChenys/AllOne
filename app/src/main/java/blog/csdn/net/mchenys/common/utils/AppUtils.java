@@ -5,17 +5,18 @@
 
 package blog.csdn.net.mchenys.common.utils;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.app.KeyguardManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningTaskInfo;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
-import android.os.Build.VERSION;
+import android.telephony.TelephonyManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.TELEPHONY_SERVICE;
 
 public class AppUtils {
 
@@ -251,5 +254,23 @@ public class AppUtils {
 
             return procInfo.processName;
         }
+    }
+
+    /**
+     * The IMEI: 仅仅只对Android手机有效
+     * 采用此种方法，需要在AndroidManifest.xml中加入一个许可：android.permission.READ_PHONE_STATE，并且用
+     * 户应当允许安装此应用。作为手机来讲，IMEI是唯一的，它应该类似于 359881030314356（除非你有一个没有量产的手
+     * 机（水货）它可能有无效的IMEI，如：0000000000000）。
+     *
+     * @return imei
+     */
+    public static String getDevId(Context ctx) {
+        TelephonyManager telephonyManager = (TelephonyManager)ctx.getSystemService("phone");
+        @SuppressLint("MissingPermission") String deviceId = telephonyManager.getDeviceId().toLowerCase();
+        if(deviceId.equals("000000000000000")) {
+            deviceId = "";
+        }
+
+        return MD5Utils.getMD5(deviceId);
     }
 }

@@ -20,6 +20,12 @@ android {
         }
         aaptOptions.cruncherEnabled = false
         aaptOptions.useNewCruncher = false
+
+        manifestPlaceholders = [
+                GETUI_APP_ID : "nUjNFZmhxh8GNnLiRqovb1",
+                GETUI_APP_KEY : "d9xzAgJVoQ88tsDW2e3Ni3",
+                GETUI_APP_SECRET : "zgw0G3rzIe9BNzXysHyhy8"
+        ]
     }
     buildTypes {
         release {
@@ -53,4 +59,5 @@ dependencies {
     implementation files('libs/BaiduLBS_Android.jar')
     compile 'com.contrarywind:Android-PickerView:3.2.5'
     compile 'com.github.chrisbanes.photoview:library:+'
+    compile 'com.getui:sdk:2.12.4.0'
 }

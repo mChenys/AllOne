@@ -27,10 +27,10 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
+import blog.csdn.net.mchenys.common.utils.URIUtils;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
 import blog.csdn.net.mchenys.common.utils.HttpUtils;
 import blog.csdn.net.mchenys.common.utils.StringUtils;
-import blog.csdn.net.mchenys.common.utils.URIUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.common.widget.view.UEView;
 import blog.csdn.net.mchenys.common.widget.webview.BaseWebView;
@@ -72,6 +72,7 @@ public class BaseTerminalActivity extends BaseActivity {
     }
 
     protected void initData() {
+        super.initData();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enableSlowWholeDocumentDraw();
         }

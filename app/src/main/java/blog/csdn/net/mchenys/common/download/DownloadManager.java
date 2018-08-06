@@ -188,8 +188,8 @@ public class DownloadManager {
                     while ((len = in.read(buffer)) != -1
                             && info.currentState == STATE_DOWNLOADING) {
                         out.write(buffer, 0, len);
-                        // 实时将缓冲区文件写进去
-                        out.flush();
+                        // FileOutputStream对flush是空实现,字节流是直接写到硬盘的
+                        // out.flush();
                         //记录当前的下载位置
                         info.currentPos += len;
                         //通知观察者, 下载进度更新

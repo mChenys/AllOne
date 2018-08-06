@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
-import blog.csdn.net.mchenys.common.utils.AppUtils;
 import blog.csdn.net.mchenys.common.utils.JumpUtils;
 import blog.csdn.net.mchenys.common.utils.ScreenShotListenManager;
 import blog.csdn.net.mchenys.common.widget.dialog.ScreenShotDialog;
@@ -149,38 +148,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (onJpushBackPress()) {
-            return;
-        }
         if (isHomePage()) {
             onHomePageBackPress();
-        } else {
-            this.finish();
-        }
-    }
-
-    private boolean onJpushBackPress() {
-        if (isPush) {
+        } else if (isPush) {
             isPush = false;
-            if (!AppUtils.isRunning(this)) {//app未启动
-                if (isHomePage()) { //打开的是主页,提示是否要退出App
-                    if (System.currentTimeMillis() - exitTime > 2000) {
-                        exitTime = System.currentTimeMillis();
-                        Toast.makeText(this, getString(R.string.app_exit), Toast.LENGTH_SHORT).show();
-                    }
-                } else { //打开的是二级及以上的页面,返回需要启动MainActivity
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    JumpUtils.toActivity(this, intent);
-                    finish();
-                }
-                return true;
-            }
-
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            JumpUtils.toActivity(this, intent);
+            finish();
+        }else{
+            finish();
         }
-        return false;
     }
-
     /**
      * 判断是否是一级页面
      *
