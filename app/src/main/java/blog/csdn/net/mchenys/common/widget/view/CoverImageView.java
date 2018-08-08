@@ -8,7 +8,9 @@ import android.util.AttributeSet;
 
 import blog.csdn.net.mchenys.R;
 
-
+/**
+ * 带蒙层的ImageView
+ */
 public class CoverImageView extends android.support.v7.widget.AppCompatImageView {
     private int coverColor;
     private Paint mBitmapPaint;
