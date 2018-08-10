@@ -76,4 +76,7 @@
         <attr name="baseColor"/>
         <attr name="radius"/>
     </declare-styleable>
+    <declare-styleable name="PinkNestedScrollView2">
+        <attr name="pinkMarginTop" format="dimension"/>
+    </declare-styleable>
 </resources>

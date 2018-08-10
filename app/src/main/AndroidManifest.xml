@@ -91,6 +91,10 @@
                   android:screenOrientation="portrait"/>
         <activity android:name=".common.photo.PhotoPreviewActivity2"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".module.personal.PersonPageActivity"
+                  android:screenOrientation="portrait"/>
+
+
         <activity
             android:name=".common.sns.activity.SnsSelectPlatformNewActivity"
             android:label="分享页面"

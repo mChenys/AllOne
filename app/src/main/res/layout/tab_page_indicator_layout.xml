@@ -31,6 +31,8 @@
             android:visibility="invisible" />
 
         <View
+            android:layout_alignRight="@+id/indicator_title"
+            android:layout_alignLeft="@+id/indicator_title"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_below="@+id/indicator_title"

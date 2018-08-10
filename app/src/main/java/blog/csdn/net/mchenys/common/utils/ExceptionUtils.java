@@ -39,7 +39,7 @@ public class ExceptionUtils {
             Toast.makeText(context, "网络不给力,请检查网络设置", Toast.LENGTH_SHORT).show();
         } else if (error instanceof ConnectTimeoutException) {
             Toast.makeText(context, "网络不给力,请检查网络设置", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if(!StringUtils.isEmpty(error.getMessage())){
             //加载失败
             Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
         }

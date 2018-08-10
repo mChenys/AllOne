@@ -633,6 +633,11 @@ public class RefreshRecyclerView extends RecyclerView {
             isPullingUp = deltaY < 0;
             mLastY = ev.getY();
             mLastX = ev.getX();
+            //避免ViewPager拦截了斜方向的滑动事件
+            boolean isVerticalScroll = Math.abs(deltaY) > Math.abs(deltaX);
+            if (isVerticalScroll && !canScrollVertically(-1) &&isPullingUp) {
+                getParent().requestDisallowInterceptTouchEvent(true);
+            }
         }
         return super.dispatchTouchEvent(ev);
     }

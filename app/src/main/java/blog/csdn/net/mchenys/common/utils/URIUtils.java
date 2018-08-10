@@ -9,9 +9,9 @@ import java.util.Map;
 
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Protocols;
+import blog.csdn.net.mchenys.module.personal.PersonPageActivity;
 import blog.csdn.net.mchenys.module.terminal.LiveColumnTerminalActivity;
 import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
-import blog.csdn.net.mchenys.module.terminal.PersonalPageTerminalActivity;
 import blog.csdn.net.mchenys.module.terminal.WapTopicsTerminalActivity;
 
 
@@ -36,7 +36,7 @@ public class URIUtils {
     static {
         uriMap.put(Protocols.LIVE_TERMINAL, new URIInfo("居住专栏终端", LiveColumnTerminalActivity.class));
         uriMap.put(Protocols.PAGE_TERMINAL, new URIInfo("分页详情页", PageTerminalActivity.class));
-        uriMap.put(Protocols.PERSONAL_TERMINAL, new URIInfo("个人主页终端", PersonalPageTerminalActivity.class));
+        uriMap.put(Protocols.PERSONAL_TERMINAL, new URIInfo("个人主页终端", PersonPageActivity.class));
         uriMap.put(Protocols.TOPIC_TERMINAL, new URIInfo("话题终端", WapTopicsTerminalActivity.class));
     }
 

@@ -9,7 +9,7 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.widget.recycleview.BaseRecycleViewAdapter;
 import blog.csdn.net.mchenys.common.widget.recycleview.BaseRecycleViewHolder;
 import blog.csdn.net.mchenys.model.DesignerPojo;
-import blog.csdn.net.mchenys.module.terminal.PersonalPageTerminalActivity;
+import blog.csdn.net.mchenys.module.personal.PersonPageActivity;
 
 
 /**
@@ -47,7 +47,7 @@ public class DesignerHomeAdapter extends BaseRecycleViewAdapter<DesignerPojo> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PersonalPageTerminalActivity.start(mContext, data.userId);
+                PersonPageActivity.start(mContext, data.userId);
             }
         });
     }

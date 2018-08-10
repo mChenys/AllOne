@@ -7,7 +7,7 @@ package blog.csdn.net.mchenys.common.config;
 public class Urls {
 
 
-    public static int URL_TYPE = Env.RELEASE;
+    public static int URL_TYPE = Env.TEST;
 
     public static String COMMON_SESSION_ID = URL_TYPE != Env.RELEASE ? "common_session_id1=" : "common_session_id=";
 
@@ -47,6 +47,7 @@ public class Urls {
     public static final String DESIGN_CITY_LIST = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/houseCase/getDesignerProvinces.xsp") ;
     public static String DESIGNER_INDEX =  getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/houseCase/designers.xsp");
     public static final String GET_ALL_PROVINCE_CITIES = getTargetUrl("https://mrobot.pchouse.com.cn/s-3600/magazine/pchouse/my/getAllProvinceCitys.xsp");
+    public static final String PERSON_PAGE_TERMINAL = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/houseCase/myHome.xsp") ;
 
     public static String getTargetUrl(String url) {
         if (URL_TYPE == Env.TEST) {

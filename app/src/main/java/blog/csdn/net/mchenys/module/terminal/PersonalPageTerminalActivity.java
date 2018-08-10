@@ -9,7 +9,7 @@ import blog.csdn.net.mchenys.common.config.Urls;
 /**
  * Created by mChenys on 2018/6/15.
  */
-
+@Deprecated
 public class PersonalPageTerminalActivity extends BaseTerminalActivity {
     private String userId;
 
