@@ -196,6 +196,10 @@ public class TagFlowLayout extends FlowLayout
             }
         } else {
             //已选中->未选中
+            if (mSelectedMax == 1) {
+                //单选不作处理
+                return;
+            }
             setChildUnChecked(position, child);
             mSelectedView.remove(position);
         }

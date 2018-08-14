@@ -23,4 +23,11 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:background">@color/transparent</item>
     </style>
+
+    <!-- 弹出框动画 由下至上 -->
+    <style name="dialogBottomInOut" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_bottom_out</item>
+    </style>
+
 </resources>

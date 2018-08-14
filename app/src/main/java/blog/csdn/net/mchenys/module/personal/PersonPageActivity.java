@@ -23,6 +23,7 @@ import blog.csdn.net.mchenys.common.widget.layout.PinkNestedScrollView2;
 import blog.csdn.net.mchenys.common.widget.pageindicator.TabPageIndicator;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.model.UserInfo;
+import blog.csdn.net.mchenys.module.designer.DesignerIdentityActivity;
 
 
 /**
@@ -108,7 +109,7 @@ public class PersonPageActivity extends BaseActivity implements View.OnClickList
 
         mIvBack.setOnClickListener(this);
         mIvShare.setOnClickListener(this);
-
+        findViewById(R.id.tv_book_designer).setOnClickListener(this);
 
     }
 
@@ -216,7 +217,7 @@ public class PersonPageActivity extends BaseActivity implements View.OnClickList
                 ToastUtils.showShort(mContext, "加关注");
                 break;
             case R.id.tv_book_designer:
-                ToastUtils.showShort(mContext, "预约设计师");
+                 startActivity(new Intent(this, DesignerIdentityActivity.class));
                 break;
         }
     }

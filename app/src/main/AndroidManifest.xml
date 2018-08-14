@@ -94,6 +94,10 @@
         <activity android:name=".module.personal.PersonPageActivity"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".module.designer.DesignerIdentityActivity"
+                  android:windowSoftInputMode="stateHidden"
+                  android:screenOrientation="portrait"/>
+
 
         <activity
             android:name=".common.sns.activity.SnsSelectPlatformNewActivity"

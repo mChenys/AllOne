@@ -49,6 +49,13 @@ public class Urls {
     public static final String GET_ALL_PROVINCE_CITIES = getTargetUrl("https://mrobot.pchouse.com.cn/s-3600/magazine/pchouse/my/getAllProvinceCitys.xsp");
     public static final String PERSON_PAGE_TERMINAL = getTargetUrl("https://mrobot.pchouse.com.cn/s/magazine/pchouse/houseCase/myHome.xsp") ;
 
+    //	擅长类别
+    public static final String DESIGNER_SPACE_LIST = "http://t-dingzhi.pchouse.com.cn/interface/designer/spacelist.do";
+    // 擅长风格
+    public static final String DESIGNER_STYLE_LIST = "http://t-dingzhi.pchouse.com.cn/interface/designer/stylelist.do";
+    // 职位列表
+    public static final String DESIGNER_POSITION_LIST = "http://t-dingzhi.pchouse.com.cn/interface/designer/positionlist.do";
+
     public static String getTargetUrl(String url) {
         if (URL_TYPE == Env.TEST) {
             if (url.contains("https://passport3.pconline.com.cn/passport3")) {
