@@ -2,6 +2,7 @@ package blog.csdn.net.mchenys.common.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -9,9 +10,8 @@ import android.view.View;
  * Created by mChenys on 2017/12/27.
  */
 public abstract class LazyBaseRecyclerViewListFragment<T> extends BaseRecyclerViewListFragment<T> {
-    private boolean isPrepared;
-    private boolean isVisible;
-    private boolean isFirstInLoad = true;
+    private boolean hasLoad;//是否已经加载数据
+    private boolean isInit;//是否已经初始化
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,31 +20,30 @@ public abstract class LazyBaseRecyclerViewListFragment<T> extends BaseRecyclerVi
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        lazyLoad();
+        if (isVisibleToUser) {
+            Log.e("cys", "setUserVisibleHint->isInit=" + isInit + " hasLoad=" + hasLoad);
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        isPrepared = true;
+        isInit = true;
         lazyLoad();
+        Log.e("cys", "onViewCreated->isInit=" + isInit + " hasLoad=" + hasLoad);
     }
 
-    @Override
-    public void onFragmentResume() {
-        isVisible = true;
-        lazyLoad();
-
-    }
-
-    @Override
-    public void onFragmentPause() {
-        isVisible = false;
-    }
 
     protected void lazyLoad() {
-        if (!isVisible || !isPrepared || !isFirstInLoad) {
-            return;
+        if (mData.isEmpty()) hasLoad = false;//避免首次加载不出数据后,切换回来还是加载不出来
+        if (!isInit || hasLoad) return;
+        if (getUserVisibleHint()) {
+            loadData(isforceRefresh);
+            hasLoad = true;
         }
-        isFirstInLoad = false;
-        loadData(isforceRefresh);
     }
-
 
 }

@@ -3,6 +3,7 @@ package blog.csdn.net.mchenys.module.main;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONObject;
@@ -60,6 +61,7 @@ public class LiveInstituteFragment extends LazyBaseRecyclerViewListFragment<SubC
         mRecyclerView.setPullRefreshEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
         mRecyclerView.setAdapter(new HomeLiveAdapter(mContext, mData, R.layout.item_layout_base_sub_column));
+        Log.e("cys", "initView  columnId:" + columnId);
     }
 
     @Override
