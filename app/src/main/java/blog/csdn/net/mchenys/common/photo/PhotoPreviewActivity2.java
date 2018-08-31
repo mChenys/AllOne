@@ -14,9 +14,10 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseActivity;
 import blog.csdn.net.mchenys.common.utils.ImageLoadUtils;
 import blog.csdn.net.mchenys.common.utils.ToastUtils;
+import blog.csdn.net.mchenys.common.widget.photoview.OnOutsidePhotoTapListener;
+import blog.csdn.net.mchenys.common.widget.photoview.OnPhotoTapListener;
+import blog.csdn.net.mchenys.common.widget.photoview.PhotoView;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * 类似微信朋友圈,大图预览效果
@@ -73,8 +74,7 @@ public class PhotoPreviewActivity2 extends BaseActivity {
                     try {
                         if (childAt != null && childAt instanceof PhotoView) {
                             PhotoView photoView = (PhotoView) childAt;// 得到viewPager里面的页面
-                            //重新设置属性之后，当从当前放大页面滑动到下一页的时候，前面的放大页面就会重新成为设置的属性大小
-                            new PhotoViewAttacher(photoView).setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            photoView.resetScale();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -113,15 +113,20 @@ public class PhotoPreviewActivity2 extends BaseActivity {
                     return true;
                 }
             });
-            photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            photoView.setOnPhotoTapListener(new OnPhotoTapListener() {
                 @Override
-                public void onPhotoTap(View view, float x, float y) {
+                public void onPhotoTap(ImageView view, float x, float y) {
                     //点击事件
                     finish();
-
                 }
             });
-
+            photoView.setOnOutsidePhotoTapListener(new OnOutsidePhotoTapListener() {
+                @Override
+                public void onOutsidePhotoTap(ImageView imageView) {
+                    //点击事件
+                    finish();
+                }
+            });
             ImageLoadUtils.disPlayWithFitCenter(urlList.get(position), photoView);
             container.addView(photoView);
             return photoView;

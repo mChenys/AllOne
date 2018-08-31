@@ -8,8 +8,8 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.utils.ImageLoadUtils;
 import blog.csdn.net.mchenys.common.utils.ToastUtils;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
+import blog.csdn.net.mchenys.common.widget.photoview.OnPhotoTapListener;
+import blog.csdn.net.mchenys.common.widget.photoview.PhotoView;
 
 /**
  * PhotoPreviewActivity中显示的图片
@@ -57,13 +57,12 @@ public class PhotoFragment extends BaseFragment {
                 return true;
             }
         });
-        mPhotoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+        mPhotoView.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override
-            public void onPhotoTap(View view, float x, float y) {
+            public void onPhotoTap(ImageView view, float x, float y) {
                 //点击事件
                 ToastUtils.showShort("点击事件");
                 mContext.finish();
-
             }
         });
 

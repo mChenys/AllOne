@@ -58,6 +58,5 @@ dependencies {
     implementation files('libs/gson-2.7.jar')
     implementation files('libs/BaiduLBS_Android.jar')
     compile 'com.contrarywind:Android-PickerView:3.2.5'
-    compile 'com.github.chrisbanes.photoview:library:+'
     compile 'com.getui:sdk:2.12.4.0'
 }

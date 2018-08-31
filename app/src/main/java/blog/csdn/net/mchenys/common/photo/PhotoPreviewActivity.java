@@ -14,9 +14,9 @@ import java.util.Collections;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseActivity;
+import blog.csdn.net.mchenys.common.widget.photoview.PhotoView;
+import blog.csdn.net.mchenys.common.widget.photoview.PhotoViewAttacher;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * 类似微信朋友圈,大图预览效果
