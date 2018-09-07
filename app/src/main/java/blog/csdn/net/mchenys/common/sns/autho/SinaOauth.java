@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
-import blog.csdn.net.mchenys.common.sns.OauthUtils;
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 
 public class SinaOauth implements OauthBuilder {
     private String requestUrl = "";
@@ -33,7 +33,7 @@ public class SinaOauth implements OauthBuilder {
         String result = "failed";
         String usermessage = "";
         JSONObject obj = null;
-        usermessage = OauthUtils.getUserInfo(this.platform, param1, param3);
+        usermessage = SnsUtils.getUserInfo(this.platform, param1, param3);
 
         try {
             if(null != usermessage) {

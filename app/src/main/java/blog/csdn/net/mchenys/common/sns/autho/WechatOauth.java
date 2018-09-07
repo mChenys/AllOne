@@ -12,7 +12,7 @@ import android.content.SharedPreferences.Editor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import blog.csdn.net.mchenys.common.sns.OauthUtils;
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 
 
 public class WechatOauth implements OauthBuilder {
@@ -27,7 +27,7 @@ public class WechatOauth implements OauthBuilder {
         String result = "failed";
         String usermessage = "";
         JSONObject obj = null;
-        usermessage = OauthUtils.getUserInfo(5, access_token, open_id);
+        usermessage = SnsUtils.getUserInfo(5, access_token, open_id);
 
         try {
             if(null != usermessage) {

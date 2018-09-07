@@ -16,13 +16,13 @@ import android.view.Window;
 import android.widget.LinearLayout;
 
 import blog.csdn.net.mchenys.R;
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 import blog.csdn.net.mchenys.common.sns.autho.SnsSSOLoginEngine;
 import blog.csdn.net.mchenys.common.sns.bean.SnsShareContent;
 import blog.csdn.net.mchenys.common.sns.callback.SnsShareListener;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 import blog.csdn.net.mchenys.common.sns.config.SnsManager;
 import blog.csdn.net.mchenys.common.sns.share.SnsShareEngine;
-import blog.csdn.net.mchenys.common.sns.OauthUtils;
 import blog.csdn.net.mchenys.common.sns.SnsImageShareUtil;
 
 /**
@@ -42,7 +42,7 @@ public class SnsSelectPlatformNewActivity extends Activity implements OnClickLis
 
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        OauthUtils.doResultIntent(this, intent, shareListener);
+        SnsUtils.doResultIntent(this, intent, shareListener);
     }
 
     protected void onCreate(Bundle savedInstanceState) {

@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import blog.csdn.net.mchenys.common.sns.callback.SnsAuthListener;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
-import blog.csdn.net.mchenys.common.sns.OauthUtils;
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 import blog.csdn.net.mchenys.common.sns.SnsHttpUtils;
 
 
@@ -77,7 +77,7 @@ public class SnsSSOLoginEngine {
     Handler doResultHandler = new Handler() {
         public void handleMessage(Message msg) {
             if(null != SnsSSOLoginEngine.this.authListener && msg.obj != null && !msg.obj.equals("failed")) {
-                SnsSSOLoginEngine.this.authListener.onSucceeded(SnsSSOLoginEngine.this.context, OauthUtils.getOpenUser(SnsSSOLoginEngine.this.context, SnsSSOLoginEngine.this.platform));
+                SnsSSOLoginEngine.this.authListener.onSucceeded(SnsSSOLoginEngine.this.context, SnsUtils.getOpenUser(SnsSSOLoginEngine.this.context, SnsSSOLoginEngine.this.platform));
             } else if(null != SnsSSOLoginEngine.this.authListener) {
                 SnsSSOLoginEngine.this.authListener.onFail(SnsSSOLoginEngine.this.context, "账号或网络发生异常，登陆失败");
             }

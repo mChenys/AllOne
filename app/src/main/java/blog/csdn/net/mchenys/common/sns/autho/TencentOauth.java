@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
-import blog.csdn.net.mchenys.common.sns.OauthUtils;
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 
 
 public class TencentOauth implements OauthBuilder {
@@ -33,9 +33,9 @@ public class TencentOauth implements OauthBuilder {
         String result = "failed";
         String QQResult = "";
         JSONObject obj = null;
-        String openId = OauthUtils.getUserOpenId(param1);
+        String openId = SnsUtils.getUserOpenId(param1);
         String usermessage = "";
-        usermessage = OauthUtils.getUserInfo(3, param1, openId);
+        usermessage = SnsUtils.getUserInfo(3, param1, openId);
         if(usermessage != null && !usermessage.equals("")) {
             try {
                 obj = new JSONObject(usermessage);

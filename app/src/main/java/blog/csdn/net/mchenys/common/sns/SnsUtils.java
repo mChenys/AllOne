@@ -23,19 +23,20 @@ import com.sina.weibo.sdk.share.WbShareHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import blog.csdn.net.mchenys.common.sns.activity.SnsSelectPlatformNewActivity;
 import blog.csdn.net.mchenys.common.sns.bean.SnsShareContent;
 import blog.csdn.net.mchenys.common.sns.bean.SnsUser;
 import blog.csdn.net.mchenys.common.sns.callback.SnsShareListener;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 
 
-public class OauthUtils {
+public class SnsUtils {
 
-    private static String TAG = "OauthUtils";
+    private static String TAG = "SnsUtils";
 
     private static WbShareHandler shareHandler;
 
-    public OauthUtils() {
+    public SnsUtils() {
     }
 
     public static String getUserInfo(int platform, String access_token, String openid) {
@@ -115,7 +116,13 @@ public class OauthUtils {
         return null;
     }
 
-
+    /**
+     * 新浪分享结果回调,需要在分享发起的Activity的onNewIntent中调用
+     * @see SnsSelectPlatformNewActivity#onNewIntent
+     * @param context
+     * @param intent
+     * @param shareListener
+     */
     public static void doResultIntent(final Activity context, Intent intent, final SnsShareListener shareListener) {
         shareHandler = new WbShareHandler(context);
         shareHandler.registerApp();

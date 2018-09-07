@@ -34,6 +34,7 @@ import com.tencent.tauth.UiError;
 import java.io.File;
 import java.util.ArrayList;
 
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 import blog.csdn.net.mchenys.common.sns.autho.SnsSSOLoginEngine;
 import blog.csdn.net.mchenys.common.sns.bean.SnsShareContent;
 import blog.csdn.net.mchenys.common.sns.bean.SnsUser;
@@ -41,7 +42,6 @@ import blog.csdn.net.mchenys.common.sns.callback.SnsAuthListener;
 import blog.csdn.net.mchenys.common.sns.callback.SnsShareListener;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 import blog.csdn.net.mchenys.common.sns.config.SnsManager;
-import blog.csdn.net.mchenys.common.sns.OauthUtils;
 import blog.csdn.net.mchenys.common.sns.SnsImageShareUtil;
 
 
@@ -181,12 +181,12 @@ public class SnsShareEngine {
             }
         }
 
-        if (OauthUtils.isAuthorized(this.context, platform)) {
-            OauthUtils.uploadToSinaAllInOne(this.context, this.contentMessage);
+        if (SnsUtils.isAuthorized(this.context, platform)) {
+            SnsUtils.uploadToSinaAllInOne(this.context, this.contentMessage);
         } else {
             SnsAuthListener authListener = new SnsAuthListener() {
                 public void onSucceeded(Context context, SnsUser openUser) {
-                    OauthUtils.uploadToSinaAllInOne(context, SnsShareEngine.this.contentMessage);
+                    SnsUtils.uploadToSinaAllInOne(context, SnsShareEngine.this.contentMessage);
                 }
 
                 public void onFail(Context context, String errMessage) {
