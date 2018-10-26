@@ -37,6 +37,14 @@ public class BaseWebView extends WebView {
     private WebSettings mWebSettings;
     private Context mContext;
     private String htmlContent;
+    public interface HTMLCallback {
+        void onSuccess(String htmlContent);
+    }
+    private HTMLCallback mHTMLCallback;
+
+    public void setHTMLCallback(HTMLCallback c) {
+        mHTMLCallback = c;
+    }
 
     public BaseWebView(Context context) {
         this(context, null);
@@ -58,6 +66,7 @@ public class BaseWebView extends WebView {
             switch (msg.what) {
                 case MyWebViewJavaScriptSInterface.CODE_GET_HTML:
                     htmlContent = (String) msg.obj;
+                    if (null != mHTMLCallback) mHTMLCallback.onSuccess(htmlContent);
                     break;
                 default:
                     String callBack = (String) msg.obj;

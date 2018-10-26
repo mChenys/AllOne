@@ -127,6 +127,17 @@ public class BaseTerminalActivity extends BaseActivity {
                 }
             }
         });
+        mWebView.setHTMLCallback(new BaseWebView.HTMLCallback() {
+            @Override
+            public void onSuccess(String htmlContent) {
+                JSONObject object = getMetaData(parseMetaString(htmlContent), false);
+                if (object != null) {
+                    onMetaDataResult(object);
+                } else {
+                    onMetaDataEmpty();
+                }
+            }
+        });
     }
 
     /**
@@ -324,6 +335,12 @@ public class BaseTerminalActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
+                        JSONObject metaObj = getMetaData(parseMetaString(okResponse.getResult()), false);
+                        if (metaObj != null) {
+                            onMetaDataResult(metaObj);
+                        } else {
+                            onMetaDataEmpty();
+                        }
                         int status = jsonObject.optInt("status");
                         if (status < 0) {
                             mUEView.showError();
@@ -450,5 +467,14 @@ public class BaseTerminalActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    //页面元数据为空的回调方法
+    protected void onMetaDataEmpty() {
+
+    }
+
+    //页面元数据不为空回调方法
+    protected void onMetaDataResult(JSONObject object) {
+
     }
 }
