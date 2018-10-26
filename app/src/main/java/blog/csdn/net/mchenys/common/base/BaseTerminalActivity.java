@@ -26,11 +26,13 @@ import java.util.HashMap;
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
-import blog.csdn.net.mchenys.common.utils.URIUtils;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
 import blog.csdn.net.mchenys.common.utils.HttpUtils;
+import blog.csdn.net.mchenys.common.utils.NetworkUtils;
 import blog.csdn.net.mchenys.common.utils.StringUtils;
+import blog.csdn.net.mchenys.common.utils.URIUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.common.widget.view.UEView;
 import blog.csdn.net.mchenys.common.widget.webview.BaseWebView;
@@ -226,7 +228,6 @@ public class BaseTerminalActivity extends BaseActivity {
 
                 @Override
                 public void onPageFinished(final WebView view, String url) {
-                    view.loadUrl("javascript:window.PCJSKit.getHtml(document.getElementsByTagName('html')[0].innerHTML);");
                     if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
                         mWebView.getSettings().setLoadsImagesAutomatically(true);//网页加载完后再显示图片
                     }
@@ -235,6 +236,8 @@ public class BaseTerminalActivity extends BaseActivity {
                     } else {
                         mUEView.hideLoading();
                     }
+                    view.loadUrl("javascript:window.PCJSKit.getHtml(document.getElementsByTagName('html')[0].innerHTML);");
+
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -335,12 +338,7 @@ public class BaseTerminalActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
-                        JSONObject metaObj = getMetaData(parseMetaString(okResponse.getResult()), false);
-                        if (metaObj != null) {
-                            onMetaDataResult(metaObj);
-                        } else {
-                            onMetaDataEmpty();
-                        }
+
                         int status = jsonObject.optInt("status");
                         if (status < 0) {
                             mUEView.showError();
@@ -348,6 +346,15 @@ public class BaseTerminalActivity extends BaseActivity {
                         }
                         mWebView.loadDataWithBaseURL(url, okResponse.getResult(), "text/html", "UTF-8", null);
                         mUEView.hideLoading();
+
+                        if(!NetworkUtils.isNetworkAvailable(mContext)||okResponse.getResponseType()== OkHttpEngine.RESPONSE_TYPE_NETWORK){
+                            JSONObject metaObj = getMetaData(parseMetaString(okResponse.getResult()), false);
+                            if (metaObj != null) {
+                                onMetaDataResult(metaObj);
+                            } else {
+                                onMetaDataEmpty();
+                            }
+                        }
 
                     }
                 });
