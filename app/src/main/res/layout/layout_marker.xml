@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/re_makerview"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="80dp"
+                android:layout_height="200dp">
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="80dp"
+        android:layout_height="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/linechart_time_bg"
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/color_464646"
+        android:textSize="8sp"
+        />
+
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_above="@id/tv_time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:background="@color/color_e43939"
+        />
+
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/icon_history_price_bg_default"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="9sp"/>
+
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:id="@+id/iv_yuan"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_color_e53f3f_border_radius6"
+        />
+
+
+</RelativeLayout>

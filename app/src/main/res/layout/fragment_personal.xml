@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,7 +11,9 @@
         android:orientation="vertical">
 
 
-        <ImageView
+        <blog.csdn.net.mchenys.common.widget.view.CircleImageView
+            app:border_color="@color/red"
+            app:border_width="2dp"
             android:id="@+id/iv_header"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -37,43 +40,47 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/chart1demo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="chart1demo"
+            android:textAllCaps="false"/>
+
+
+        <Button
             android:id="@+id/btn_to_page_ternimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_desc"
             android:text="显示分页终端"/>
 
         <Button
             android:id="@+id/btn_current_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_to_page_ternimal"
             android:text="我的小区"/>
 
         <Button
             android:id="@+id/btn_house_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_current_city"
             android:text="户型"/>
 
         <Button
             android:id="@+id/btn_area"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_current_city"
             android:text="省市区"/>
+
         <Button
             android:id="@+id/btn_show_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_current_city"
             android:text="浏览图片"/>
+
         <Button
             android:id="@+id/btn_show_pic2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_current_city"
             android:text="浏览图片2"/>
 
         <Button

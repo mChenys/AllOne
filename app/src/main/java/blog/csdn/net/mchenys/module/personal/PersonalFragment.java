@@ -44,6 +44,7 @@ import blog.csdn.net.mchenys.common.utils.ToastUtils;
 import blog.csdn.net.mchenys.model.Account;
 import blog.csdn.net.mchenys.model.Province;
 import blog.csdn.net.mchenys.module.account.LoginActivity;
+import blog.csdn.net.mchenys.module.demo.test.TestChartActivity;
 import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 
 
@@ -190,6 +191,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.btn_area).setOnClickListener(this);
         findViewById(R.id.btn_show_pic).setOnClickListener(this);
         findViewById(R.id.btn_show_pic2).setOnClickListener(this);
+        findViewById(R.id.chart1demo).setOnClickListener(this);
 
     }
 
@@ -244,6 +246,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_show_pic2:
                 startActivity(new Intent(mContext, PhotoPreviewActivity2.class));
+                break;
+            case R.id.chart1demo:
+                startActivity(new Intent(mContext, TestChartActivity.class));
                 break;
         }
     }

@@ -37,9 +37,11 @@ public class BaseWebView extends WebView {
     private WebSettings mWebSettings;
     private Context mContext;
     private String htmlContent;
+
     public interface HTMLCallback {
         void onSuccess(String htmlContent);
     }
+
     private HTMLCallback mHTMLCallback;
 
     public void setHTMLCallback(HTMLCallback c) {
@@ -111,16 +113,30 @@ public class BaseWebView extends WebView {
         this.mContext = context;
         mWebSettings = getSettings();
         mWebSettings.setJavaScriptEnabled(true);
+        mWebSettings.setAllowFileAccess(true);
+        mWebSettings.setGeolocationEnabled(true);
         mWebSettings.setUseWideViewPort(true);
         mWebSettings.setLoadWithOverviewMode(true);
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         mWebSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        mWebSettings.setLoadsImagesAutomatically(true);//关闭延迟加载图片
+//        mWebSettings.setLoadsImagesAutomatically(true);//关闭延迟加载图片
+        enableImageLoading(false);//WebView先不要自动加载图片，等页面finish后再发起图片加载。
       /*  if (NetworkUtils.isNetworkAvailable(mContext)) {
             mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         } else {
             mWebSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         }*/
+        // 开启DOM缓存，开启LocalStorage存储（存储一些简单的用key/value对即可解决的数据，根据作用范围的不同，有SessionStorage和Local Storage两种）
+        mWebSettings.setDomStorageEnabled(true);
+        mWebSettings.setDatabaseEnabled(true);
+        mWebSettings.setDatabasePath(getContext().getDir("database", getContext().MODE_PRIVATE).getPath());
+
+        //缓冲web浏览器中所有的东西，从页面、图片到脚本、css等等
+        mWebSettings.setAppCacheEnabled(true);
+        mWebSettings.setAppCachePath(getContext().getDir("cache", getContext().MODE_PRIVATE).getPath());
+
+        mWebSettings.setDefaultTextEncodingName("UTF-8");
+        setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //解决Http和Https混合问题
             mWebSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
@@ -143,6 +159,22 @@ public class BaseWebView extends WebView {
                 return true;
             }
         });
+    }
+
+    /**
+     * 开启/关闭网络图片加载响应
+     *
+     * @param enable true开启,false关闭
+     */
+    public void enableImageLoading(boolean enable) {
+        if (enable) {
+            if (!getSettings().getLoadsImagesAutomatically()) {
+                getSettings().setLoadsImagesAutomatically(true);//开始加载网络图片
+            }
+        } else {
+            getSettings().setLoadsImagesAutomatically(false); //关闭网络图片加载
+        }
+
     }
 
     public boolean shouldOverrideUrlLoading(WebView view, String url) {

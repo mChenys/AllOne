@@ -16,6 +16,17 @@ public class RoundImageDrawable extends Drawable {
     private Bitmap mBitmap;
 
     private RectF rectF;
+    private int coverColor;
+    private float radius;
+    //除了那几个角不需要圆角的
+    private boolean exceptLeftTop, exceptRightTop, exceptLeftBottom, exceptRightBotoom;
+
+
+    public RoundImageDrawable(Bitmap bitmap, int coverColor, float radius) {
+        this(bitmap);
+        this.coverColor = coverColor;
+        this.radius = radius;
+    }
 
     public RoundImageDrawable(Bitmap bitmap) {
         mBitmap = bitmap;
@@ -26,6 +37,21 @@ public class RoundImageDrawable extends Drawable {
         mPaint.setShader(bitmapShader);
     }
 
+    /**
+     * 除了那几个角不需要圆角的
+     *
+     * @param leftTop
+     * @param rightTop
+     * @param leftBottom
+     * @param rightBottom
+     */
+    public void setExceptCorner(boolean leftTop, boolean rightTop, boolean leftBottom, boolean rightBottom) {
+        this.exceptLeftTop = leftTop;
+        this.exceptRightTop = rightTop;
+        this.exceptLeftBottom = leftBottom;
+        this.exceptRightBotoom = rightBottom;
+    }
+
     @Override
     public void setBounds(int left, int top, int right, int bottom) {
         super.setBounds(left, top, right, bottom);
@@ -34,7 +60,46 @@ public class RoundImageDrawable extends Drawable {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawRoundRect(rectF, 30, 30, mPaint);
+        if (radius == 0) {
+            radius = 30f;
+        }
+        canvas.drawRoundRect(rectF, radius, radius, mPaint);
+
+
+        Paint coverPaint = new Paint();
+        coverPaint.setAntiAlias(true);
+        coverPaint.setColor(coverColor);
+        if(coverColor > -1) {
+            canvas.drawRoundRect(rectF, radius, radius, coverPaint);
+        }
+
+        if (exceptLeftTop) { //左上角不为圆角
+            canvas.drawRect(0, 0, radius, radius, mPaint);
+            if (coverColor > -1) {
+                canvas.drawRect(0, 0, radius, radius, coverPaint);
+            }
+        }
+        if (exceptRightTop) {//右上角不为圆角
+            canvas.drawRect(canvas.getWidth() - radius, 0, canvas.getWidth(), radius, mPaint);
+            if (coverColor > -1) {
+                canvas.drawRect(canvas.getWidth() - radius, 0, canvas.getWidth(), radius, coverPaint);
+            }
+        }
+
+        if (exceptLeftBottom) {//左下角不为圆角
+            canvas.drawRect(0, canvas.getHeight() - radius, radius, canvas.getHeight(), mPaint);
+            if (coverColor > -1) {
+                canvas.drawRect(0, canvas.getHeight() - radius, radius, canvas.getHeight(), coverPaint);
+            }
+        }
+
+        if (exceptRightBotoom) {//右下角不为圆角
+            canvas.drawRect(canvas.getWidth() - radius, canvas.getHeight() - radius, canvas.getWidth(), canvas.getHeight(), mPaint);
+            if (coverColor > -1) {
+                canvas.drawRect(canvas.getWidth() - radius, canvas.getHeight() - radius, canvas.getWidth(), canvas.getHeight(), coverPaint);
+            }
+        }
+
     }
 
     @Override

@@ -7,7 +7,7 @@ package blog.csdn.net.mchenys.common.config;
 public class Urls {
 
 
-    public static int URL_TYPE = Env.TEST;
+    public static int URL_TYPE = Env.RELEASE;
 
     public static String COMMON_SESSION_ID = URL_TYPE != Env.RELEASE ? "common_session_id1=" : "common_session_id=";
 

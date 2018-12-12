@@ -228,9 +228,7 @@ public class BaseTerminalActivity extends BaseActivity {
 
                 @Override
                 public void onPageFinished(final WebView view, String url) {
-                    if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
-                        mWebView.getSettings().setLoadsImagesAutomatically(true);//网页加载完后再显示图片
-                    }
+                    mWebView.enableImageLoading(true);
                     if (onReceivedError) {
                         mUEView.showError();
                     } else {
