@@ -55,6 +55,11 @@ public class Urls {
     public static final String DESIGNER_STYLE_LIST = "http://t-dingzhi.pchouse.com.cn/interface/designer/stylelist.do";
     // 职位列表
     public static final String DESIGNER_POSITION_LIST = "http://t-dingzhi.pchouse.com.cn/interface/designer/positionlist.do";
+    public static String SLIDE_CAPTCHA_FLUSH ="http://captcha.pconline.com.cn/captcha/slidecaptcha_flush.jsp";
+    public static final String SLIDE_CAPTCHA_IMG = "http://captcha.pconline.com.cn/captcha/slideCaptchaImg";
+    public static final String SLIDE_CAPTCHA_THUMB = "http://captcha.pconline.com.cn/captcha/slideCaptchaThumb";
+    public static final String SLIDE_CAPTCHA_CHECK = "http://captcha.pconline.com.cn/captcha/slidecaptcha_check.jsp";
+
 
     public static String getTargetUrl(String url) {
         if (URL_TYPE == Env.TEST) {

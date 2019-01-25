@@ -207,6 +207,10 @@
         <activity android:name=".module.demo.mpandroidchart.LineChartActivity1"/>
         <activity android:name=".module.demo.mpandroidchart.LineChartActivity2"/>
         <activity android:name=".module.demo.test.TestChartActivity"/>
+        <activity android:name=".module.demo.test.TestSmartRefreshActivity"/>
+        <activity android:name=".module.demo.test.TestNestScrollRefreshActivity"/>
+        <activity android:name=".module.demo.test.TestNestScrollRefresh2Activity"/>
+        <activity android:name=".module.demo.test.TestSlideViewActivity"/>
 
         <!-- 配置自定义推送服务作为推送服务运行的载体-->
         <service

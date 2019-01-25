@@ -7,6 +7,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
@@ -16,6 +18,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,12 +206,6 @@ public class RefreshRecyclerView extends RecyclerView {
 
     }
 
-    public void setNoMore(boolean noMore, boolean autoScrollLast) {
-        setNoMore(noMore);
-        if (autoScrollLast) {
-            smoothScrollToPosition(mWrapAdapter.getItemCount() - 1);
-        }
-    }
 
     public boolean isNoMore() {
         return isNoMore;
@@ -331,13 +328,14 @@ public class RefreshRecyclerView extends RecyclerView {
 
     }
 
-    public void stopRefresh(boolean isLoadMore){
+    public void stopRefresh(boolean isLoadMore) {
         if (isLoadMore) {
             loadMoreComplete();
-        }else{
+        } else {
             refreshComplete();
         }
     }
+
     @Override
     public void scrollBy(int x, int y) {
         isApiScroll = true;
@@ -374,7 +372,7 @@ public class RefreshRecyclerView extends RecyclerView {
      * @param stickTop 是否支持置顶功能
      * @param dy       距离recycleview顶部的距离
      *                 <p>
-     *  或者使用scrollToPositionWithOffset来完成
+     *                 或者使用scrollToPositionWithOffset来完成
      */
     public void smoothScrollToPosition(int position, boolean stickTop, int dy) {
         isApiScroll = true;
@@ -635,7 +633,7 @@ public class RefreshRecyclerView extends RecyclerView {
             mLastX = ev.getX();
             //避免ViewPager拦截了斜方向的滑动事件
             boolean isVerticalScroll = Math.abs(deltaY) > Math.abs(deltaX);
-            if (isVerticalScroll && !canScrollVertically(-1) &&isPullingUp) {
+            if (isVerticalScroll && !canScrollVertically(-1) && isPullingUp) {
                 getParent().requestDisallowInterceptTouchEvent(true);
             }
         }
@@ -662,7 +660,7 @@ public class RefreshRecyclerView extends RecyclerView {
                 if (pullRefreshEnabled)
                     LogUtils.d(TAG, ">>>>>>非刷新状态====" + mRefreshHeader.getState());
                 LogUtils.d(TAG, ">>>>>>isOnTop() ====" + isOnTop());
-                if (isOnTop() /*&& appbarState == AppBarStateChangeListener.State.EXPANDED*/
+                if (isOnTop() && appbarState == AppBarStateChangeListener.State.EXPANDED
                         && mRefreshHeader.getState() != BaseRefreshHeader.STATE_REFRESHING) {
                     //LogUtils.d(TAG, ">>>>>>非刷新状态");
                     mRefreshHeader.onMove(deltaY / DRAG_RATE);
@@ -674,10 +672,7 @@ public class RefreshRecyclerView extends RecyclerView {
                         return true;
                     }
                 } else {
-                    LogUtils.d(TAG, ">>>>>>新状态");  //手动推上去
-                    if (pullRefreshEnabled) {
-                        mRefreshHeader.manuallyPushUp(deltaY / DRAG_RATE);
-                    }
+                    LogUtils.d(TAG, ">>>>>>新状态");
                     if (pullRefreshEnabled) {
                         for (OnPullScrollListener l : mOnPullScrollListeners) {
                             l.onRefreshStayMove(mRefreshHeader.getVisibleHeight(), deltaY > 0);
@@ -687,7 +682,7 @@ public class RefreshRecyclerView extends RecyclerView {
                 break;
             default:
                 mLastY = -1; // reset
-                if (isOnTop() /*&& appbarState == AppBarStateChangeListener.State.EXPANDED*/) {
+                if (isOnTop() && appbarState == AppBarStateChangeListener.State.EXPANDED) {
                     mRefreshHeader.releaseAction(new SimpleRefreshAnimatorListener() {
                         @Override
                         public void onStayAnimEnd() {
@@ -1138,7 +1133,6 @@ public class RefreshRecyclerView extends RecyclerView {
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            super.onAttachedToRecyclerView(recyclerView);
             LayoutManager manager = recyclerView.getLayoutManager();
             if (manager instanceof GridLayoutManager) {
                 final GridLayoutManager gridManager = ((GridLayoutManager) manager);
@@ -1358,72 +1352,77 @@ public class RefreshRecyclerView extends RecyclerView {
         }
     }
 
-    /**
-     * 有用到可以解开,引入design包
-     * private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
-     *
-     * @Override protected void onAttachedToWindow() {
-     * super.onAttachedToWindow();
-     * //解决和CollapsingToolbarLayout冲突的问题
-     * AppBarLayout appBarLayout = null;
-     * ViewParent p = getParent();
-     * while (p != null) {
-     * if (p instanceof CoordinatorLayout) {
-     * break;
-     * }
-     * p = p.getParent();
-     * }
-     * if (p instanceof CoordinatorLayout) {
-     * CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
-     * final int childCount = coordinatorLayout.getChildCount();
-     * for (int i = childCount - 1; i >= 0; i--) {
-     * final View child = coordinatorLayout.getChildAt(i);
-     * if (child instanceof AppBarLayout) {
-     * appBarLayout = (AppBarLayout) child;
-     * break;
-     * }
-     * }
-     * if (appBarLayout != null) {
-     * appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-     * @Override public void onStateChanged(AppBarLayout appBarLayout, State state) {
-     * appbarState = state;
-     * }
-     * });
-     * }
-     * }
-     * }
-     * <p>
-     * public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
-     * <p>
-     * public enum State {
-     * EXPANDED,
-     * COLLAPSED,
-     * IDLE
-     * }
-     * <p>
-     * private State mCurrentState = State.IDLE;
-     * @Override public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-     * if (i == 0) {
-     * if (mCurrentState != State.EXPANDED) {
-     * onStateChanged(appBarLayout, State.EXPANDED);
-     * }
-     * mCurrentState = State.EXPANDED;
-     * } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
-     * if (mCurrentState != State.COLLAPSED) {
-     * onStateChanged(appBarLayout, State.COLLAPSED);
-     * }
-     * mCurrentState = State.COLLAPSED;
-     * } else {
-     * if (mCurrentState != State.IDLE) {
-     * onStateChanged(appBarLayout, State.IDLE);
-     * }
-     * mCurrentState = State.IDLE;
-     * }
-     * }
-     * <p>
-     * public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
-     * }
-     **/
+
+    // 有用到可以解开,引入design包
+    private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //解决和CollapsingToolbarLayout冲突的问题
+        AppBarLayout appBarLayout = null;
+        ViewParent p = getParent();
+        while (p != null) {
+            if (p instanceof CoordinatorLayout) {
+                break;
+            }
+            p = p.getParent();
+        }
+        if (p != null) {
+            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
+            final int childCount = coordinatorLayout.getChildCount();
+            for (int i = childCount - 1; i >= 0; i--) {
+                final View child = coordinatorLayout.getChildAt(i);
+                if (child instanceof AppBarLayout) {
+                    appBarLayout = (AppBarLayout) child;
+                    break;
+                }
+            }
+            //监听AppBarLayout的状态
+            if (appBarLayout != null) {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        appbarState = state;
+                    }
+                });
+            }
+        }
+    }
+
+    public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
+
+        public enum State {
+            EXPANDED,
+            COLLAPSED,
+            IDLE
+        }
+
+        private State mCurrentState = State.IDLE;
+
+        @Override
+        public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+            if (i == 0) {
+                if (mCurrentState != State.EXPANDED) {
+                    onStateChanged(appBarLayout, State.EXPANDED);
+                }
+                mCurrentState = State.EXPANDED;
+            } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+                if (mCurrentState != State.COLLAPSED) {
+                    onStateChanged(appBarLayout, State.COLLAPSED);
+                }
+                mCurrentState = State.COLLAPSED;
+            } else {
+                if (mCurrentState != State.IDLE) {
+                    onStateChanged(appBarLayout, State.IDLE);
+                }
+                mCurrentState = State.IDLE;
+            }
+        }
+
+        public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
+    }
+
 
     //由于RecyclerView有刷新头存在，canScrollVertically(-1)时，始终返回true的解决办法
     @Override

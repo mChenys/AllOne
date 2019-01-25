@@ -32,5 +32,4 @@ public interface BaseRefreshHeader {
 
     View getView();
 
-    void manuallyPushUp(float deltaY);
 }

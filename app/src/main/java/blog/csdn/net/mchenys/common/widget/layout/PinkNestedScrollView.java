@@ -13,7 +13,7 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
 
-public class PinkNestedScrollView extends LinearLayout implements NestedScrollingParent , Scrollable{
+public class PinkNestedScrollView extends LinearLayout implements NestedScrollingParent, Scrollable {
     private static final String TAG = "PinkNestedScrollParent";
     private View mTopView;
     private View mPinkView;
@@ -317,17 +317,17 @@ public class PinkNestedScrollView extends LinearLayout implements NestedScrollin
         return shouldIntercept;
     }
 
-
+    /**
+     *
+     * @param dy 整数表示向下拉动
+     * @return
+     */
     @Override
     public boolean canIntercept(int dy) {
         if (null != mTarget) {
-            if (dy > 0) {
-                return !mTarget.canScrollVertically(-1) && getScrollY() == 0;
-            } else {
-                return false;
-            }
+            return dy > 0 && !mTarget.canScrollVertically(-1) && getScrollY() == 0;
         } else {
-            return getScrollY() == 0;
+            return dy > 0 && getScrollY() == 0;
         }
     }
 }

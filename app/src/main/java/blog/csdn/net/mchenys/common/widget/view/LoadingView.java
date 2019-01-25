@@ -24,12 +24,14 @@ public class LoadingView extends RelativeLayout {
     public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         View.inflate(context, R.layout.layout_loading_view, this);
-        infoTv = findViewById(R.id.tv_info);
+        infoTv = findViewById(R.id.tv_nickname);
+        setClickable(true);
     }
 
     public void show(String text) {
         infoTv.setText(text);
         setVisibility(VISIBLE);
+
     }
 
     public void hide() {

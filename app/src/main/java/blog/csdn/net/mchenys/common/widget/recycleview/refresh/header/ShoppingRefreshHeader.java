@@ -194,10 +194,6 @@ public class ShoppingRefreshHeader extends LinearLayout implements BaseRefreshHe
         return this;
     }
 
-    @Override
-    public void manuallyPushUp(float deltaY) {
-
-    }
 
     private class MyAnimatorListener implements Animator.AnimatorListener {
         private RefreshAnimatorListener refreshAnimatorListener;

@@ -45,6 +45,10 @@ import blog.csdn.net.mchenys.model.Account;
 import blog.csdn.net.mchenys.model.Province;
 import blog.csdn.net.mchenys.module.account.LoginActivity;
 import blog.csdn.net.mchenys.module.demo.test.TestChartActivity;
+import blog.csdn.net.mchenys.module.demo.test.TestNestScrollRefresh2Activity;
+import blog.csdn.net.mchenys.module.demo.test.TestNestScrollRefreshActivity;
+import blog.csdn.net.mchenys.module.demo.test.TestSlideViewActivity;
+import blog.csdn.net.mchenys.module.demo.test.TestSmartRefreshActivity;
 import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 
 
@@ -56,7 +60,7 @@ import blog.csdn.net.mchenys.module.terminal.PageTerminalActivity;
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
 
     private Button mLoginOutBtn;
-    private Button mCityBtn, mHouseBtn,mAreaBtn;
+    private Button mCityBtn, mHouseBtn, mAreaBtn;
     private TextView nickNameTv;
     private ImageView headerIv;
     private TextView phoneTv;
@@ -124,10 +128,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 mHouseBtn.setText(parseSelectedResult(options1, options2, options3));
             }
         }));
-        mHousePinkView.setNPicker(tingList,shiList,weiList);
+        mHousePinkView.setNPicker(tingList, shiList, weiList);
 
         //省市区
-        OptionsPickerView.Builder builder =new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
+        OptionsPickerView.Builder builder = new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 mAreaBtn.setText(parseSelectedResult2(options1, options2, options3));
@@ -154,9 +158,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             }
         });
         mAreaPinkView = new OptionsPickerView<>(builder);
-        mAreaPinkView.setPicker(provinceNameList, cityNameList,lastNameList);
+        mAreaPinkView.setPicker(provinceNameList, cityNameList, lastNameList);
     }
-
 
 
     @Override
@@ -192,6 +195,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.btn_show_pic).setOnClickListener(this);
         findViewById(R.id.btn_show_pic2).setOnClickListener(this);
         findViewById(R.id.chart1demo).setOnClickListener(this);
+        findViewById(R.id.smartRefresh1demo).setOnClickListener(this);
+        findViewById(R.id.testNestscrollRefresh).setOnClickListener(this);
+        findViewById(R.id.testNestscrollRefresh2).setOnClickListener(this);
+        findViewById(R.id.btn_slide_view).setOnClickListener(this);
 
     }
 
@@ -249,6 +256,17 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.chart1demo:
                 startActivity(new Intent(mContext, TestChartActivity.class));
+                break;
+            case R.id.smartRefresh1demo:
+                startActivity(new Intent(mContext, TestSmartRefreshActivity.class));
+                break;
+            case R.id.testNestscrollRefresh:
+                startActivity(new Intent(mContext, TestNestScrollRefreshActivity.class));
+                break;  case R.id.testNestscrollRefresh2:
+                startActivity(new Intent(mContext, TestNestScrollRefresh2Activity.class));
+                break;
+            case R.id.btn_slide_view:
+                startActivity(new Intent(mContext,TestSlideViewActivity.class));
                 break;
         }
     }
@@ -372,11 +390,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     private String parseSelectedResult(int options1, int options2, int options3) {
-        return tingList.get(options1)+","+shiList.get(options2)+","+weiList.get(options3);
+        return tingList.get(options1) + "," + shiList.get(options2) + "," + weiList.get(options3);
     }
 
     private String parseSelectedResult2(int options1, int options2, int options3) {
-        return provinceList.get(options1).getName()+","+cityNameList.get(options1).get(options2)+","+
+        return provinceList.get(options1).getName() + "," + cityNameList.get(options1).get(options2) + "," +
                 lastNameList.get(options1).get(options2).get(options3);
     }
 }

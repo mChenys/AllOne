@@ -220,7 +220,7 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
                 if (pageTotal < 1 || total > 0 && total < 5) {
                     mRecyclerView.hideLoaderFooterView();
                     return false;
-                } else if (pageTotal <= pageNo && isShowNoMore) {
+                } else if (pageTotal < pageNo && isShowNoMore) {
                     mRecyclerView.setNoMore(true);
                     return false;
                 }

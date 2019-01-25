@@ -60,10 +60,11 @@ public class FlowLayout extends ViewGroup {
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-        // wrap_content
+        // wrap_content 最终宽高
         int width = 0;
         int height = 0;
 
+        //当前已用行宽高
         int lineWidth = 0;
         int lineHeight = 0;
 
@@ -81,7 +82,7 @@ public class FlowLayout extends ViewGroup {
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
             MarginLayoutParams lp = (MarginLayoutParams) child
                     .getLayoutParams();
-
+            //子View宽高
             int childWidth = child.getMeasuredWidth() + lp.leftMargin
                     + lp.rightMargin;
             int childHeight = child.getMeasuredHeight() + lp.topMargin
@@ -90,12 +91,12 @@ public class FlowLayout extends ViewGroup {
             if (lineWidth + childWidth > sizeWidth - getPaddingLeft() - getPaddingRight()) {
                 //需要换行
                 width = Math.max(width, lineWidth);
-                lineWidth = childWidth;
+                lineWidth = childWidth;//重新赋值行宽
                 height += lineHeight;//累加包裹内容所需的高度
-                lineHeight = childHeight;
+                lineHeight = childHeight;//重新赋值行高
             } else {
                 //不用换行
-                lineWidth += childWidth;
+                lineWidth += childWidth;//累加行宽
                 lineHeight = Math.max(lineHeight, childHeight);//取当前行最大高度作为行高
             }
             if (i == cCount - 1) {
@@ -116,13 +117,15 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mAllViews.clear();//所有行的view
-        mLineHeight.clear();//每一行的高度
-        mLineWidth.clear();//每一行的宽度
-        lineViews.clear();//每一行的view
+        mAllViews.clear();//记录所有行的view
+        mLineHeight.clear();//记录每一行的高度
+        mLineWidth.clear();//记录每一行的宽度
+        lineViews.clear();//记录每一行的view
 
+        //总宽
         int width = getWidth();
 
+        //当前已用行宽高
         int lineWidth = 0;
         int lineHeight = 0;
 
@@ -133,7 +136,7 @@ public class FlowLayout extends ViewGroup {
             if (child.getVisibility() == View.GONE) continue;
             MarginLayoutParams lp = (MarginLayoutParams) child
                     .getLayoutParams();
-
+            //子View宽高
             int childWidth = child.getMeasuredWidth();
             int childHeight = child.getMeasuredHeight();
 
@@ -143,27 +146,32 @@ public class FlowLayout extends ViewGroup {
                 mAllViews.add(lineViews);
                 mLineWidth.add(lineWidth);
 
+                //重置记录
                 lineWidth = 0;
                 lineHeight = childHeight + lp.topMargin + lp.bottomMargin;
                 lineViews = new ArrayList<View>();
             }
+            //累加记录
             lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
             lineHeight = Math.max(lineHeight, childHeight + lp.topMargin
                     + lp.bottomMargin);
             lineViews.add(child);
 
         }
+        //添加最后一行数据
         mLineHeight.add(lineHeight);
         mLineWidth.add(lineWidth);
         mAllViews.add(lineViews);
 
 
+        //下面是对每一行的View进行布局
         int left = getPaddingLeft();
         int top = getPaddingTop();
 
         int lineNum = mAllViews.size();
 
         for (int i = 0; i < lineNum; i++) {
+            //获取当前行和行高
             lineViews = mAllViews.get(i);
             lineHeight = mLineHeight.get(i);
 
@@ -177,13 +185,13 @@ public class FlowLayout extends ViewGroup {
                     left = (width - currentLineWidth) / 2 + getPaddingLeft();
                     break;
                 case RIGHT:
-                    //  适配了rtl，需要补偿一个padding值
+                    //  适配了rtl，需要补偿一个padding值 ,从右边向左开始布局
                     left = width - (currentLineWidth + getPaddingLeft()) - getPaddingRight();
                     //  适配了rtl，需要把lineViews里面的数组倒序排,从右边开始存放view
                     Collections.reverse(lineViews);
                     break;
             }
-
+            //开始布局
             for (int j = 0; j < lineViews.size(); j++) {
                 View child = lineViews.get(j);
                 if (child.getVisibility() == View.GONE) {
