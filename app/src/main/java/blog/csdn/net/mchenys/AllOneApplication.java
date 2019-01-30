@@ -18,6 +18,10 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AuthInfo;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import blog.csdn.net.mchenys.common.config.Env;
 import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
@@ -29,6 +33,7 @@ import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 
 public class AllOneApplication extends Application {
     public static Context mAppContext;
+
     //配置第三方登录信息
     static {
         //weixin
@@ -109,5 +114,16 @@ public class AllOneApplication extends Application {
 
     }
 
+    public void testRoot() {
+        try {
+            Process su = Runtime.getRuntime().exec("su");
+            OutputStream outputStream = su.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeBytes("\n");
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
 }

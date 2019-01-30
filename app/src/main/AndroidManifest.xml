@@ -45,7 +45,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".module.main.LaunchActivity"
+            android:name=".module.demo.automator.AutomatorActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -211,6 +211,9 @@
         <activity android:name=".module.demo.test.TestNestScrollRefreshActivity"/>
         <activity android:name=".module.demo.test.TestNestScrollRefresh2Activity"/>
         <activity android:name=".module.demo.test.TestSlideViewActivity"/>
+        <activity android:name=".module.demo.espresso.EspressoActivity"/>
+        <activity android:name=".module.demo.espresso.WebViewActivity"/>
+        <activity android:name=".module.demo.espresso.RecycleViewActivity"/>
 
         <!-- 配置自定义推送服务作为推送服务运行的载体-->
         <service

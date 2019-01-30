@@ -1,37 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="95dp"
+    android:layout_centerInParent="true"
+    android:background="@drawable/shape_stroke_6_solid_c333333_90"
+    >
+    <include
+        android:id="@+id/loadlayout_loading"
+        layout="@layout/layout_progressbar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:layout_gravity="center"/>
 
-    <RelativeLayout
-        android:layout_width="100dp"
-        android:layout_height="95dp"
-        android:layout_centerInParent="true"
-        android:background="@drawable/shape_stroke_6_solid_c333333_90"
-        >
-        <include
-            android:id="@+id/loadlayout_loading"
-            layout="@layout/layout_progressbar"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="21dp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_below="@id/loadlayout_loading"
-            android:text="加载中"
-            android:textSize="14sp"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/white"
-            />
-    </RelativeLayout>
-
-
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_below="@+id/loadlayout_loading"
+        android:text="加载中"
+        android:textSize="14sp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/white"
+        />
 </RelativeLayout>

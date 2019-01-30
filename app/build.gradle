@@ -15,9 +15,8 @@ android {
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
 
-        ndk {
-            abiFilters "armeabi"
-        }
+
+
         aaptOptions.cruncherEnabled = false
         aaptOptions.useNewCruncher = false
 
@@ -44,17 +43,17 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.android.support:design:26.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     compile 'com.squareup.okio:okio:1.7.0'
+    //share
     implementation files('libs/httpmime-4.1.1.jar')
     implementation files('libs/libammsdk.jar')
     implementation files('libs/mta-sdk-1.6.2.1.jar')
     implementation files('libs/open-sdk-r5793.jar')
-    compile(name: 'openDefault-2.0.3_', ext: 'aar')
+   // compile(name: 'openDefault-2.0.3_', ext: 'aar')
+    compile 'com.sina.weibo.sdk:core:4.3.6:openDefaultRelease@aar'
+
     compile 'com.github.bumptech.glide:glide:3.7.0'
     implementation files('libs/gson-2.7.jar')
     implementation files('libs/BaiduLBS_Android.jar')
@@ -67,5 +66,26 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
 
+
+    //--------------------自动化测试-------------------------------
+    //espresso 相关,只能操作本应用的Ui
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    //要对Recycleview进行操作，先要修改bulid.gradle引入一些包
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+
+    }
+    ///要对webview进行操作，先要修改bulid.gradle引入一些包
+    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
+    //对intent操作
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+
+    // UiAutomator Testing 可以跨应用操作Ui
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1';
+//    androidTestCompile 'org.hamcrest:hamcrest-integration:1.3'
 
 }
