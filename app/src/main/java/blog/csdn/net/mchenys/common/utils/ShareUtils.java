@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.webkit.URLUtil;
 import android.widget.Toast;
 
+import java.io.File;
+
+import blog.csdn.net.mchenys.AllOneApplication;
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.sns.SnsImageShareUtil;
 import blog.csdn.net.mchenys.common.sns.activity.SnsSelectPlatformNewActivity;
@@ -62,10 +66,16 @@ public class ShareUtils {
         shareEntity.setTitle(title);
         shareEntity.setDescription(desc);
         shareEntity.setContent(content);
-        shareEntity.setImage(image);
         shareEntity.setUrl(wapurl);
         shareEntity.setWapUrl(wapurl);
         shareEntity.setHideContent(hideContent);
+        if(!TextUtils.isEmpty(image)){
+            shareEntity.setImage(image);
+            if (!URLUtil.isNetworkUrl(image)) { //本地图片
+                shareEntity.setShareImgFile(new File(image));
+            }
+            SnsImageShareUtil.setImage(AllOneApplication.mAppContext, image);
+        }
         return shareEntity;
     }
 
@@ -75,7 +85,7 @@ public class ShareUtils {
      * @param context
      * @param shareContent
      * @param callback
-     * @param type:SHARE_SINA,SHARE_TENCENT,SHARE_WECHAT,SHARE_WECHAT_FRIEND
+     * @param type:SnsConfig#SHARE_SINA,SHARE_TENCENT,SHARE_WECHAT,SHARE_WECHAT_FRIEND
      */
     public static void shareWithoutSurface(Context context, SnsShareContent shareContent, Callback callback, int type) {
         if (shareContent == null) return;

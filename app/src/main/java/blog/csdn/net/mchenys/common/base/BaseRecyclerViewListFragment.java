@@ -23,7 +23,6 @@ import blog.csdn.net.mchenys.common.utils.HttpUtils;
 import blog.csdn.net.mchenys.common.utils.NetworkUtils;
 import blog.csdn.net.mchenys.common.utils.ToastUtils;
 import blog.csdn.net.mchenys.common.widget.recycleview.refresh.RefreshRecyclerView;
-import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.common.widget.view.UEView;
 
 
@@ -37,7 +36,6 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
     private FrameLayout mTopLayout; //悬浮在顶部布局,可添加额外的布局
     private FrameLayout mBottomLayout; //悬浮在底部布局,可添加额外的布局
     protected UEView mUEView;
-    private TitleBar mTitleBar;
 
     private int pageNo = 1;//页码
     protected int pageTotal;//总页数
@@ -89,13 +87,11 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
     @Override
     protected void initView() {
         super.initView();
-        mTitleBar = findViewById(R.id.title_bar);
         mRecyclerView = findViewById(R.id.refresh);
         mTopLayout = findViewById(R.id.fl_flow_top);
         mBottomLayout = findViewById(R.id.fl_flow_bottom);
         mUEView = findViewById(R.id.UEView);
         mUEView.showLoading();
-        setTitleBar(mTitleBar);
     }
 
 
@@ -336,12 +332,6 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
         }
     }
 
-    /**
-     * 设置标题
-     *
-     * @param titleBar
-     */
-    protected abstract void setTitleBar(TitleBar titleBar);
 
     /**
      * 构建请求对象

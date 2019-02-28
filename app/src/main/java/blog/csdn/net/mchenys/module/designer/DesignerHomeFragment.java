@@ -28,7 +28,6 @@ import blog.csdn.net.mchenys.common.utils.DisplayUtils;
 import blog.csdn.net.mchenys.common.utils.StringUtils;
 import blog.csdn.net.mchenys.common.widget.recycleview.BaseRecycleViewAdapter;
 import blog.csdn.net.mchenys.common.widget.recycleview.BaseRecycleViewHolder;
-import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.model.DesignPrice;
 import blog.csdn.net.mchenys.model.DesignProvince;
 import blog.csdn.net.mchenys.model.DesignerPojo;
@@ -137,10 +136,6 @@ public class DesignerHomeFragment extends BaseRecyclerViewListFragment<DesignerP
 
     }
 
-    @Override
-    protected void setTitleBar(TitleBar titleBar) {
-        titleBar.setCenterTv("设计师");
-    }
 
     @Override
     protected Req onCreateReq() {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONObject;
 
@@ -15,7 +14,6 @@ import java.util.Map;
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.LazyBaseRecyclerViewListFragment;
 import blog.csdn.net.mchenys.common.config.Urls;
-import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.model.SubColumnData;
 import blog.csdn.net.mchenys.module.adapter.HomeLiveAdapter;
 
@@ -27,10 +25,6 @@ public class LiveInstituteFragment extends LazyBaseRecyclerViewListFragment<SubC
 
     private String columnId;
 
-    @Override
-    protected void setTitleBar(TitleBar titleBar) {
-        titleBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

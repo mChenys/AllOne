@@ -56,6 +56,12 @@ public class LaunchActivity extends BaseActivity {
         }, 2000);
     }
 
+    @Override
+    protected void initView() {
+        super.initView();
+        transStatusBar(false);
+    }
+
     private void loadAllProvinceCities() {
         HttpUtils.getJSON(true, Urls.GET_ALL_PROVINCE_CITIES, null, null, new HttpUtils.JSONCallback() {
             @Override

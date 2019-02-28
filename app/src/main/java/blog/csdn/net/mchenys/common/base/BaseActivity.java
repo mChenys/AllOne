@@ -18,6 +18,7 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.utils.JumpUtils;
 import blog.csdn.net.mchenys.common.utils.ScreenShotListenManager;
+import blog.csdn.net.mchenys.common.utils.UIUtils;
 import blog.csdn.net.mchenys.common.widget.dialog.ScreenShotDialog;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.module.main.MainActivity;
@@ -36,6 +37,7 @@ import blog.csdn.net.mchenys.module.main.MainActivity;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+    protected View mRootView;
     private TitleBar mTitleBar;
     private FrameLayout mContentLayout;
     private View mNightMode;
@@ -49,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     //截屏监听
     private ScreenShotListenManager mScreenShotListenManager;
     private ScreenShotDialog mShotDialog;
+
     /**
      * 子类别重写,可以重写initData initView initListener
      *
@@ -73,10 +76,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void initView() {
+        mRootView = findViewById(R.id.fl_root_layout);
         mTitleBar = findViewById(R.id.title_bar);
         mContentLayout = findViewById(R.id.fl_content);
         mNightMode = findViewById(R.id.view_night);
         setTitleBar(mTitleBar);
+        boolean needTrans = mTitleBar.getVisibility() == View.GONE;
+        transStatusBar(needTrans);//修改状态栏是否透明,默认如果TitleBar不可见则透明
         if (null != getLayoutResID()) {
             View.inflate(this, getLayoutResID(), mContentLayout);
         }
@@ -89,7 +95,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mScreenShotListenManager.setListener(
                 new ScreenShotListenManager.OnScreenShotListener() {
                     public void onShot(String imagePath) {
-                        Log.e("cys","截屏路径imagePath:"+imagePath);
+                        Log.e("cys", "截屏路径imagePath:" + imagePath);
                         mShotDialog.show(imagePath);
                     }
                 }
@@ -111,6 +117,22 @@ public abstract class BaseActivity extends AppCompatActivity {
                 String geMsgId = bundle.getString(Constant.GE_MSGID, "");
                 //  PushManager.getInstance().sendFeedbackMessage(this, geTastId, geMsgId, 90001);
             }
+        }
+    }
+
+    /**
+     * 是否要透明状态栏,如果透明,则布局会延伸到状态栏下
+     *
+     * @param trans 是否透明
+     */
+    public void transStatusBar(boolean trans) {
+        if (!trans) {
+            mRootView.setFitsSystemWindows(true);
+            UIUtils.setStatusBarColor(this, R.color.white);
+            UIUtils.setLightStatusBar(this, true);
+        } else {
+            UIUtils.setStatusBarTrans(this);
+            mRootView.setFitsSystemWindows(false);
         }
     }
 
@@ -162,10 +184,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             JumpUtils.toActivity(this, intent);
             finish();
-        }else{
+        } else {
             finish();
         }
     }
+
     /**
      * 判断是否是一级页面
      *
@@ -191,6 +214,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void autoRefresh(Bundle bundle) {
         //empty
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

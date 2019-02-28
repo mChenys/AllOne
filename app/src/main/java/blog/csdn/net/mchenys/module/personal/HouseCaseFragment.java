@@ -19,7 +19,6 @@ import blog.csdn.net.mchenys.common.config.Urls;
 import blog.csdn.net.mchenys.common.utils.ImageLoadUtils;
 import blog.csdn.net.mchenys.common.widget.recycleview.BaseRecycleViewAdapter;
 import blog.csdn.net.mchenys.common.widget.recycleview.BaseRecycleViewHolder;
-import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.model.HousingCase;
 import blog.csdn.net.mchenys.model.UserInfo;
 
@@ -79,10 +78,6 @@ public class HouseCaseFragment extends LazyBaseRecyclerViewListFragment<HousingC
         });
     }
 
-    @Override
-    protected void setTitleBar(TitleBar titleBar) {
-        titleBar.setVisibility(View.GONE);
-    }
 
     @Override
     protected Req onCreateReq() {

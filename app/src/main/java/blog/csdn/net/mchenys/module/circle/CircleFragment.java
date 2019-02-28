@@ -13,7 +13,6 @@ import blog.csdn.net.mchenys.common.base.BaseRecyclerViewListFragment;
 import blog.csdn.net.mchenys.common.config.Env;
 import blog.csdn.net.mchenys.common.config.Urls;
 import blog.csdn.net.mchenys.common.widget.focusimg.FocusView;
-import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.model.CircleTopics;
 import blog.csdn.net.mchenys.model.Focus;
 import blog.csdn.net.mchenys.module.adapter.CircleTopicsAdapter;
@@ -27,10 +26,7 @@ import blog.csdn.net.mchenys.module.adapter.CircleTopicsAdapter;
 public class CircleFragment extends BaseRecyclerViewListFragment<CircleTopics> {
 
     private FocusView mFocusView;
-    @Override
-    protected void setTitleBar(TitleBar titleBar) {
-        titleBar.setCenterTv("圈子");
-    }
+
 
     @Override
     protected Req onCreateReq() {

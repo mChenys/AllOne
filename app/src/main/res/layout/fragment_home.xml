@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
    >
 
-    <TextView
-        android:background="@color/white"
-        android:gravity="center"
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="首页"
-        android:textColor="@color/color_333333"
-        android:textSize="20sp"/>
 
     <blog.csdn.net.mchenys.common.widget.layout.RefreshLayout
         android:id="@+id/refreshLayout"

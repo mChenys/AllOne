@@ -66,6 +66,8 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
 
+    //状态栏变色
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 
     //--------------------自动化测试-------------------------------
     //espresso 相关,只能操作本应用的Ui

@@ -4,13 +4,6 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-
-    <blog.csdn.net.mchenys.common.widget.view.TitleBar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

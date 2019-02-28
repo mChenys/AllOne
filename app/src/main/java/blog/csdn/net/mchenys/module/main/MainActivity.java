@@ -50,14 +50,16 @@ public class MainActivity extends BaseActivity {
     private String[] mTabTitle = {"", "", "", ""};
 
     //每个tab对应的Fragment
-    private Class[] fragmentArray = {HomeFragment.class,  CircleFragment.class,DesignerHomeFragment.class,
+    private Class[] fragmentArray = {HomeFragment.class, CircleFragment.class, DesignerHomeFragment.class,
             PersonalFragment.class};
 
     private int position;//首次打开的tab位置
+    private TitleBar mTitleBar;
 
     @Override
     public void setTitleBar(TitleBar titleBar) {
-        titleBar.setVisibility(View.GONE);
+        this.mTitleBar = titleBar;
+        mTitleBar.setCenterTv("首页");
     }
 
     @Override
@@ -96,11 +98,12 @@ public class MainActivity extends BaseActivity {
         }
         Log.e("cys", "设备Id:" + AppUtils.getDevId(getApplicationContext()));
     }
+
     @Override
     protected void initView() {
         super.initView();
         FragmentTabHost tabHost = findViewById(android.R.id.tabhost);
-        tabHost.setup(this, getSupportFragmentManager(),  android.R.id.tabcontent);
+        tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         tabHost.getTabWidget().setDividerDrawable(null); //去掉分割线
         for (int i = 0; i < fragmentArray.length; i++) {
             TabHost.TabSpec tabSpec = tabHost.newTabSpec(String.valueOf(i)).setIndicator(getTabItemView(i));
@@ -112,7 +115,7 @@ public class MainActivity extends BaseActivity {
             //设置tabView相关
             View tabView = tabHost.getTabWidget().getChildAt(i);
             tabView.setId(i);
-           // tabView.setBackgroundColor(getResources().getColor(R.color.white));
+            // tabView.setBackgroundColor(getResources().getColor(R.color.white));
             tabView.setOnTouchListener(mTabTouchListener);
         }
         tabHost.setCurrentTab(position);  //默认选中第一个tab
@@ -121,12 +124,20 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabChanged(String tabId) {
                 position = Integer.valueOf(tabId);
+                mTitleBar.setVisibility(View.VISIBLE);
+                if (position == 0) {
+                    mTitleBar.setCenterTv("首页");
+                } else if (position == 1) {
+                    mTitleBar.setCenterTv("圈子");
+                } else if (position == 2) {
+                    mTitleBar.setCenterTv("设计师");
+                } else {
+                    mTitleBar.setVisibility(View.GONE);
+                }
             }
         });
 
     }
-
-
 
 
     /**
@@ -148,8 +159,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
-
     private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
         @Override
         public void onPermissionGranted(int requestCode) {
@@ -167,10 +176,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
 
     }
+
     //tab切换处理
     View.OnTouchListener mTabTouchListener = new View.OnTouchListener() {
         @Override
@@ -189,7 +199,7 @@ public class MainActivity extends BaseActivity {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     View child = v.findViewById(R.id.iv_tab);
                     if (null != child && child instanceof ImageView) {
-                        Drawable drawable = ((ImageView)child).getDrawable();
+                        Drawable drawable = ((ImageView) child).getDrawable();
                         if (null != drawable && drawable instanceof StateListDrawable) {
                             AnimationDrawable anim = getAnimDrawable((StateListDrawable) drawable);
                             if (null != anim) {
@@ -230,7 +240,8 @@ public class MainActivity extends BaseActivity {
             Method getDrawableMethod = slDraClass.getDeclaredMethod("getStateDrawable", int.class);
             int count = (Integer) getStateCountMethod.invoke(userDrawable);
             Log.e("cys", "state count =" + count);
-            out:for (int i = 0; i < count; i++) {
+            out:
+            for (int i = 0; i < count; i++) {
                 int[] stateSet = (int[]) getStateSetMethod.invoke(userDrawable, i);
                 if (stateSet == null || stateSet.length == 0) {
                     Log.e("cys", "state is null");

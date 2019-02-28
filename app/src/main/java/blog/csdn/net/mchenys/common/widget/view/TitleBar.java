@@ -15,14 +15,13 @@ import blog.csdn.net.mchenys.R;
  * 顶部公用布局
  * Created by mChenys on 2012/12/27.
  */
-/**
- * 顶部公用布局
- * Created by mChenys on 2012/12/27.
- */
+
 public class TitleBar extends RelativeLayout {
     private RelativeLayout mTitleBar;
     private TextView mLeftTv, mCenterTv, mRightTv, mSubTitle;
     private ImageButton mLeftIcon, mRightIcon1, mRightIcon2;
+    private RelativeLayout mCustContainerRl;
+    private RelativeLayout mNormalBarRl;
 
     public TitleBar(Context context) {
         this(context, null);
@@ -46,6 +45,8 @@ public class TitleBar extends RelativeLayout {
         mRightIcon1 = findViewById(R.id.ib_right_icon1);
         mRightIcon2 = findViewById(R.id.ib_right_icon2);
         mSubTitle = findViewById(R.id.sub_title);
+        mCustContainerRl = findViewById(R.id.rl_cust_container);
+        mNormalBarRl = findViewById(R.id.rl_normal_bar);
         mLeftIcon.setVisibility(View.GONE);
         mLeftTv.setVisibility(View.GONE);
         mRightTv.setVisibility(View.GONE);
@@ -159,11 +160,17 @@ public class TitleBar extends RelativeLayout {
         return mRightIcon2;
     }
 
-    public void setBgColor(int color) {
-        findViewById(R.id.rl_title_bar).setBackgroundColor(color);
-    }
 
     public void setCenterTvColor(int color) {
         mCenterTv.setTextColor(color);
+    }
+
+    public void addCustView(View view) {
+        if (null != view) {
+            mCustContainerRl.addView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            mNormalBarRl.setVisibility(View.GONE);
+            mCustContainerRl.setVisibility(View.VISIBLE);
+        }
     }
 }

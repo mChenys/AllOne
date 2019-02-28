@@ -24,6 +24,12 @@ public class AppGuideActivity extends BaseActivity {
         return R.layout.activity_app_guide;
     }
 
+    @Override
+    protected void initView() {
+        super.initView();
+        transStatusBar(false);
+    }
+
     public void toMainActivity(View view) {
         JumpUtils.startActivity(this, MainActivity.class);
         finish();
