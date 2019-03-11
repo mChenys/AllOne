@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import org.json.JSONObject;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -166,8 +167,7 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
         HttpUtils.getJSON(isRefresh, req.url, req.headersMap, req.bodyMap, new HttpUtils.JSONCallback() {
             @Override
             public void onFailure(Exception e) {
-                ExceptionUtils.exceptionHandler(e);
-                requestException();
+                requestException(e);
             }
 
             @Override
@@ -242,18 +242,20 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
     /**
      * 请求异常
      */
-    private void requestException() {
+    private void requestException(Exception e) {
+        ExceptionUtils.exceptionHandler(e);
         mRecyclerView.stopRefresh(isLoadMore);
         if (mData.isEmpty()) {
-            if (!NetworkUtils.isNetworkAvailable(mContext)) {
-                mUEView.showError();
-            } else {
+            if (NetworkUtils.isNetworkAvailable(mContext)
+                    && !(e instanceof SocketTimeoutException)) {
                 if (mRecyclerView.getHeadersCount() > 1) {
                     //有头部
                     mUEView.hideAll();
                 } else {
                     mUEView.showNoData();
                 }
+            } else {
+                mUEView.showError();
             }
         }
 
