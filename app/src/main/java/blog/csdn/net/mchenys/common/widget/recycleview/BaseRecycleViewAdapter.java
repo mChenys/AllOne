@@ -55,7 +55,6 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Bas
 
     }
 
-
     protected abstract void bindView(BaseRecycleViewHolder holder, int position, T data);
 
 

@@ -40,6 +40,12 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/pinnedHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pinnedHeader"
+            android:textAllCaps="false"/>
+        <Button
             android:id="@+id/chart1demo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -44,6 +44,7 @@ import blog.csdn.net.mchenys.common.utils.ToastUtils;
 import blog.csdn.net.mchenys.model.Account;
 import blog.csdn.net.mchenys.model.Province;
 import blog.csdn.net.mchenys.module.account.LoginActivity;
+import blog.csdn.net.mchenys.module.demo.pindheader.TestPinnedHeaderActivity;
 import blog.csdn.net.mchenys.module.demo.test.TestChartActivity;
 import blog.csdn.net.mchenys.module.demo.test.TestNestScrollRefresh2Activity;
 import blog.csdn.net.mchenys.module.demo.test.TestNestScrollRefreshActivity;
@@ -199,6 +200,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         findViewById(R.id.testNestscrollRefresh).setOnClickListener(this);
         findViewById(R.id.testNestscrollRefresh2).setOnClickListener(this);
         findViewById(R.id.btn_slide_view).setOnClickListener(this);
+        findViewById(R.id.pinnedHeader).setOnClickListener(this);
 
     }
 
@@ -262,11 +264,15 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.testNestscrollRefresh:
                 startActivity(new Intent(mContext, TestNestScrollRefreshActivity.class));
-                break;  case R.id.testNestscrollRefresh2:
+                break;
+            case R.id.testNestscrollRefresh2:
                 startActivity(new Intent(mContext, TestNestScrollRefresh2Activity.class));
                 break;
             case R.id.btn_slide_view:
-                startActivity(new Intent(mContext,TestSlideViewActivity.class));
+                startActivity(new Intent(mContext, TestSlideViewActivity.class));
+                break;
+            case R.id.pinnedHeader:
+                startActivity(new Intent(mContext, TestPinnedHeaderActivity.class));
                 break;
         }
     }

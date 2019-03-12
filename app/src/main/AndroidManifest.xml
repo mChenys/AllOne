@@ -214,6 +214,7 @@
         <activity android:name=".module.demo.espresso.EspressoActivity"/>
         <activity android:name=".module.demo.espresso.WebViewActivity"/>
         <activity android:name=".module.demo.espresso.RecycleViewActivity"/>
+        <activity android:name=".module.demo.pindheader.TestPinnedHeaderActivity"/>
 
         <!-- 配置自定义推送服务作为推送服务运行的载体-->
         <service

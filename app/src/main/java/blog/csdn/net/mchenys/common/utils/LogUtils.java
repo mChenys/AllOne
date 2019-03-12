@@ -3,7 +3,7 @@ package blog.csdn.net.mchenys.common.utils;
 import android.util.Log;
 
 public class LogUtils {
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     public LogUtils() {
     }
