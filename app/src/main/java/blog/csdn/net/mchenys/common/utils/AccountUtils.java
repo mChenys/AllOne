@@ -187,8 +187,8 @@ public class AccountUtils {
             accountJson.put("smallHeaderUrl", account.getSmallHeaderUrl());
             accountJson.put("bigHeaderUrl", account.getBigHeaderUrl());
             accountJson.put("phoneNum", account.getPhoneNum());
-            PreferencesUtils.setPreferences(AllOneApplication.mAppContext, Constant.ACCOUNT_FILE_NAME,
-                    Constant.ACCOUNT_KEY, accountJson.toString());
+            PreferencesUtils.setPreferences(AllOneApplication.mAppContext, Constant.KEY_ACCOUNT_FILE_NAME,
+                    Constant.KEY_ACCOUNT_KEY, accountJson.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -201,7 +201,7 @@ public class AccountUtils {
      */
     public static Account getLoginAccount() {
         String account_message = PreferencesUtils.getPreference(AllOneApplication.mAppContext,
-                Constant.ACCOUNT_FILE_NAME, Constant.ACCOUNT_KEY, "");
+                Constant.KEY_ACCOUNT_FILE_NAME, Constant.KEY_ACCOUNT_KEY, "");
         Account account = null;
         try {
             if (!StringUtils.isEmpty(account_message)) {
@@ -260,6 +260,6 @@ public class AccountUtils {
             Account account = getLoginAccount();
             account.reset();
         }
-        PreferencesUtils.clearPreference(AllOneApplication.mAppContext, Constant.ACCOUNT_FILE_NAME);
+        PreferencesUtils.clearPreference(AllOneApplication.mAppContext, Constant.KEY_ACCOUNT_FILE_NAME);
     }
 }

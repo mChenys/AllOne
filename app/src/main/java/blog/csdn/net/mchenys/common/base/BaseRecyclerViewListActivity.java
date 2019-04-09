@@ -110,8 +110,10 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
                         startRefresh();
                     }
                 } else {
-                    mUEView.showError();
                     ToastUtils.showShort(mContext, getString(R.string.notify_no_network));
+                    if (mData.isEmpty()) {
+                        mUEView.showError();
+                    }
                     mRecyclerView.refreshComplete();
                 }
             }
@@ -146,10 +148,8 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
         loadData(true);
     }
 
-    @Override
     public void autoRefresh(Bundle bundle) {
         if (null == bundle) bundle = new Bundle();
-        super.autoRefresh(bundle);
         bundle.putBoolean(Constant.KEY_REFRESH, true);
         mUEView.hideAll();
         mRecyclerView.autoRefresh(bundle);
@@ -275,11 +275,10 @@ public abstract class BaseRecyclerViewListActivity<T> extends BaseActivity {
         } else {
             mUEView.hideAll();
         }
-        if (isLoadMore && pageTotal <= pageNo && isShowNoMore) {
+        if (pageTotal <= pageNo && isShowNoMore) {
             mRecyclerView.setNoMore(true);
-        } else {
-            mRecyclerView.stopRefresh(isLoadMore);
         }
+        mRecyclerView.stopRefresh(isLoadMore);
     }
 
     /**

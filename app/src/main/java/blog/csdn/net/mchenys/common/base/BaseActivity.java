@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
+import blog.csdn.net.mchenys.common.config.Env;
 import blog.csdn.net.mchenys.common.utils.JumpUtils;
+import blog.csdn.net.mchenys.common.utils.LogUtils;
 import blog.csdn.net.mchenys.common.utils.ScreenShotListenManager;
 import blog.csdn.net.mchenys.common.utils.UIUtils;
 import blog.csdn.net.mchenys.common.widget.dialog.ScreenShotDialog;
@@ -42,7 +44,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private FrameLayout mContentLayout;
     private View mNightMode;
 
-    private boolean isPush;
+    private boolean isPush; //是否是推送
+    private boolean isRunning;//推送打开前,App是否已启动
     private long exitTime;
     protected Activity mContext;
     //默认开启点击软键盘以外的区域收起软键盘
@@ -62,17 +65,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_base);
         mContext = this;
+        initIntent();
         initData();
         initView();
         initListener();
         loadData();
     }
-
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        initIntent();
+    }
 
     protected abstract Integer getLayoutResID();
 
     protected void initData() {
-        initPush();
+
     }
 
     protected void initView() {
@@ -107,34 +116,38 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void initPush() {
+    protected void initIntent() {
         Intent intent = this.getIntent();
         if (intent != null) {
             isPush = intent.getBooleanExtra(Constant.KEY_PUSH, false);
-            if (isPush) {
-                Bundle bundle = intent.getExtras();
-                String geTastId = bundle.getString(Constant.GE_TASKID, "");
-                String geMsgId = bundle.getString(Constant.GE_MSGID, "");
-                //  PushManager.getInstance().sendFeedbackMessage(this, geTastId, geMsgId, 90001);
-            }
+            isRunning = intent.getBooleanExtra(Constant.KEY_RUNNING, false);
+            LogUtils.e("BaseActivity", "isPush=" + isPush);
         }
     }
 
     /**
      * 是否要透明状态栏,如果透明,则布局会延伸到状态栏下
      *
-     * @param trans 是否透明
+     * @param trans 是否透明 ,true:透明 false:不透明
      */
     public void transStatusBar(boolean trans) {
-        if (!trans) {
+        if (trans) {
+            UIUtils.setStatusBarTrans(this);
+            mRootView.setFitsSystemWindows(false);
+            //适配刘海屏
+            //需要设置上边距的子布局根id统一用这个
+            View childRootLayout = findViewById(R.id.child_root_layout);
+            if (null != childRootLayout) {
+                childRootLayout.setPadding(0, Env.statusBarHeight, 0, 0);
+            }
+        } else {
             mRootView.setFitsSystemWindows(true);
             UIUtils.setStatusBarColor(this, R.color.white);
             UIUtils.setLightStatusBar(this, true);
-        } else {
-            UIUtils.setStatusBarTrans(this);
-            mRootView.setFitsSystemWindows(false);
+
         }
     }
+
 
     /**
      * 用于添加蒙层,或者其他view覆盖在主视图之上
@@ -172,20 +185,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         mNightMode.setVisibility(on ? View.VISIBLE : View.GONE);
     }
 
-    public abstract void setTitleBar(TitleBar titleBar);
+    public void setTitleBar(TitleBar titleBar) {
+        titleBar.setLeft(null, null, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {
+        if (onJpushBackPress()) {
+            return;
+        }
         if (isHomePage()) {
             onHomePageBackPress();
-        } else if (isPush) {
-            isPush = false;
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            JumpUtils.toActivity(this, intent);
-            finish();
         } else {
-            finish();
+            this.finish();
         }
     }
 
@@ -211,8 +228,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void autoRefresh(Bundle bundle) {
-        //empty
+    private boolean onJpushBackPress() {
+        if (isPush) {
+            isPush = false;
+            if (isHomePage()) { //打开的是主页,提示是否要退出App
+                if (System.currentTimeMillis() - exitTime > 2000) {
+                    exitTime = System.currentTimeMillis();
+                    Toast.makeText(this, getString(R.string.app_exit), Toast.LENGTH_SHORT).show();
+                }
+            } else if (!isRunning) {
+                //未启动时返回需要启动MainActivity
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                JumpUtils.toActivity(this, intent);
+                isRunning = true;
+                finish();
+            } else { //已启动直接返回上一级页面
+                finish();
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

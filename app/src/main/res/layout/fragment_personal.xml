@@ -40,74 +40,11 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/pinnedHeader"
+            android:id="@+id/btn_demo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="pinnedHeader"
+            android:text="Demo"
             android:textAllCaps="false"/>
-        <Button
-            android:id="@+id/chart1demo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="chart1demo"
-            android:textAllCaps="false"/>
-
-        <Button
-            android:id="@+id/smartRefresh1demo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="smartRefresh1demo"
-            android:textAllCaps="false"/>
-
-        <Button
-            android:id="@+id/testNestscrollRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="testNestscrollRefresh"
-            android:textAllCaps="false"/>
-
-        <Button
-            android:id="@+id/testNestscrollRefresh2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="testNestscrollRefresh2"
-            android:textAllCaps="false"/>
-
-        <Button
-            android:id="@+id/btn_to_page_ternimal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="显示分页终端"/>
-
-        <Button
-            android:id="@+id/btn_current_city"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我的小区"/>
-
-        <Button
-            android:id="@+id/btn_house_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="户型"/>
-
-        <Button
-            android:id="@+id/btn_area"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="省市区"/>
-
-        <Button
-            android:id="@+id/btn_show_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="浏览图片"/>
-
-        <Button
-            android:id="@+id/btn_show_pic2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="浏览图片2"/>
 
         <Button
             android:id="@+id/btn_login_out"
@@ -115,12 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="注销"/>
-
-        <Button
-            android:text="滑动验证码"
-            android:id="@+id/btn_slide_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

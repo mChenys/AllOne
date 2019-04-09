@@ -215,6 +215,11 @@
         <activity android:name=".module.demo.espresso.WebViewActivity"/>
         <activity android:name=".module.demo.espresso.RecycleViewActivity"/>
         <activity android:name=".module.demo.pindheader.TestPinnedHeaderActivity"/>
+        <activity android:name=".module.demo.DemoActivity"/>
+        <activity android:name=".module.demo.pagersnaphelper.PagerSnapHelperActivity"/>
+        <activity android:name=".module.demo.pagersnaphelper.VideoListActivity"/>
+        <activity android:name=".module.demo.pagersnaphelper.TextureListActivity"/>
+        <activity android:name=".module.demo.douyin.DouYinVideoActivity"/>
 
         <!-- 配置自定义推送服务作为推送服务运行的载体-->
         <service

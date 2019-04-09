@@ -146,6 +146,34 @@ public class ImageCacheUtils {
     }
 
     /**
+     * 添加Bitmap到磁盘
+     *
+     * @param url
+     * @param bitmap
+     */
+    public void addBitmapToDiskCache(String url, Bitmap bitmap) {
+        if (mDiskLruCache == null) {
+            return ;
+        }
+        try {
+            String key = hashKeyFormUrl(url);
+            DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+            if (editor != null) {
+                OutputStream outputStream = editor.newOutputStream(DISK_CACHE_INDEX);
+                boolean success = bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+                if (success) {
+                    editor.commit();
+                } else {
+                    editor.abort();
+                }
+                mDiskLruCache.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 将输入流保存到自定的输出流中
      *
      * @param inputStream

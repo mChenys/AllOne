@@ -21,6 +21,7 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 
 import blog.csdn.net.mchenys.common.config.Env;
 import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
@@ -92,6 +93,7 @@ public class AllOneApplication extends Application {
         Env.screenWidth = rotation == 0 ? metrics.widthPixels : metrics.heightPixels;
         Env.screenHeight = rotation == 0 ? metrics.heightPixels : metrics.widthPixels;
         Env.density = metrics.density;
+        Env.statusBarHeight = getStatusBarHeight(mAppContext);
     }
 
     private void initAppVersionInfo() {
@@ -114,16 +116,25 @@ public class AllOneApplication extends Application {
 
     }
 
-    public void testRoot() {
+    /**
+     * 获取状态栏高度/像素
+     *
+     * @return
+     */
+    private static int getStatusBarHeight(Context context) {
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
         try {
-            Process su = Runtime.getRuntime().exec("su");
-            OutputStream outputStream = su.getOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            dataOutputStream.writeBytes("\n");
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
-
+        return statusBarHeight;
     }
 }

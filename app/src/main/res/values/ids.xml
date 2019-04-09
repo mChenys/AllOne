@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="FocusView_id_view_pager" type="id">id_view_pager</item>
-    <item name="FocusView_id_desc_tv" type="id">id_desc_tv</item>
-    <item name="FocusView_id_indicator" type="id">id_indicator</item>
+    <item name="FocusView_id_view_pager" type="id"/>
+    <item name="FocusView_id_desc_tv" type="id"/>
+    <item name="FocusView_id_indicator" type="id"/>
+
+    <!--子视图的顶级view 用于统一设置paddingTop 适配刘海屏-->
+    <item name="child_root_layout" type="id"/>
 </resources>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/pinnedHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pinnedHeader"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/chart1demo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="chart1demo"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/smartRefresh1demo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="smartRefresh1demo"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/testNestscrollRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="testNestscrollRefresh"
+            android:textAllCaps="false"/>
+
+
+        <Button
+            android:id="@+id/btn_to_page_ternimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="显示分页终端"/>
+
+        <Button
+            android:id="@+id/btn_current_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的小区"/>
+
+        <Button
+            android:id="@+id/btn_house_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="户型"/>
+
+        <Button
+            android:id="@+id/btn_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="省市区"/>
+
+        <Button
+            android:id="@+id/btn_show_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="浏览图片"/>
+
+        <Button
+            android:id="@+id/btn_show_pic2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="浏览图片2"/>
+
+
+
+        <Button
+            android:id="@+id/btn_slide_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="滑动验证码"/>
+
+
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/btn_pagersnaphelper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PagerSnapHelper"/>
+
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/btn_video_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VideoListActivity"/>
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/btn_texture_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextureListActivity"/>
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/btn_douyinvideo_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DouYinVideoActivity"/>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

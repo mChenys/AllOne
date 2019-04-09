@@ -290,11 +290,10 @@ public abstract class BaseRecyclerViewListFragment<T> extends BaseFragment {
         } else {
             mUEView.hideAll();
         }
-        if (isLoadMore && pageTotal <= pageNo && isShowNoMore) {
+        if (pageTotal <= pageNo && isShowNoMore) {
             mRecyclerView.setNoMore(true);
-        } else {
-            mRecyclerView.stopRefresh(isLoadMore);
         }
+        mRecyclerView.stopRefresh(isLoadMore);
         onReqComplete(isLoadMore);
     }
 

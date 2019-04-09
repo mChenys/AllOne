@@ -15,6 +15,7 @@ public class Env {
     public static String packageName;
     public static int screenWidth;
     public static int screenHeight;
+    public static int statusBarHeight;
     public static float density;
     public static String userApp = "PCONLINE_SHOP_ANDR";
 

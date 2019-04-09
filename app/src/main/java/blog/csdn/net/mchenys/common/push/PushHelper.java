@@ -78,49 +78,40 @@ public class PushHelper {
 
             boolean isRunning = AppUtils.isRunning(context);
             PendingIntent messagePendingIntent = null;
-            Intent messageIntent;
+            Intent messageIntent = null;
             REQUEST_CODE++;
-            if (MESSAGE_TYPE == MESSAGE_TXT) {
-                if (!isRunning) {
+            if (MESSAGE_TYPE == MESSAGE_TXT) { //普通文本
+                if (!isRunning) { //单纯打开App
                     messageIntent = new Intent(context, MainActivity.class);
-                    messageIntent.putExtra(Constant.KEY_PUSH, true);
-                    messageIntent.putExtra(Constant.GE_TASKID, taskId);
-                    messageIntent.putExtra(Constant.GE_MSGID, geMessageId);
-                    messagePendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, messageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 } else {
                     //单纯带入前端
                     messageIntent = new Intent();
-                    messageIntent.putExtra(Constant.GE_TASKID, taskId);
-                    messageIntent.putExtra(Constant.GE_MSGID, geMessageId);
                     messageIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                    messagePendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, messageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 }
             } else if (MESSAGE_TYPE == MESSAGE_EVENT) {  //跳转协议
                 if (messageUrl != null && URIUtils.hasURI(messageUrl)) {
                     messageIntent = URIUtils.getIntent(messageUrl, context);
-                    messageIntent.putExtra(Constant.GE_TASKID, taskId);
-                    messageIntent.putExtra(Constant.GE_MSGID, geMessageId);
-                    messageIntent.putExtra(Constant.KEY_PUSH, true);
                     messageIntent.setData(Uri.parse(messageUrl));
-                    messagePendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 } else {
                     if (!isRunning) {
                         messageIntent = new Intent(context, MainActivity.class);
-                        messageIntent.putExtra(Constant.GE_TASKID, taskId);
-                        messageIntent.putExtra(Constant.GE_MSGID, geMessageId);
-                        messageIntent.putExtra(Constant.KEY_PUSH, true);
-                        messagePendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, messageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     } else {
                         //单纯带入前端
                         messageIntent = new Intent();
-                        messageIntent.putExtra(Constant.GE_TASKID, taskId);
-                        messageIntent.putExtra(Constant.GE_MSGID, geMessageId);
                         messageIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                        messagePendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, messageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     }
                 }
+
             } else if (MESSAGE_TYPE == MESSAGE_NO_JSON) {
                 return;
+            }
+
+            if (null != messageIntent) {
+                messageIntent.putExtra(Constant.GE_TASKID, taskId);
+                messageIntent.putExtra(Constant.GE_MSGID, geMessageId);
+                messageIntent.putExtra(Constant.KEY_RUNNING, isRunning);
+                messagePendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, messageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
             }
 
             //创建通知

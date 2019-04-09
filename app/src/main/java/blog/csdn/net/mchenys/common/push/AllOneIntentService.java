@@ -14,7 +14,8 @@ import com.igexin.sdk.message.GTTransmitMessage;
  * Created by mChenys on 2018/7/19.
  */
 
-public class AllOneIntentService extends GTIntentService {
+public
+class AllOneIntentService extends GTIntentService {
 
     public AllOneIntentService() {
 
@@ -54,4 +55,5 @@ public class AllOneIntentService extends GTIntentService {
     public void onNotificationMessageClicked(Context context, GTNotificationMessage gtNotificationMessage) {
 
     }
+
 }

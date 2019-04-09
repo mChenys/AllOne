@@ -20,6 +20,7 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Bas
     protected Context mContext;
     private int[] layoutIds;
     private BaseRecycleViewHolder mHolder;
+    private LayoutInflater inflater;
 
     public BaseRecycleViewAdapter(Context ctx, List<T> data, int layoutId) {
         this(ctx, data, new int[]{layoutId});
@@ -29,13 +30,16 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Bas
         this.mContext = ctx;
         this.mData = data;
         this.layoutIds = layoutIds;
+        inflater = LayoutInflater.from(mContext);
     }
 
     @Override
     public BaseRecycleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BaseRecycleViewHolder[] holders = new BaseRecycleViewHolder[layoutIds.length];
+      /*  BaseRecycleViewHolder[] holders = new BaseRecycleViewHolder[layoutIds.length];
         holders[viewType] = new BaseRecycleViewHolder(LayoutInflater.from(mContext).inflate(layoutIds[viewType], parent, false));
         mHolder = holders[viewType];
+        return mHolder;*/
+        mHolder = new BaseRecycleViewHolder(inflater.inflate(layoutIds[viewType], parent, false));
         return mHolder;
     }
 
