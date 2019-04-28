@@ -60,6 +60,8 @@ public class Urls {
     public static final String SLIDE_CAPTCHA_THUMB = "http://captcha.pconline.com.cn/captcha/slideCaptchaThumb";
     public static final String SLIDE_CAPTCHA_CHECK = "http://captcha.pconline.com.cn/captcha/slidecaptcha_check.jsp";
 
+    public static final String PRODUCT_DETAIL = "https://csc.pconline.com.cn/s-300/buy/recommend/getSkuInfo.xsp";
+
 
     public static String getTargetUrl(String url) {
         if (URL_TYPE == Env.TEST) {

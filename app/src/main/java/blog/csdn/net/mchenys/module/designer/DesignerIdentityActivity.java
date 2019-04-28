@@ -154,7 +154,7 @@ public class DesignerIdentityActivity extends BaseActivity implements View.OnCli
 
     private void goNext(int currPosition) {
         mViewFlipper.setInAnimation(this, R.anim.slide_right_in);
-        mViewFlipper.setInAnimation(this, R.anim.slide_left_out);
+        mViewFlipper.setOutAnimation(this, R.anim.slide_left_out);
         mViewFlipper.showNext();
         currPagePosition = currPosition;
     }
@@ -164,7 +164,7 @@ public class DesignerIdentityActivity extends BaseActivity implements View.OnCli
             finish();
         } else {
             mViewFlipper.setInAnimation(this, R.anim.slide_left_in);
-            mViewFlipper.setInAnimation(this, R.anim.slide_right_out);
+            mViewFlipper.setOutAnimation(this, R.anim.slide_right_out);
             mViewFlipper.showPrevious();
             currPagePosition--;
         }

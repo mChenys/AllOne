@@ -17,6 +17,7 @@ public interface Constant {
      String KEY_POSITION = "key_position";
      String KEY_RUNNING = "key_running";
      String KEY_REFRESH = "key_refresh";
+     String KEY_ID = "key_id";
 
      //requestCode
      int REQ_WEB_LOGIN = 200;//webView登录

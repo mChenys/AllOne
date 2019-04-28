@@ -9,4 +9,5 @@
     <string name="refreshing_complete_label">刷新成功</string>
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="asset_statements" translatable="false">[{\n  \"relation\": [\"delegate_permission/common.handle_all_urls\"],\n  \"target\": {\n    \"namespace\": \"web\",\n    \"site\": \"https://www.test.com\",\n  }\n}]</string>
 </resources>
