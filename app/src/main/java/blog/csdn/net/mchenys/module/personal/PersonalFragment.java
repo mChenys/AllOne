@@ -20,7 +20,7 @@ import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.base.BaseFragment;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
-import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
+import blog.csdn.net.mchenys.common.okhttp2.x.HttpManager;
 import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBackHandler;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
 import blog.csdn.net.mchenys.common.photo.crop.CropActivity;
@@ -166,7 +166,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         Map<String, String> headersMap = new HashMap<>();
         headersMap.put("Cookie", Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());
         String url = "http://upc.pcbaby.com.cn/upload_head.jsp";
-        OkHttpEngine.getInstance().asyncPostImage(fileName, fileName, url, new RequestCallBackHandler() {
+        HttpManager.getInstance().asyncPostImage(fileName, fileName, url, new RequestCallBackHandler() {
             @Override
             public void onFailure(Exception e) {
                 ToastUtils.showShort("头像上传失败");

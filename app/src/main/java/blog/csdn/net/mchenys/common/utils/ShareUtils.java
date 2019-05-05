@@ -61,7 +61,7 @@ public class ShareUtils {
             wapurl = "  ";
         }
         if (!TextUtils.isEmpty(hideContent)) { //分享到新浪的隐藏内容
-            hideContent += " (@太平洋电脑网)";
+            hideContent += " (@mChenys)";
         }
         shareEntity.setTitle(title);
         shareEntity.setDescription(desc);
@@ -88,12 +88,15 @@ public class ShareUtils {
      * @param type:SnsConfig#SHARE_SINA,SHARE_TENCENT,SHARE_WECHAT,SHARE_WECHAT_FRIEND
      */
     public static void shareWithoutSurface(Context context, SnsShareContent shareContent, Callback callback, int type) {
-        if (shareContent == null) return;
-        SnsShareListener snsShareListener = getMFSnsShareListener(context, callback);
-        if (!TextUtils.isEmpty(shareContent.getImage())) {
+        if (shareContent == null) {
+            ToastUtils.showShort(context, "获取分享数据失败");
+            return;
+        }
+        SnsShareListener mfSnsShareListener = getMFSnsShareListener(callback);
+        if (!StringUtils.isEmpty(shareContent.getImage())) {
             SnsImageShareUtil.setImage(context, shareContent.getImage());
         }
-        SnsManager.getSnsShare().share(context, type, shareContent, snsShareListener);
+        SnsManager.getSnsShare().share(context, type, shareContent, mfSnsShareListener);
     }
 
 
@@ -106,133 +109,91 @@ public class ShareUtils {
      */
     public static void share(final Context context, SnsShareContent shareContent, final Callback callback) {
         if (shareContent == null) return;
-        shareOri(context, shareContent, new SnsShareListener() {
-
-            @Override
-            public void onSucceeded(Context arg0) {
-                if (null != callback) {
-                    callback.onSucceed();
-                }
-                if (arg0 instanceof Activity) {
-                    ((Activity) arg0).finish();
-                }
-            }
-
-            @Override
-            public void onTencentQQSucceeded(Context context, Object response) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSinaSucceeded(Context arg0) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
-            }
-
-
-            @Override
-            public void onFailed(Context arg0, String arg1) {
-                if (null != callback) {
-                    callback.onFailed();
-                }
-                if (arg0 instanceof Activity) {
-                    ((Activity) arg0).finish();
-                }
-                Toast.makeText(arg0, "分享失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onTencentFailed(Context context, Object o) {
-                if (context instanceof Activity) {
-                    ((Activity) context).finish();
-                }
-                Toast.makeText(context, "分享失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onWeiXinSucceeded(Context arg0) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
-            }
-
-
-            @Override
-            public void onWeiXinFriendsSucceeded(Context arg0) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
-            }
-
-
-            @Override
-            public void onWeiXinNoSupported(Context arg0, boolean arg1) {
-                if (!arg1) {
-                    Toast.makeText(context, "您尚未安装微信或微信版本过低！", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        shareOri(context, shareContent, getMFSnsShareListener(callback));
 
     }
 
-    public static SnsShareListener getMFSnsShareListener(final Context context, final Callback callback) {
-        SnsShareListener snsShareListener = new SnsShareListener() {
+    private static SnsShareListener listeners;
+
+    public static SnsShareListener getListener() {
+        return listeners;
+    }
+
+    public static SnsShareListener getMFSnsShareListener(final Callback callback) {
+        listeners = new SnsShareListener() {
 
             @Override
             public void onSucceeded(Context arg0) {
                 if (null != callback) {
                     callback.onSucceed();
                 }
+//                ToastUtils.showShort(arg0, "分享成功！");
             }
 
             @Override
             public void onTencentQQSucceeded(Context context, Object response) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort(context, "分享成功！");
             }
 
             @Override
             public void onSinaSucceeded(Context arg0) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort(arg0, "分享成功！");
             }
 
+            @Override
+            public void onTextSharedCopy(Context context) {
+                super.onTextSharedCopy(context);
+                ToastUtils.showShort(context, "复制成功！");
+            }
 
             @Override
             public void onFailed(Context arg0, String arg1) {
                 if (null != callback) {
                     callback.onFailed();
                 }
-                Toast.makeText(arg0, "分享失败", Toast.LENGTH_SHORT).show();
+
+                if ("mf_share_failed".equals(arg1))
+                    Toast.makeText(arg0, "分享失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onTencentFailed(Context context, Object o) {
+
             }
 
             @Override
             public void onWeiXinSucceeded(Context arg0) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort(arg0, "分享成功！");
+
             }
 
 
             @Override
             public void onWeiXinFriendsSucceeded(Context arg0) {
-                Toast.makeText(context, "分享成功！", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort(arg0, "分享成功！");
+
             }
 
 
             @Override
             public void onWeiXinNoSupported(Context arg0, boolean arg1) {
                 if (!arg1) {
-                    Toast.makeText(context, "您尚未安装微信或微信版本过低！", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(arg0, "您尚未安装微信或微信版本过低", 0);
                 }
             }
 
         };
-        return snsShareListener;
+        return listeners;
     }
 
+    /**
+     * 带界面的分享
+     * @param context
+     * @param content
+     * @param listener
+     */
     public static void shareOri(Context context, SnsShareContent content, SnsShareListener listener) {
-        Intent intent = new Intent(context, SnsSelectPlatformNewActivity.class);
-        intent.putExtra("content", content);
-        SnsSelectPlatformNewActivity.setShareListener(listener);
-        SnsManager.setSnsShare(new SnsShareEngine());
-        context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.bottom_fade_in, R.anim.bottom_fade_out);
+        shareOri(context,content,listener,R.anim.bottom_fade_in, R.anim.bottom_fade_out);
     }
 
     public static void shareOri(Context context, SnsShareContent content, SnsShareListener listener, int animIn,

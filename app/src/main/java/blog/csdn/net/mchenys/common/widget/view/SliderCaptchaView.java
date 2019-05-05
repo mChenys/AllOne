@@ -30,7 +30,7 @@ import javax.crypto.Cipher;
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
-import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
+import blog.csdn.net.mchenys.common.okhttp2.x.HttpManager;
 import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBackHandler;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
 import blog.csdn.net.mchenys.common.utils.RSAUtils;
@@ -129,7 +129,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
         String url = Urls.SLIDE_CAPTCHA_FLUSH + "?" + randomNum;
         HashMap<String, String> header = new HashMap<>();
         header.put("Referer", "http://dev2.pconline.com.cn:81/captcha/slidecaptcha_test.jsp");
-        OkHttpEngine.getInstance().asyncRequest(url, new RequestCallBackHandler() {
+        HttpManager.getInstance().asyncRequest(url, new RequestCallBackHandler() {
             @Override
             public void onFailure(Exception e) {
 
@@ -149,7 +149,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
                 }
             }
 
-        }, OkHttpEngine.RequestType.FORCE_NETWORK, OkHttpEngine.RequestMode.GET, "", header, null);
+        }, HttpManager.RequestType.FORCE_NETWORK, HttpManager.RequestMode.GET, "", header, null);
     }
 
     /**
@@ -163,7 +163,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
         HashMap<String, String> header = new HashMap<>();
         header.put("Cookie", cookie);
         header.put("Referer", "http://dev2.pconline.com.cn:81/captcha/slidecaptcha_test.jsp");
-        OkHttpEngine.getInstance().asyncRequestForInputStream(url, new RequestCallBackHandler() {
+        HttpManager.getInstance().asyncRequestForInputStream(url, new RequestCallBackHandler() {
             @Override
             public void onFailure(Exception e) {
                 isBigLoadSuccess = false;
@@ -185,7 +185,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
 
 
 
-        }, OkHttpEngine.RequestMode.GET, "", header, null);
+        }, HttpManager.RequestMode.GET, "", header, null);
     }
 
     /**
@@ -199,7 +199,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
         HashMap<String, String> header = new HashMap<>();
         header.put("Cookie", cookie);
         header.put("Referer", "http://dev2.pconline.com.cn:81/captcha/slidecaptcha_test.jsp");
-        OkHttpEngine.getInstance().asyncRequestForInputStream(url, new RequestCallBackHandler() {
+        HttpManager.getInstance().asyncRequestForInputStream(url, new RequestCallBackHandler() {
             @Override
             public void onFailure(Exception e) {
                 isThumbLoadSuccess = false;
@@ -221,7 +221,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
             }
 
 
-        }, OkHttpEngine.RequestMode.GET, "", header, null);
+        }, HttpManager.RequestMode.GET, "", header, null);
     }
 
 
@@ -236,7 +236,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
         HashMap<String, String> header = new HashMap<>();
         header.put("Cookie", cookie);
         header.put("Referer", "http://dev2.pconline.com.cn:81/captcha/slidecaptcha_test.jsp");
-        OkHttpEngine.getInstance().asyncRequest(url, new RequestCallBackHandler() {
+        HttpManager.getInstance().asyncRequest(url, new RequestCallBackHandler() {
             @Override
             public void onFailure(Exception e) {
 
@@ -270,7 +270,7 @@ public class SliderCaptchaView extends FrameLayout implements View.OnTouchListen
                     e.printStackTrace();
                 }
             }
-        }, OkHttpEngine.RequestType.FORCE_NETWORK, OkHttpEngine.RequestMode.GET, "", header, null);
+        }, HttpManager.RequestType.FORCE_NETWORK, HttpManager.RequestMode.GET, "", header, null);
     }
 
 

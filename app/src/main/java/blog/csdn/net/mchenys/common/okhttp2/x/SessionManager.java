@@ -46,8 +46,8 @@ public class SessionManager {
             this.onResumeTime = System.currentTimeMillis();
             if(this.onResumeTime - this.onStopTime > sessionTimeout) {
                 this.session = this.createSeesion();
-                if(OkHttpEngine.getInstance() != null) {
-                    OkHttpEngine.getInstance().clearUrls();
+                if(HttpManager.getInstance() != null) {
+                    HttpManager.getInstance().clearUrls();
                 }
             }
         }

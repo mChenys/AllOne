@@ -1,12 +1,11 @@
 package blog.csdn.net.mchenys;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-
+import android.support.multidex.MultiDexApplication;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
@@ -18,13 +17,10 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AuthInfo;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 
 import blog.csdn.net.mchenys.common.config.Env;
-import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
+import blog.csdn.net.mchenys.common.okhttp2.x.HttpManager;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 
 
@@ -32,7 +28,7 @@ import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
  * Created by mChenys on 2017/12/26.
  */
 
-public class AllOneApplication extends Application {
+public class AllOneApplication extends MultiDexApplication {
     public static Context mAppContext;
 
     //配置第三方登录信息
@@ -82,7 +78,7 @@ public class AllOneApplication extends Application {
     }
 
     private void initFramework() {
-        new OkHttpEngine.Builder(this).build();
+        new HttpManager.Builder(this).build();
 
     }
 

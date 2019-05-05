@@ -55,10 +55,10 @@ import blog.csdn.net.mchenys.common.okhttp2.x.model.ProgressResponseBody;
 /**
  * Created by mChenys on 2016/9/9.
  */
-public class OkHttpEngine {
+public class HttpManager {
 
     private static final boolean DEBUG = true;
-    private static final String TAG = "OkHttpEngine";
+    private static final String TAG = "HttpManager";
     private static final long CACHE_SIZE = 10485760L; //10M
     private static final long CACHE_TIME = 31536000L;//1year
     private static final long CONNECT_TIMEOUT = 10L;
@@ -72,15 +72,15 @@ public class OkHttpEngine {
     private final Map<String, String> partHeaders;
     private long cacheTime;
     private static OkHttpClient client;
-    private static OkHttpEngine mOkHttpEngine = new OkHttpEngine((File) null, (Cache) null, (Map) null, CONNECT_TIMEOUT, READ_TIMEOUT, WRITE_TIMEOUT, CACHE_TIME);
+    private static HttpManager mHttpManager = new HttpManager((File) null, (Cache) null, (Map) null, CONNECT_TIMEOUT, READ_TIMEOUT, WRITE_TIMEOUT, CACHE_TIME);
     private List<String> urls;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType FILE = MediaType.parse("multipart/form-data; charset=utf-8");
     private static final MediaType IMAGE_JPG = MediaType.parse("image/pjpeg");
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
 
-    private OkHttpEngine(File cacheDir, Cache cache, Map<String, String> partHeaders, long connectTimeout,
-                         long readTimeout, long writeTimeout, long cacheTime) {
+    private HttpManager(File cacheDir, Cache cache, Map<String, String> partHeaders, long connectTimeout,
+                        long readTimeout, long writeTimeout, long cacheTime) {
         if (mContext != null) {
             SessionManager.init(mContext);
             urls = new ArrayList();
@@ -100,7 +100,7 @@ public class OkHttpEngine {
         this.setHostnameVerifier();
     }
 
-    public static OkHttpEngine getInstance() {
+    public static HttpManager getInstance() {
         if (cache != null && cache.isClosed()) {
             try {
                 cache.initialize();
@@ -108,7 +108,7 @@ public class OkHttpEngine {
                 var1.printStackTrace();
             }
         }
-        return mOkHttpEngine;
+        return mHttpManager;
     }
 
     //支持https
@@ -1418,22 +1418,22 @@ public class OkHttpEngine {
             return this;
         }
 
-        public OkHttpEngine build() {
+        public HttpManager build() {
             if (this.cacheDir == null) {
-                this.cacheDir = OkHttpEngine.createCacheDir(this.context);
+                this.cacheDir = HttpManager.createCacheDir(this.context);
             }
             if (this.cacheSize <= 0L) {
                 this.cacheSize = CACHE_SIZE;
             }
             this.cache = new Cache(this.cacheDir, this.cacheSize);
-            OkHttpEngine.mContext = this.context.getApplicationContext();
+            HttpManager.mContext = this.context.getApplicationContext();
 
             if (this.context != null) {
                 this.context.registerActivityLifecycleCallbacks(new SessionActivityLifecycleCallbacks());
             }
-            OkHttpEngine.mOkHttpEngine = new OkHttpEngine(this.cacheDir, this.cache, this.partHeaders,
+            HttpManager.mHttpManager = new HttpManager(this.cacheDir, this.cache, this.partHeaders,
                     this.connectTimeout, this.readTimeout, this.writeTimeout, this.cacheTime);
-            return OkHttpEngine.mOkHttpEngine;
+            return HttpManager.mHttpManager;
         }
 
     }

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
-import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
+import blog.csdn.net.mchenys.common.okhttp2.x.HttpManager;
 import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBack;
 import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBackHandler;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
@@ -35,15 +35,15 @@ public class HttpUtils {
 
     public static void getJSON(boolean forceNetwork, final String url, Map<String, String> headersMap, Map<String, String> bodyMap,
                                final JSONCallback handler) {
-        OkHttpEngine.getInstance().asyncRequest(url, new MyRequestCallBackHandler(handler), forceNetwork ? OkHttpEngine.RequestType.FORCE_NETWORK :
-                        OkHttpEngine.RequestType.CACHE_FIRST,
-                OkHttpEngine.RequestMode.GET, "", headersMap, bodyMap);
+        HttpManager.getInstance().asyncRequest(url, new MyRequestCallBackHandler(handler), forceNetwork ? HttpManager.RequestType.FORCE_NETWORK :
+                        HttpManager.RequestType.CACHE_FIRST,
+                HttpManager.RequestMode.GET, "", headersMap, bodyMap);
     }
 
     public static OkResponse getResponse(boolean forceNetwork, String url, Map<String, String> headersMap, Map<String, String> bodyMap) {
         try {
-            return OkHttpEngine.getInstance().syncRequest(url, forceNetwork ? OkHttpEngine.RequestType.FORCE_NETWORK :
-                    OkHttpEngine.RequestType.CACHE_FIRST, OkHttpEngine.RequestMode.GET, "", headersMap, bodyMap);
+            return HttpManager.getInstance().syncRequest(url, forceNetwork ? HttpManager.RequestType.FORCE_NETWORK :
+                    HttpManager.RequestType.CACHE_FIRST, HttpManager.RequestMode.GET, "", headersMap, bodyMap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,13 +51,13 @@ public class HttpUtils {
     }
 
     public static void postJSON(String url, Map<String, String> headersMap, Map<String, String> bodyMap, final JSONCallback handler) {
-        OkHttpEngine.getInstance().asyncRequest(url, new MyRequestCallBackHandler(handler), OkHttpEngine.RequestType.FORCE_NETWORK,
-                OkHttpEngine.RequestMode.POST, "", headersMap, bodyMap);
+        HttpManager.getInstance().asyncRequest(url, new MyRequestCallBackHandler(handler), HttpManager.RequestType.FORCE_NETWORK,
+                HttpManager.RequestMode.POST, "", headersMap, bodyMap);
     }
 
     public static void post(String url, Map<String, String> headersMap, Map<String, String> bodyMap, RequestCallBack handler) {
-        OkHttpEngine.getInstance().asyncRequest(url, handler, OkHttpEngine.RequestType.FORCE_NETWORK,
-                OkHttpEngine.RequestMode.POST, "", headersMap, bodyMap);
+        HttpManager.getInstance().asyncRequest(url, handler, HttpManager.RequestType.FORCE_NETWORK,
+                HttpManager.RequestMode.POST, "", headersMap, bodyMap);
     }
 
     public static void getBitmap(final String url, final int targetWidth, final int targetHeight, final BitmapCallback callback) {
@@ -73,7 +73,7 @@ public class HttpUtils {
             return;
         }
 
-        OkHttpEngine.getInstance().asyncRequestForInputStream(url, new RequestCallBackHandler() {
+        HttpManager.getInstance().asyncRequestForInputStream(url, new RequestCallBackHandler() {
             @Override
             public void onFailure(Exception e) {
                 if (null != callback) {
@@ -104,7 +104,7 @@ public class HttpUtils {
                     }
                 }
             }
-        }, OkHttpEngine.RequestMode.GET, url, null, null);
+        }, HttpManager.RequestMode.GET, url, null, null);
     }
 
     /**

@@ -4,6 +4,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "blog.csdn.net.mchenys"
         minSdkVersion 21
@@ -11,11 +12,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
         //BlurTransformation
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
-
-
 
         aaptOptions.cruncherEnabled = false
         aaptOptions.useNewCruncher = false
@@ -62,6 +63,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     compile 'com.squareup.okio:okio:1.7.0'
+    compile 'com.android.support:multidex:1.0.1'//分包管理
     //share
     implementation files('libs/httpmime-4.1.1.jar')
     implementation files('libs/libammsdk.jar')

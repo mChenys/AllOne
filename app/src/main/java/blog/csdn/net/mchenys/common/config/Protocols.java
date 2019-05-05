@@ -15,4 +15,6 @@ public class Protocols {
     public static final String PERSONAL_TERMINAL = SCHEMA + "personal_detail/";
     //话题终端
     public static final String TOPIC_TERMINAL = SCHEMA + "topic_detail/";
+
+    public static final String BIG_PHOTO = SCHEMA + "big_photo";;
 }

@@ -1,6 +1,8 @@
 package blog.csdn.net.mchenys.common.base;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
@@ -11,31 +13,37 @@ import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import blog.csdn.net.mchenys.R;
 import blog.csdn.net.mchenys.common.config.Constant;
+import blog.csdn.net.mchenys.common.config.Protocols;
 import blog.csdn.net.mchenys.common.config.Urls;
-import blog.csdn.net.mchenys.common.okhttp2.x.OkHttpEngine;
+import blog.csdn.net.mchenys.common.okhttp2.x.HttpManager;
+import blog.csdn.net.mchenys.common.okhttp2.x.listener.RequestCallBackHandler;
 import blog.csdn.net.mchenys.common.okhttp2.x.model.OkResponse;
+import blog.csdn.net.mchenys.common.sns.SnsUtils;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
-import blog.csdn.net.mchenys.common.utils.HttpUtils;
+import blog.csdn.net.mchenys.common.utils.LogUtils;
 import blog.csdn.net.mchenys.common.utils.NetworkUtils;
+import blog.csdn.net.mchenys.common.utils.ShareUtils;
 import blog.csdn.net.mchenys.common.utils.StringUtils;
 import blog.csdn.net.mchenys.common.utils.URIUtils;
 import blog.csdn.net.mchenys.common.widget.view.TitleBar;
 import blog.csdn.net.mchenys.common.widget.view.UEView;
 import blog.csdn.net.mchenys.common.widget.webview.BaseWebView;
+import blog.csdn.net.mchenys.module.terminal.ImageShowActivity;
 
 import static android.webkit.WebView.enableSlowWholeDocumentDraw;
 
@@ -80,6 +88,11 @@ public class BaseTerminalActivity extends BaseActivity {
         }
         url = getIntent().getStringExtra(Constant.KEY_URL);
         title = getIntent().getStringExtra(Constant.KEY_TITLE);
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //微博分享回调
+        SnsUtils.doResultIntent(this, intent, ShareUtils.getListener());
     }
 
     @Override
@@ -206,15 +219,13 @@ public class BaseTerminalActivity extends BaseActivity {
             mWebView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(final WebView view, String url) {
-                    if (URLUtil.isNetworkUrl(url)) {
-                        view.loadUrl(url);//内跳
+                    LogUtils.e("cys", "BaseTerminal url=" + url);
+                    if (null != mBaseWebViewClient && mBaseWebViewClient.shouldOverrideUrlLoading(view, url)) {
                         return true;
-                    } else if (paserProtocol(url)) {
-                        return true;
-                    } else if (null != mBaseWebViewClient && mBaseWebViewClient.shouldOverrideUrlLoading(view, url)) {
+                    } else if (parserProtocol(url)) {
                         return true;
                     }
-                    return false;
+                    return true;
                 }
 
                 @Override
@@ -262,20 +273,6 @@ public class BaseTerminalActivity extends BaseActivity {
 //                    super.onReceivedSslError(view, handler, error);
                     handler.proceed();//支持https响应
                 }
-
-                @Override
-                public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-                    mWebView.syncCookie(url);
-                    return super.shouldInterceptRequest(view, url);
-                }
-
-                @Override
-                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mWebView.syncCookie(request.getUrl().toString());
-                    }
-                    return super.shouldInterceptRequest(view, request);
-                }
             });
 
         } else {
@@ -289,14 +286,50 @@ public class BaseTerminalActivity extends BaseActivity {
      * @param url
      * @return
      */
-    private boolean paserProtocol(String url) {
+    /**
+     * 解析公共的协议
+     *
+     * @param url
+     * @return
+     */
+    protected boolean parserProtocol(String url) {
         if (mWebView.shouldOverrideUrlLoading(mWebView, url)) {
+            return true;
+        } else if (url.startsWith(Protocols.BIG_PHOTO)) {
+            showBigImage(url);
+            return true;
+        } else if (url.startsWith("wtloginmqq://ptlogin/qlogin")) { //webqq登录
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
             return true;
         } else {
             return URIUtils.dispatch(mContext, url);
         }
     }
 
+    private void showBigImage(String protocol) {
+        Uri uri = Uri.parse(protocol);
+        ArrayList<String> images = null;
+        int currentIndex = 0;
+        try {
+            JSONObject jsonObject = new JSONObject(uri.getQueryParameter("data"));
+            currentIndex = jsonObject.optInt("currentIndex");
+            if (jsonObject.has("photos")) {
+                JSONArray array = jsonObject.optJSONArray("photos");
+                images = new ArrayList<>();
+                for (int i = 0; i < array.length(); i++) {
+                    images.add(array.optString(i));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(mContext, ImageShowActivity.class);
+        intent.putExtra(Constant.KEY_POSITION, currentIndex);
+        intent.putStringArrayListExtra(Constant.KEY_IMAGES, images);
+        startActivity(intent);
+    }
 
     /**
      * 处理WebClient中对应名称的方法
@@ -320,32 +353,47 @@ public class BaseTerminalActivity extends BaseActivity {
      */
     public void loadUrl(final String url) {
         onReceivedError = false;
-        if (!StringUtils.isEmpty(url)) {
+        if (!StringUtils.isEmpty(url) && URLUtil.isNetworkUrl(url)) {
             HashMap<String, String> header = new HashMap<>();
             header.put("Referer", url);
+            header.put("Cookie", Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());
             this.originalUrl = url;
+            if (URLUtil.isNetworkUrl(url)) {
+                mWebView.syncCookie(url);
+            }
             if (loadType == TYPE_URL) {
                 mWebView.loadUrl(url, header);
             } else {
-                header.put("Cookie", Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());
-                HttpUtils.getJSON(true, url, header, null, new HttpUtils.JSONCallback() {
+                HttpManager.getInstance().asyncRequest(url, new RequestCallBackHandler() {
                     @Override
                     public void onFailure(Exception e) {
                         mUEView.showError();
                     }
 
                     @Override
-                    public void onSuccess(JSONObject jsonObject, OkResponse okResponse) {
+                    public Object doInBackground(OkResponse okResponse) {
+                        return null;
+                    }
 
-                        int status = jsonObject.optInt("status");
-                        if (status < 0) {
+                    @Override
+                    public void onResponse(Object o, OkResponse okResponse) {
+                        if (null != okResponse && !StringUtils.isEmpty(okResponse.getResult()) && okResponse.getCode() == 200) {
+                            try {
+                                JSONObject object = new JSONObject(okResponse.getResult());
+                                int status = object.optInt("status");
+                                if (status < 0) {
+                                    mUEView.showError();
+                                    return;
+                                }
+                            } catch (JSONException e) {
+                            }
+                            mWebView.loadDataWithBaseURL(url, okResponse.getResult(), "text/html", "UTF-8", null);
+                            mUEView.hideLoading();
+                        } else {
                             mUEView.showError();
-                            return;
                         }
-                        mWebView.loadDataWithBaseURL(url, okResponse.getResult(), "text/html", "UTF-8", null);
-                        mUEView.hideLoading();
-
-                        if(!NetworkUtils.isNetworkAvailable(mContext)||okResponse.getResponseType()== OkHttpEngine.RESPONSE_TYPE_NETWORK){
+                        if ((NetworkUtils.isNetworkAvailable(mContext) && okResponse.getResponseType() == HttpManager.RESPONSE_TYPE_NETWORK)
+                                || (!NetworkUtils.isNetworkAvailable(mContext) && okResponse.getResponseType() == HttpManager.RESPONSE_TYPE_CACHE)) {
                             JSONObject metaObj = getMetaData(parseMetaString(okResponse.getResult()), false);
                             if (metaObj != null) {
                                 onMetaDataResult(metaObj);
@@ -353,9 +401,8 @@ public class BaseTerminalActivity extends BaseActivity {
                                 onMetaDataEmpty();
                             }
                         }
-
                     }
-                });
+                }, HttpManager.RequestType.FORCE_NETWORK, HttpManager.RequestMode.GET, url, header, null);
             }
         } else {
             mUEView.showError();
@@ -473,6 +520,7 @@ public class BaseTerminalActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
     //页面元数据为空的回调方法
     protected void onMetaDataEmpty() {
 
@@ -481,5 +529,10 @@ public class BaseTerminalActivity extends BaseActivity {
     //页面元数据不为空回调方法
     protected void onMetaDataResult(JSONObject object) {
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mWebView.onActivityResult(requestCode, resultCode, data);
     }
 }

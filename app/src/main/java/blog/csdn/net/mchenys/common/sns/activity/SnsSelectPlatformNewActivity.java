@@ -32,7 +32,7 @@ public class SnsSelectPlatformNewActivity extends Activity implements OnClickLis
     private static SnsShareListener shareListener;
     private SnsShareContent contentMessage;
     private LinearLayout topLayout;
-    private SnsSSOLoginEngine ssoLogin;
+    private SnsSSOLoginEngine mSnsSSOLoginEngine;
     private SnsShareEngine mSnsShareEngine;
 
 
@@ -50,7 +50,7 @@ public class SnsSelectPlatformNewActivity extends Activity implements OnClickLis
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.imofan_weibo_select_platform_activity);
         contentMessage = (SnsShareContent) getIntent().getSerializableExtra("content");
-        ssoLogin = SnsManager.getSSOLogin();
+        mSnsSSOLoginEngine = SnsManager.getSSOLogin();
         mSnsShareEngine = SnsManager.getSnsShare();
         SnsShareEngine.isHttpImage = false;
         SnsShareEngine.imageDownDone = false;
@@ -97,8 +97,8 @@ public class SnsSelectPlatformNewActivity extends Activity implements OnClickLis
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (null != ssoLogin) {
-            ssoLogin.onActivityResult(requestCode, resultCode, data);
+        if (null != mSnsSSOLoginEngine) {
+            mSnsSSOLoginEngine.onActivityResult(requestCode, resultCode, data);
         }
 
         mSnsShareEngine.onActivityResult(requestCode, resultCode, data);

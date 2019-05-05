@@ -247,6 +247,7 @@
             android:name=".module.terminal.ProductActivity"
             android:screenOrientation="portrait"
             android:label="商品详情页"/>
+        <activity android:name=".module.terminal.ImageShowActivity"/>
         <!-- 配置自定义推送服务作为推送服务运行的载体-->
         <service
             android:name=".common.push.AllOnePushService"

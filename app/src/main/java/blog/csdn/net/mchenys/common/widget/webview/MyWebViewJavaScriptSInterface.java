@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.webkit.JavascriptInterface;
 
 import blog.csdn.net.mchenys.common.config.Env;
+import blog.csdn.net.mchenys.common.sns.SnsImageShareUtil;
 import blog.csdn.net.mchenys.common.sns.bean.SnsShareContent;
 import blog.csdn.net.mchenys.common.sns.config.SnsConfig;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
@@ -65,6 +66,9 @@ public class MyWebViewJavaScriptSInterface  {
     @JavascriptInterface
     public void share(String title, String content, final String wapurl, String icon, final String callBack) {
         SnsShareContent shareEntity = ShareUtils.wrapShareContent(title, content, null, null, wapurl, icon);
+        if (!shareEntity.getImage().isEmpty()) {
+            SnsImageShareUtil.setImage(mContext, shareEntity.getImage());
+        }
         ShareUtils.share(mContext, shareEntity, new ShareUtils.Callback() {
             @Override
             public void onSucceed() {
@@ -91,6 +95,9 @@ public class MyWebViewJavaScriptSInterface  {
     @JavascriptInterface
     public void shareWithoutSurface(String title, String content, final String wapurl, String icon, final String callBack, int type) {
         SnsShareContent shareEntity = ShareUtils.wrapShareContent(title, content, null, null, wapurl, icon);
+        if (!shareEntity.getImage().isEmpty()) {
+            SnsImageShareUtil.setImage(mContext, shareEntity.getImage());
+        }
         ShareUtils.shareWithoutSurface(mContext, shareEntity, new ShareUtils.Callback() {
             @Override
             public void onSucceed() {

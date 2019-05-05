@@ -18,10 +18,10 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebStorage.QuotaUpdater;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import blog.csdn.net.mchenys.common.config.Constant;
 import blog.csdn.net.mchenys.common.config.Urls;
+import blog.csdn.net.mchenys.common.sns.config.SnsManager;
 import blog.csdn.net.mchenys.common.utils.AccountUtils;
 import blog.csdn.net.mchenys.module.account.LoginActivity;
 
@@ -86,27 +86,13 @@ public class BaseWebView extends WebView {
      */
     public void syncCookie(String url) {
         if (null == url || "".equals(url)) return;
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            CookieSyncManager.createInstance(mContext);
-        }
+        String sessionId = AccountUtils.getSessionId();
+        CookieSyncManager.createInstance(mContext);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
-
-        if (AccountUtils.isLogin()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                cookieManager.setCookie(url, Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());//为url设置cookie
-                cookieManager.flush();//同步cookie
-            } else {
-                cookieManager.removeSessionCookie();
-                cookieManager.removeAllCookie();
-                cookieManager.setCookie(url, Urls.COMMON_SESSION_ID + AccountUtils.getSessionId());//为url设置cookie
-                CookieSyncManager.getInstance().sync();
-            }
-        } else {
-            cookieManager.removeSessionCookie();
-            cookieManager.setCookie(url, Urls.COMMON_SESSION_ID);
-        }
+        cookieManager.removeSessionCookie();
+        cookieManager.setCookie(url, Urls.COMMON_SESSION_ID + sessionId);
+        CookieSyncManager.getInstance().sync();
     }
 
     public void init(Context context) {
@@ -142,16 +128,7 @@ public class BaseWebView extends WebView {
         }
         addJavascriptInterface(new MyWebViewJavaScriptSInterface(context, mHandler), "PCJSKit");
         setWebChromeClient(null);
-        setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (URLUtil.isNetworkUrl(url)) {
-                    view.loadUrl(url);
-                    return true;
-                }
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-        });
+
         //屏蔽长按复制
         setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -185,6 +162,9 @@ public class BaseWebView extends WebView {
             intent.putExtra(Constant.KEY_WEB_CALLBACK, funName);
             ((Activity) mContext).startActivityForResult(intent, Constant.REQ_WEB_LOGIN);
             return true;
+        }else if (URLUtil.isNetworkUrl(url)) {
+            view.loadUrl(url);
+            return true;
         }
         return false;
     }
@@ -205,6 +185,10 @@ public class BaseWebView extends WebView {
                     this.loadUrl("javascript:" + funName + "('" + sessionId + "')");
                 }
             }
+        }else{
+            //分享/授权相关
+            SnsManager.getSSOLogin().onActivityResult(requestCode, resultCode, data);
+            SnsManager.getSnsShare().onActivityResult(requestCode, resultCode, data);
         }
     }
 

@@ -41,7 +41,7 @@ import android.widget.OverScroller;
 public class PhotoViewAttacher implements View.OnTouchListener,
         View.OnLayoutChangeListener {
 
-    private static float DEFAULT_MAX_SCALE = 3.0f;
+    private static float DEFAULT_MAX_SCALE = 2.0f;
     private static float DEFAULT_MID_SCALE = 1.75f;
     private static float DEFAULT_MIN_SCALE = 1.0f;
     private static int DEFAULT_ZOOM_DURATION = 200;
@@ -56,8 +56,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     private int mZoomDuration = DEFAULT_ZOOM_DURATION;
     private float mMinScale = DEFAULT_MIN_SCALE;
     private float mMidScale = DEFAULT_MID_SCALE;
-    //    private float mMaxScale = DEFAULT_MAX_SCALE;
-    private float mMaxScale = mMidScale;//只需要放大一级
+    private float mMaxScale = DEFAULT_MAX_SCALE;//只需要放大一级
 
     private boolean mAllowParentInterceptOnEdge = true;
     private boolean mBlockParentIntercept = false;
@@ -244,13 +243,20 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                     float x = ev.getX();
                     float y = ev.getY();
 
-                    if (scale < getMediumScale()) {
+                    /*if (scale < getMediumScale()) {
                         setScale(getMediumScale(), x, y, true);
                     } else if (scale >= getMediumScale() && scale < getMaximumScale()) {
                         setScale(getMaximumScale(), x, y, true);
                     } else {
                         setScale(getMinimumScale(), x, y, true);
+                    }*/
+                    //只需要放大一级
+                    if (scale >= getMaximumScale()) {
+                        setScale(getMinimumScale(), x, y, true);
+                    }else{
+                        setScale(getMaximumScale(), x, y, true);
                     }
+
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Can sometimes happen when getX() and getY() is called
                 }
@@ -503,7 +509,6 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     }
 
     public void setScaleType(ScaleType scaleType) {
-        Log.e("cys", "setScaleType");
         if (Util.isSupportedScaleType(scaleType) && scaleType != mScaleType) {
             mScaleType = scaleType;
             update();
@@ -527,7 +532,6 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     }
 
     public void update() {
-        Log.e("cys", "update");
         if (mZoomEnabled) {
             // Update the base matrix using the current drawable
             updateBaseMatrix(mImageView.getDrawable());
@@ -641,8 +645,6 @@ public class PhotoViewAttacher implements View.OnTouchListener,
         final float viewHeight = getImageViewHeight(mImageView);
         final int drawableWidth = drawable.getIntrinsicWidth();
         final int drawableHeight = drawable.getIntrinsicHeight();
-        Log.e("cys", "viewWidth:" + viewWidth + " viewHeight:" + viewHeight);
-        Log.e("cys", "drawableWidth:" + drawableWidth + " drawableHeight:" + drawableHeight);
         mBaseMatrix.reset();
 
         final float widthScale = viewWidth / drawableWidth;
