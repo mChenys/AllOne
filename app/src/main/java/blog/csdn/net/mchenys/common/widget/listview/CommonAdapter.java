@@ -89,12 +89,16 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ListViewHolder[] holders = new ListViewHolder[getViewTypeCount()];
+       /* ListViewHolder[] holders = new ListViewHolder[getViewTypeCount()];
         int i = getItemViewType(position);
         holders[i] = ListViewHolder.getViewHolder(mContext, convertView, layoutIds[i], position);
         setData(holders[i], position, getItem(position));
-        return holders[i].getConvertView();
+        return holders[i].getConvertView();*/
 
+        int i = getItemViewType(position);
+        ListViewHolder viewHolder = ListViewHolder.getViewHolder(mContext, convertView, layoutIds[i], position);
+        setData(viewHolder, position, getItem(position));
+        return viewHolder.getConvertView();
     }
 
     @Override

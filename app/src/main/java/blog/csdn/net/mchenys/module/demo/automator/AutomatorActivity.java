@@ -20,7 +20,6 @@ public class AutomatorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_automator);
         initListener();
     }
-
     private void initListener() {
         findViewById(R.id.openBtn).setOnClickListener(new View.OnClickListener() {
             @Override
